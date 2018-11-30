@@ -87,9 +87,12 @@ class AuthService {
       callbackURL: 'http://localhost:3000/api/login/google',
     };
 
-    this.passport.use(new GoogleStrategy(this.opts, async (req, accessToken, refreshToken, profile, done) => {
-      console.log(profile);
-    }));
+    this.passport.use(new GoogleStrategy(
+      this.opts,
+      async (req, accessToken, refreshToken, profile, done) => {
+        console.log(profile);
+      },
+    ));
   }
 
   init(strategy) {
