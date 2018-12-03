@@ -1,20 +1,23 @@
 import passportJwt from 'passport-jwt';
 import passportLocal from 'passport-local';
 import passportGoogle from 'passport-google-oauth';
-import os from 'os';
+import passportGithub from 'passport-github';
 import config from '../../config/auth';
 import User from '../models/User';
 
 const JwtStrategy = passportJwt.Strategy;
 const LocalStrategy = passportLocal.Strategy;
 const GoogleStrategy = passportGoogle.OAuth2Strategy;
-
-const { ExtractJwt } = passportJwt;
+const GithubStrategy = passportGithub.Strategy;
 
 class AuthService {
   constructor(pass) {
     this.passport = pass;
-    this.opts = {};
+
+    this.google = this.google;
+    this.local = this.local;
+    this.jwt = this.jwt;
+    this.github = this.github;
   }
 
   static get allowedStrategies() {
@@ -30,20 +33,22 @@ class AuthService {
     if (AuthService.allowedStrategies.indexOf(strategy) === -1) {
       throw new Error(`Only ${AuthService.allowedStrategies.toString()} strategies are available`);
     }
+    // this.init(strategy);
 
-    this.init(strategy);
+    this[strategy]();
 
-    return this.passport.authenticate(strategy, { scope: ['profile'] });
+    return this.passport.authenticate(strategy, { session: false, scope: ['profile', 'email'] });
   }
 
-  jwtAuth() {
-    this.opts = {
-      jwtFromRequest: ExtractJwt.fromHeader('authorization'),
-      secretOrKey: config.JWT_SECRET,
-    };
+  jwt() {
+    const { ExtractJwt } = passportJwt;
 
     // eslint-disable-next-line consistent-return
-    this.passport.use(new JwtStrategy(this.opts, async (jwtPayload, done) => {
+    this.passport.use(new JwtStrategy({
+      jwtFromRequest: ExtractJwt.fromHeader('authorization'),
+      secretOrKey: config.JWT_SECRET,
+    },
+    async (jwtPayload, done) => {
       try {
         const user = await User.findById(jwtPayload.sub);
 
@@ -58,15 +63,14 @@ class AuthService {
     }));
   }
 
-  localAuth() {
-    this.opts = {
-      usernameField: 'email',
-    };
-
+  local() {
     // eslint-disable-next-line consistent-return
-    this.passport.use(new LocalStrategy(this.opts, async (email, password, done) => {
+    this.passport.use(new LocalStrategy({
+      usernameField: 'email',
+    },
+    async (email, password, done) => {
       try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ 'local.email': email });
 
         if (!user) {
           return done(null, false);
@@ -79,35 +83,67 @@ class AuthService {
     }));
   }
 
-  googleAuth() {
-    console.log(os.hostname());
-    this.opts = {
+  google() {
+    this.passport.use(new GoogleStrategy({
       clientID: config.oauth.google.clientID,
       clientSecret: config.oauth.google.clientSecret,
-      callbackURL: 'http://localhost:3000/api/login/google',
-    };
+      // TODO use real gost name.
+      callbackURL: 'http://localhost:3000/api/login/google/oauthCallback',
+    },
+    async (req, accessToken, refreshToken, profile, done) => {
+      try {
+        const foundedUser = await User.findOne({ 'google.id': profile.id });
 
-    this.passport.use(new GoogleStrategy(
-      this.opts,
-      async (req, accessToken, refreshToken, profile, done) => {
-        console.log(profile);
-      },
-    ));
+        if (foundedUser) {
+          return done(null, foundedUser);
+        }
+
+        const user = new User({
+          method: 'google',
+          google: {
+            id: profile.id,
+            email: profile.emails[0].value,
+          },
+          role: 'authenticated',
+        });
+
+        await user.save();
+        done(null, user);
+      } catch (err) {
+        done(err, false, err.message);
+      }
+    }));
   }
 
-  init(strategy) {
-    // eslint-disable-next-line default-case
-    switch (strategy) {
-      case 'jwt':
-        this.jwtAuth();
-        break;
-      case 'local':
-        this.localAuth();
-        break;
-      case 'google':
-        this.googleAuth();
-        break;
-    }
+  github() {
+    this.passport.use(new GithubStrategy({
+      clientID: config.oauth.github.clientID,
+      clientSecret: config.oauth.github.clientSecret,
+      callbackURL: 'http://localhost:3000/api/login/github/oauthCallback',
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        const foundedUser = await User.findOne({ 'github.id': profile.id });
+
+        if (foundedUser) {
+          return done(null, foundedUser);
+        }
+
+        const user = new User({
+          method: 'github',
+          github: {
+            id: profile.id,
+            email: profile.emails[0].value,
+          },
+          role: 'authenticated',
+        });
+
+        await user.save();
+        done(null, user);
+      } catch (err) {
+        done(err, false, err.message);
+      }
+    }));
   }
 }
 

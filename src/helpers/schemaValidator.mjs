@@ -17,21 +17,24 @@ export function validateBody(schema) {
   };
 }
 
+const email = Joi.string()
+  .email()
+  .lowercase()
+  .required();
+
+const password = Joi.string()
+  .min(6)
+  .max(20)
+  .regex(/^[a-zA-Z0-9]/)
+  .required();
+
+const role = Joi.string()
+  .lowercase()
+  .valid('anonymous', 'authenticated', 'editor', 'admin')
+  .required();
+
 export const schemas = {
-  authSchema: Joi.object().keys({
-    email: Joi.string()
-      .email()
-      .lowercase()
-      .required(),
-    password: Joi.string()
-      .min(6)
-      .max(20)
-      .regex(/^[a-zA-Z0-9]/)
-      .required(),
-    role: Joi.string()
-      .lowercase()
-      .valid('anonymous', 'authenticated', 'editor', 'admin')
-      .required(),
-  }),
+  registerSchema: Joi.object().keys({ email, password, role }),
+  loginSchema: Joi.object().keys({ email, password }),
   postSchema: {},
 };

@@ -3,7 +3,7 @@ import User from '../models/User';
 import { signToken, generatePassword } from '../helpers/auth';
 
 export default {
-  async userRegister(req, res) {
+  async userRegister(req, res, next) {
     try {
       const { email, password, role } = req.value.body;
       const foundedUser = await User.findOne({ 'local.email': email });
@@ -28,13 +28,11 @@ export default {
 
       res.status(201).json({ user, token });
     } catch (err) {
-      console.log(err);
-
-      res.status(500).send();
+      next(err);
     }
   },
 
-  async userLogin(req, res) {
+  async userLogin(req, res, next) {
     try {
       const { email, password } = req.value.body;
 
@@ -44,7 +42,7 @@ export default {
         const match = await bcrypt.compare(password, user.local.password);
 
         if (!match) {
-          res.status(400).json({ message: 'Specified password do not match.' });
+          res.status(400).json({ message: 'Password is incorrect.' });
         }
 
         const token = signToken(user);
@@ -54,9 +52,37 @@ export default {
         res.status(404).json({ message: `User ${email} is not registered.` });
       }
     } catch (err) {
-      console.error(err);
+      next(err);
+    }
+  },
 
-      res.status(500).send();
+  async googleOauthCallback(req, res, next) {
+    try {
+      const { email } = req.user.google;
+
+      const user = await User.findOne({ 'google.email': email });
+
+      const token = signToken(user);
+
+      // TODO change response header to application/json
+      res.status(201).json({ user, token });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async githubOauthCallback(req, res, next) {
+    try {
+      const { email } = req.user.github;
+
+      const user = await User.findOne({ 'github.email': email });
+
+      const token = signToken(user);
+
+      // TODO change response header to application/json
+      res.status(201).json({ user, token });
+    } catch (err) {
+      next(err);
     }
   },
 
@@ -77,9 +103,7 @@ export default {
 
         res.status(401).json({ message: 'Unauthorized' });
       } catch (err) {
-        console.error(err);
-
-        res.status(500).send();
+        next(err);
       }
     };
   },

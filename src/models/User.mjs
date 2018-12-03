@@ -10,12 +10,11 @@ const UserSchema = mongoose.Schema({
   local: {
     email: {
       type: String,
-      required: true,
+
       lowercase: true,
     },
     password: {
       type: String,
-      required: true,
     },
   },
   google: {
@@ -39,7 +38,7 @@ const UserSchema = mongoose.Schema({
   role: {
     type: String,
     enum: ['anonymous', 'authenticated', 'editor', 'admin'],
-    default: 'anonymous',
+    default: 'authenticated',
   },
 });
 

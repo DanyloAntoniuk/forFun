@@ -32,21 +32,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(paginate.middleware(10, 20));
 app.use(routes);
+app.use((req, res) => {
+  res.status(404).json({ message: 'Can\'t find that' });
+});
+
 app.use(express.static('public'));
 
 const dirname = path.join(path.resolve('./'));
 const logStream = fs.createWriteStream(path.join(dirname, 'morgan-logs.log'), { flags: 'a' });
 app.use(morgan('combined', { stream: logStream }));
-
-app.use((req, res) => {
-  res.status(404).json({ err: '404' });
-});
-
-app.use((err, req, res) => {
-  // console.error(err);
-
-  res.sendFile(path.join(__dirname, '../public/500.html'));
-});
 
 const PORT = process.env.port || 3000;
 

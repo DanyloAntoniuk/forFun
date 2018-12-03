@@ -1,17 +1,17 @@
 import express from 'express';
 import passport from 'passport';
-import userController from '../../controllers/UserController';
-import { validateBody, schemas } from '../../helpers/schemaValidator';
+import UserController from '../../controllers/UserController';
 import Auth from '../../services/AuthService';
+import AuthController from '../../controllers/AuthController';
 
 const AuthService = new Auth(passport);
 
 const router = express.Router();
 
-router.get('/user/:id([0-9a-f]{24})', userController.userGetOne);
+router.get('/user/:id([0-9a-f]{24})', AuthService.authenticate('jwt'), UserController.userGetOne);
 
-router.get('/user/test', [AuthService.authenticate('jwt'), userController.userRoleAuth(['editor'])], (res, req) => {
-  console.log('bom bom');
-});
+router.get('/users', [AuthService.authenticate('jwt'), AuthController.userRoleAuth('admin')], UserController.userList);
+
+router.put('/user/:id', [AuthService.authenticate('jwt'), AuthController.userRoleAuth(['authenticated', 'admin'])], UserController.userUpdate);
 
 export default router;
