@@ -36,8 +36,6 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Can\'t find that' });
 });
 
-app.use(express.static('public'));
-
 const dirname = path.join(path.resolve('./'));
 const logStream = fs.createWriteStream(path.join(dirname, 'morgan-logs.log'), { flags: 'a' });
 app.use(morgan('combined', { stream: logStream }));

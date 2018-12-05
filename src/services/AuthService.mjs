@@ -2,6 +2,7 @@ import passportJwt from 'passport-jwt';
 import passportLocal from 'passport-local';
 import passportGoogle from 'passport-google-oauth';
 import passportGithub from 'passport-github';
+import passport from 'passport';
 import config from '../../config/auth';
 import User from '../models/User';
 
@@ -11,33 +12,8 @@ const GoogleStrategy = passportGoogle.OAuth2Strategy;
 const GithubStrategy = passportGithub.Strategy;
 
 class AuthService {
-  constructor(pass) {
-    this.passport = pass;
-
-    this.google = this.google;
-    this.local = this.local;
-    this.jwt = this.jwt;
-    this.github = this.github;
-  }
-
-  static get allowedStrategies() {
-    return [
-      'jwt',
-      'local',
-      'github',
-      'google',
-    ];
-  }
-
-  authenticate(strategy) {
-    if (AuthService.allowedStrategies.indexOf(strategy) === -1) {
-      throw new Error(`Only ${AuthService.allowedStrategies.toString()} strategies are available`);
-    }
-    // this.init(strategy);
-
-    this[strategy]();
-
-    return this.passport.authenticate(strategy, { session: false, scope: ['profile', 'email'] });
+  constructor() {
+    this.passport = passport;
   }
 
   jwt() {
@@ -61,6 +37,8 @@ class AuthService {
         done(err, false);
       }
     }));
+
+    return this.passport.authenticate('jwt', { session: false });
   }
 
   local() {
@@ -81,6 +59,8 @@ class AuthService {
         done(err, false);
       }
     }));
+
+    return this.passport.authenticate('local', { session: false });
   }
 
   google() {
@@ -113,6 +93,8 @@ class AuthService {
         done(err, false, err.message);
       }
     }));
+
+    return this.passport.authenticate('google', { session: false, scope: ['profile', 'email'] });
   }
 
   github() {
@@ -144,7 +126,9 @@ class AuthService {
         done(err, false, err.message);
       }
     }));
+
+    return this.passport.authenticate('github', { session: false, scope: ['profile', 'email'] });
   }
 }
 
-export default AuthService;
+export default new AuthService();

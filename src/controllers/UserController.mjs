@@ -36,5 +36,14 @@ export default {
     }
   },
 
-  async userUpdate(req, res) {},
+  async userUpdate(req, res, next) {
+    try {
+      const user = await User.findById(req.params.id);
+
+      const { value } = req.value.body;
+      console.log(value);
+    } catch (err) {
+      next(err);
+    }
+  },
 };

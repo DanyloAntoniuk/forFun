@@ -36,5 +36,6 @@ const role = Joi.string()
 export const schemas = {
   registerSchema: Joi.object().keys({ email, password, role }),
   loginSchema: Joi.object().keys({ email, password }),
+  // userSchema: Joi.object().keys({ email,  }),
   postSchema: {},
 };

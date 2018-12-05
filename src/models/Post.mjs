@@ -7,13 +7,19 @@ const PostSchema = mongoose.Schema({
     reqiured: true,
   },
   author: {
-    type: String,
-    // reqiured: true,
-  },
-  body: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     reqiured: true,
   },
+  widgets: [{
+    fieldType: {
+      type: String,
+    },
+    body: {
+      type: mongoose.Schema.Types.ObjectId,
+      refPath: 'fieldType',
+    },
+  }],
 });
 
 PostSchema.plugin(timestamps);

@@ -1,21 +1,18 @@
 import express from 'express';
-import passport from 'passport';
-import postController from '../../controllers/PostController';
-import Auth from '../../services/AuthService';
+import PostController from '../../controllers/PostController';
+import AuthService from '../../services/AuthService';
 // import { validateBody, schema } from '../helpers/schemaValidator';
 
 const postRouter = express.Router();
 
-const AuthService = new Auth(passport);
+postRouter.get('/articles', PostController.postList);
 
-postRouter.get('/articles', postController.postList);
+postRouter.get('/article/:id', PostController.postGetOne);
 
-postRouter.get('/article/:id', postController.postGetOne);
+postRouter.post('/articles', PostController.postCreate);
 
-postRouter.post('/articles', postController.postCreate);
+postRouter.put('/article/:id', PostController.postUpdate);
 
-postRouter.put('/article/:id', postController.postUpdate);
-
-postRouter.delete('/article/:id', postController.postDelete);
+postRouter.delete('/article/:id', PostController.postDelete);
 
 export default postRouter;
