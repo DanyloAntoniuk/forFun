@@ -67,7 +67,7 @@ class AuthService {
     this.passport.use(new GoogleStrategy({
       clientID: config.oauth.google.clientID,
       clientSecret: config.oauth.google.clientSecret,
-      // TODO use real gost name.
+      // TODO use real host name.
       callbackURL: 'http://localhost:3000/api/login/google/oauthCallback',
     },
     async (req, accessToken, refreshToken, profile, done) => {

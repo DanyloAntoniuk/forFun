@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import timestamps from 'mongoose-timestamp';
+// import timestamps from 'mongoose-timestamp';
 
 const PostSchema = mongoose.Schema({
   title: {
@@ -11,17 +11,22 @@ const PostSchema = mongoose.Schema({
     ref: 'User',
     reqiured: true,
   },
+  status: {
+    type: String,
+    reqiured: true,
+    enum: ['Unpublished', 'Published', 'Archive'],
+  },
   widgets: [{
     fieldType: {
       type: String,
     },
-    body: {
+    id: {
       type: mongoose.Schema.Types.ObjectId,
-      refPath: 'fieldType',
+      refPath: 'widgets.fieldType',
     },
   }],
-});
+}, { timestamps: true });
 
-PostSchema.plugin(timestamps);
+// PostSchema.plugin(timestamps);
 
 export default mongoose.model('Post', PostSchema);

@@ -7,6 +7,11 @@ const UserSchema = mongoose.Schema({
     enum: ['local', 'google', 'github'],
     required: true,
   },
+  active: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
   local: {
     email: {
       type: String,

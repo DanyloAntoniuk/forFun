@@ -33,9 +33,36 @@ const role = Joi.string()
   .valid('anonymous', 'authenticated', 'editor', 'admin')
   .required();
 
+const active = Joi.bool()
+  .required();
+
+const textField = Joi.string()
+  .required();
+
+const status = Joi.string()
+  .valid('Unpublished', 'Published', 'Archive')
+  .required();
+
+const objectID = Joi.string()
+  .regex(/^[a-fA-F0-9]{24}$/);
+
 export const schemas = {
-  registerSchema: Joi.object().keys({ email, password, role }),
+  registerSchema: Joi.object().keys({
+    active,
+    email,
+    password,
+    role,
+  }),
   loginSchema: Joi.object().keys({ email, password }),
   // userSchema: Joi.object().keys({ email,  }),
-  postSchema: {},
+  widgets: {
+    mediaSchema: Joi.object().keys({ title: textField }),
+  },
+  postSchema: Joi.object().keys({
+    status,
+    author: objectID,
+    widgets: {
+      id: objectID,
+    },
+  }),
 };

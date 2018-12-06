@@ -1,6 +1,6 @@
 import paginate from 'express-paginate';
 import Post from '../models/Post';
-import Media from '../models/widgets/Media';
+// import Media from '../models/widgets/Media';
 
 export default {
   async postList(req, res, next) {
@@ -30,7 +30,9 @@ export default {
 
   async postGetOne(req, res, next) {
     try {
-      const post = await Post.findById(req.params.id).populate('author');
+      const post = await Post.findById(req.params.id)
+        .populate('author')
+        .populate('widgets.body');
 
       res.json(post);
     } catch (err) {
@@ -41,11 +43,10 @@ export default {
   async postCreate(req, res, next) {
     try {
       const { title, author, widgets } = req.body;
-      const post = new Post({ title, author });
 
-      await post.save(() => {
-        // const {  } = req.body;
-      });
+      const post = new Post({ title, author, widgets });
+
+      await post.save();
 
       res.status(201).json(post);
     } catch (err) {
