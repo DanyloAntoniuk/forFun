@@ -1,8 +1,18 @@
+/**
+ * Module dependencies.
+ */
 import Joi from 'joi';
 
+/**
+ * Validation for incoming requests JSON.
+ *
+ * @param {Object} schema
+ * @return {Function}
+ */
 export function validateBody(schema) {
   // eslint-disable-next-line consistent-return
   return (req, res, next) => {
+    console.log(req);
     const result = Joi.validate(req.body, schema);
 
     if (result.error) {
@@ -17,6 +27,11 @@ export function validateBody(schema) {
   };
 }
 
+/**
+ * Field types to validate.
+ *
+ * @see https://github.com/hapijs/joi/blob/v14.3.0/API.md
+ */
 const email = Joi.string()
   .email()
   .lowercase()
@@ -46,6 +61,14 @@ const status = Joi.string()
 const objectID = Joi.string()
   .regex(/^[a-fA-F0-9]{24}$/);
 
+const array = Joi.array();
+
+const number = Joi.number()
+  .required();
+
+/**
+ * Available schemas.
+ */
 export const schemas = {
   registerSchema: Joi.object().keys({
     active,
@@ -56,13 +79,20 @@ export const schemas = {
   loginSchema: Joi.object().keys({ email, password }),
   // userSchema: Joi.object().keys({ email,  }),
   widgets: {
-    mediaSchema: Joi.object().keys({ title: textField }),
+    mediaSchema: Joi.object().keys({
+      title: textField,
+      image: {
+        originalName: textField,
+        size: number,
+        mimetype: textField,
+        path: textField,
+      },
+    }),
   },
   postSchema: Joi.object().keys({
+    title: textField,
     status,
     author: objectID,
-    widgets: {
-      id: objectID,
-    },
+    widgets: array,
   }),
 };

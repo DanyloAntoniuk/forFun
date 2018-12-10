@@ -1,6 +1,12 @@
+/**
+ * Module dependencies.
+ */
 import mongoose from 'mongoose';
 // import timestamps from 'mongoose-timestamp';
 
+/**
+ * Mongoose Schema for Post entity.
+ */
 const PostSchema = mongoose.Schema({
   title: {
     type: String,

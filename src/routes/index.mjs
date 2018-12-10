@@ -12,7 +12,11 @@ router.use('/api', Auth, User, Post, Widgets);
 router.use((err, req, res, next) => {
   console.error(err);
 
-  res.status(500).json({ message: 'Internal error' });
+  if (err.message) {
+    res.status(500).json({ message: err });
+  } else {
+    res.status(500).json({ message: 'Internal error' });
+  }
 });
 
 export default router;

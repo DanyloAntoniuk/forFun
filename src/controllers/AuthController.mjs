@@ -1,13 +1,21 @@
+/**
+ * Module dependencies.
+ */
 import bcrypt from 'bcrypt';
 import User from '../models/User';
 import { signToken, generatePassword } from '../helpers/auth';
 
 export default {
+  /**
+   * User registration.
+   * Creates user with local strategy.
+   */
   async userRegister(req, res, next) {
     try {
       const { email, password, role } = req.value.body;
-      const foundedUser = await User.findOne({ 'local.email': email });
 
+      // Deny registration with dupplicate emails.
+      const foundedUser = await User.findOne({ 'local.email': email });
       if (foundedUser) {
         res.status(422).json({ message: `Email ${email} is already registered.` });
       }
@@ -32,6 +40,9 @@ export default {
     }
   },
 
+  /**
+   * Login user with local strategy through email and pass.
+   */
   async userLogin(req, res, next) {
     try {
       const { email, password } = req.value.body;
@@ -39,6 +50,7 @@ export default {
       const user = await User.findOne({ 'local.email': email });
 
       if (user) {
+        // TODO Move password check to Model methods.
         const match = await bcrypt.compare(password, user.local.password);
 
         if (!match) {
@@ -56,6 +68,11 @@ export default {
     }
   },
 
+  /**
+   * Login through google account.
+   *
+   * @see https://console.developers.google.com/apis
+   */
   async googleOauthCallback(req, res, next) {
     try {
       const { email } = req.user.google;
@@ -71,6 +88,11 @@ export default {
     }
   },
 
+  /**
+   * Login through github account.
+   *
+   * @see https://developer.github.com/v3
+   */
   async githubOauthCallback(req, res, next) {
     try {
       const { email } = req.user.github;
@@ -86,6 +108,14 @@ export default {
     }
   },
 
+  /**
+   * Middleware for protecting routes based on User role.
+   *
+   * TODO Use accesscontrol module
+   * @see https://github.com/onury/accesscontrol
+   *
+   * @param {Array} roles
+   */
   userRoleAuth(roles) {
     return async (req, res, next) => {
       try {

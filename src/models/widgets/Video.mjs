@@ -1,6 +1,12 @@
+/**
+ * Module dependencies.
+ */
 import mongoose from 'mongoose';
-import timestamps from 'mongoose-timestamp';
+// import timestamps from 'mongoose-timestamp';
 
+/**
+ * Mongoose schema for Video entity.
+ */
 const VideoSchema = mongoose.Schema({
   title: {
     type: String,
@@ -18,8 +24,8 @@ const VideoSchema = mongoose.Schema({
       },
     },
   },
-});
+}, { timestamps: true });
 
-VideoSchema.plugin(timestamps);
+// VideoSchema.plugin(timestamps);
 
 export default mongoose.model('Video', VideoSchema);

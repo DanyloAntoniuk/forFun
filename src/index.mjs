@@ -31,6 +31,7 @@ app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(paginate.middleware(10, 20));
+app.use('/files', express.static('files'));
 app.use(routes);
 app.use((req, res) => {
   res.status(404).json({ message: 'Can\'t find that' });

@@ -1,7 +1,13 @@
+/**
+ * Module dependencies.
+ */
 import paginate from 'express-paginate';
 import User from '../models/User';
 
 export default {
+  /**
+   * Get single user.
+   */
   async userGetOne(req, res, next) {
     try {
       const user = await User.findById(req.params.id);
@@ -12,6 +18,12 @@ export default {
     }
   },
 
+  /**
+   * Get all users.
+   *
+   * By default 10 users are return, use query params for pagination.
+   * @example '/api/users?page=2&limit=5'
+   */
   async userList(req, res, next) {
     try {
       const limit = Number(req.query.limit);
@@ -36,6 +48,10 @@ export default {
     }
   },
 
+  /**
+   * Update user.
+   * TODO
+   */
   async userUpdate(req, res, next) {
     try {
       const user = await User.findById(req.params.id);

@@ -1,10 +1,23 @@
 import express from 'express';
 import ImageController from '../../../controllers/widgets/ImageController';
-import { createUploadDirectory } from '../../../helpers/widgets';
-import { validateBody, schemas } from '../../../helpers/schemaValidator';
+import { ensureDirectoryCreated, createUploadDirectory } from '../../../helpers/widgets';
 
 const router = express.Router();
 
-router.post('/images', createUploadDirectory, ImageController.uploadSingle('image'), ImageController.imageCreate);
+router.post('/images', ensureDirectoryCreated, createUploadDirectory, ImageController.uploadSingle('image'), ImageController.imageCreate);
+
+router.get('/image/:id', ImageController.imageGetOne);
+
+router.put('/image/:id', createUploadDirectory, ImageController.uploadSingle('image'), ImageController.imageUpdate);
+
+router.delete('/image/:id', ImageController.imageDelete);
+
+/**
+ * TODO
+ * router.post('/images/multiple',
+ *  createUploadDirectory,
+ *  ImageController.uploadMultiple('images'),
+ *  ImageController.imageCreateMultiple);
+ */
 
 export default router;

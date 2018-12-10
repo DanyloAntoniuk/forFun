@@ -1,13 +1,22 @@
+/**
+ * Module dependencies.
+ */
 import mkdirp from 'mkdirp';
 
-// Creates default directory for all uploading files
-export function createFileDirectory(res, req, next) {
+/**
+ * Middleware for creating default directory for all uploading files.
+ * This is used to ensure upload directory is created
+ * before working with first request.
+ */
+export function ensureDirectoryCreated(res, req, next) {
   mkdirp('./files');
 
   next();
 }
 
-// Creates directory for all uploading images
+/**
+ * Middleware got creating directory for all uploading images.
+ */
 export function createUploadDirectory(req, res, next) {
   const currentDate = new Date().toLocaleDateString();
 
@@ -20,4 +29,20 @@ export function createUploadDirectory(req, res, next) {
   req.value.folder = folder;
 
   next();
+}
+
+/**
+ * File filter callback for multer module.
+ *
+ * @param {Array} mimeTypes Allowed mimetypes.
+ * @returns {Function}
+ */
+export function fileFilter(mimeTypes) {
+  return (req, file, cb) => {
+    if (!mimeTypes.includes(file.mimetype)) {
+      cb(new Error(`Only ${mimeTypes.toString()} mimetypes are available.`), false);
+    }
+
+    cb(null, true);
+  };
 }

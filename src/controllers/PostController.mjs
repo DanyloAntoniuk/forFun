@@ -1,8 +1,17 @@
+/**
+ * Module dependencies.
+ */
 import paginate from 'express-paginate';
 import Post from '../models/Post';
 // import Media from '../models/widgets/Media';
 
 export default {
+  /**
+   * Get all posts.
+   *
+   * By default 10 posts are return, use query params for pagination.
+   * @example '/api/acticles?page=2&limit=5'
+   */
   async postList(req, res, next) {
     try {
       // Limit must be int for paginate.
@@ -10,6 +19,8 @@ export default {
 
       const [posts, count] = await Promise.all([
         Post.find({})
+          .populate('author')
+          .populate('widgets.id')
           .limit(limit)
           .skip(req.skip)
           .lean()
@@ -28,11 +39,14 @@ export default {
     }
   },
 
+  /**
+   * Get one post from id.
+   */
   async postGetOne(req, res, next) {
     try {
       const post = await Post.findById(req.params.id)
         .populate('author')
-        .populate('widgets.body');
+        .populate('widgets.id');
 
       res.json(post);
     } catch (err) {
@@ -40,11 +54,25 @@ export default {
     }
   },
 
+  /**
+   * Create post.
+   * TODO Use dynamic mongoose fields.
+   */
   async postCreate(req, res, next) {
     try {
-      const { title, author, widgets } = req.body;
+      const {
+        title,
+        author,
+        status,
+        widgets,
+      } = req.value.body;
 
-      const post = new Post({ title, author, widgets });
+      const post = new Post({
+        title,
+        author,
+        status,
+        widgets,
+      });
 
       await post.save();
 
@@ -54,6 +82,9 @@ export default {
     }
   },
 
+  /**
+   * Update post.
+   */
   async postUpdate(req, res, next) {
     try {
       const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body);
@@ -64,6 +95,9 @@ export default {
     }
   },
 
+  /**
+   * Delete post.
+   */
   async postDelete(req, res, next) {
     try {
       const deletedPost = await Post.findByIdAndDelete(req.params.id);

@@ -1,3 +1,6 @@
+/**
+ * Module dependencies.
+ */
 import passportJwt from 'passport-jwt';
 import passportLocal from 'passport-local';
 import passportGoogle from 'passport-google-oauth';
@@ -6,16 +9,24 @@ import passport from 'passport';
 import config from '../../config/auth';
 import User from '../models/User';
 
+// Available Strategies.
 const JwtStrategy = passportJwt.Strategy;
 const LocalStrategy = passportLocal.Strategy;
 const GoogleStrategy = passportGoogle.OAuth2Strategy;
 const GithubStrategy = passportGithub.Strategy;
 
+/**
+ * Service for user authentication.
+ */
 class AuthService {
   constructor() {
+    // Inject passport service.
     this.passport = passport;
   }
 
+  /**
+   * Authentication with JWT.
+   */
   jwt() {
     const { ExtractJwt } = passportJwt;
 
@@ -41,6 +52,9 @@ class AuthService {
     return this.passport.authenticate('jwt', { session: false });
   }
 
+  /**
+   * Local authentication with email and password.
+   */
   local() {
     // eslint-disable-next-line consistent-return
     this.passport.use(new LocalStrategy({
@@ -63,6 +77,9 @@ class AuthService {
     return this.passport.authenticate('local', { session: false });
   }
 
+  /**
+   * Authentication with Google account.
+   */
   google() {
     this.passport.use(new GoogleStrategy({
       clientID: config.oauth.google.clientID,
@@ -94,9 +111,13 @@ class AuthService {
       }
     }));
 
+    // Scope property is required for Google api.
     return this.passport.authenticate('google', { session: false, scope: ['profile', 'email'] });
   }
 
+  /**
+   * Authentication with Github account.
+   */
   github() {
     this.passport.use(new GithubStrategy({
       clientID: config.oauth.github.clientID,
@@ -127,6 +148,7 @@ class AuthService {
       }
     }));
 
+    // Scope property is required for Google api.
     return this.passport.authenticate('github', { session: false, scope: ['profile', 'email'] });
   }
 }
