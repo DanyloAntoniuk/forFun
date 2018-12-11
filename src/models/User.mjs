@@ -2,7 +2,6 @@
  * Module dependencies.
  */
 import mongoose from 'mongoose';
-import timestamps from 'mongoose-timestamp';
 
 /**
  * Mongoose Schema for User entity.
@@ -51,8 +50,6 @@ const UserSchema = mongoose.Schema({
     default: 'authenticated',
   },
 }, { timestamps: true });
-
-// UserSchema.plugin(timestamps);
 
 // Workaround on OverwriteModelError: Cannot overwrite `User` model once compiled.
 // @see https://github.com/kriasoft/react-starter-kit/issues/1418#issuecomment-334957970

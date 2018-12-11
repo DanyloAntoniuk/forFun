@@ -61,6 +61,7 @@ export default {
         size,
       } = req.file;
       const { title, imageTitle, imageAlt } = req.body;
+      console.log(originalname, mimetype, path, size);
 
       const image = new Image({
         title,
@@ -110,6 +111,10 @@ export default {
     try {
       const image = await Image.findById(req.params.id);
 
+      if (!image) {
+        return res.status(404).json({ message: `Image with id ${req.params.id} not found.` });
+      }
+
       return res.json(image);
     } catch (err) {
       next(err);
@@ -141,7 +146,11 @@ export default {
           mimetype,
           path,
         },
-      });
+      }, { new: true });
+
+      if (!updatedImage) {
+        return res.status(404).json({ message: `Image with id ${req.params.id} not found.` });
+      }
 
       res.json(updatedImage);
     } catch (err) {
@@ -155,6 +164,10 @@ export default {
   async imageDelete(req, res, next) {
     try {
       const deletedImage = await Image.findByIdAndDelete(req.params.id);
+
+      if (!deletedImage) {
+        return res.status(404).json({ message: `Image with id ${req.params.id} not found.` });
+      }
       // Delete image from files directory.
       fs.unlink(deletedImage.image.path, (err) => {
         if (err) {
@@ -163,6 +176,41 @@ export default {
       });
 
       res.json(deletedImage);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  /**
+   * Get all images.
+   *
+   * By default 10 images are return, use query params for pagination.
+   * @example '/api/widgets/images?page=2&limit=5'
+   */
+  async imageList(req, res, next) {
+    try {
+      // Limit must be int for paginate.
+      const limit = Number(req.query.limit);
+
+      const [images, count] = await Promise.all([
+        Image.find({})
+          .limit(limit)
+          .skip(req.skip)
+          .lean()
+          .exec(),
+        Image.countDocuments({}),
+      ]);
+
+      if (!count) {
+        return res.status(404).json({ message: 'No Images found.' });
+      }
+
+      const pageCount = Math.ceil(count / limit);
+
+      res.json({
+        images,
+        hasMore: paginate.hasNextPages(req)(pageCount),
+      });
     } catch (err) {
       next(err);
     }

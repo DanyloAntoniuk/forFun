@@ -28,7 +28,7 @@ export default {
         Post.countDocuments({}),
       ]);
 
-      const pageCount = Math.ceil(count / req.query.limit);
+      const pageCount = Math.ceil(count / limit);
 
       res.json({
         posts,

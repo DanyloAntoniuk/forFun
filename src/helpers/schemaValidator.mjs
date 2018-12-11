@@ -6,13 +6,12 @@ import Joi from 'joi';
 /**
  * Validation for incoming requests JSON.
  *
- * @param {Object} schema
- * @return {Function}
+ * @param {Object} schema Joi schema to validate.
+ * @return {Function} Express middleware.
  */
 export function validateBody(schema) {
   // eslint-disable-next-line consistent-return
   return (req, res, next) => {
-    console.log(req);
     const result = Joi.validate(req.body, schema);
 
     if (result.error) {
@@ -77,22 +76,26 @@ export const schemas = {
     role,
   }),
   loginSchema: Joi.object().keys({ email, password }),
-  // userSchema: Joi.object().keys({ email,  }),
-  widgets: {
-    mediaSchema: Joi.object().keys({
-      title: textField,
-      image: {
-        originalName: textField,
-        size: number,
-        mimetype: textField,
-        path: textField,
-      },
-    }),
-  },
   postSchema: Joi.object().keys({
     title: textField,
     status,
     author: objectID,
     widgets: array,
   }),
+  widgets: {
+    imageSchema: {
+      title: textField,
+    },
+    videoSchema: {
+      title: textField,
+      video: {
+        youtube: {
+          videoID: Joi.string(),
+        },
+        vimeo: {
+          videoID: Joi.string(),
+        },
+      },
+    },
+  },
 };

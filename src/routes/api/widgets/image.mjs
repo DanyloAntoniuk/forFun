@@ -4,6 +4,8 @@ import { ensureDirectoryCreated, createUploadDirectory } from '../../../helpers/
 
 const router = express.Router();
 
+router.get('/images', ImageController.imageList);
+
 router.post('/images', ensureDirectoryCreated, createUploadDirectory, ImageController.uploadSingle('image'), ImageController.imageCreate);
 
 router.get('/image/:id', ImageController.imageGetOne);

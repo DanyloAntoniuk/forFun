@@ -54,10 +54,17 @@ export default {
    */
   async userUpdate(req, res, next) {
     try {
-      const user = await User.findById(req.params.id);
+      const updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        req.value.body,
+        { new: true },
+      );
 
-      const { value } = req.value.body;
-      console.log(value);
+      if (!updatedUser) {
+        return res.status(404).json({ message: `User with id ${req.params.id} not found.` });
+      }
+
+      res.json(updatedUser);
     } catch (err) {
       next(err);
     }

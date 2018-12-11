@@ -10,8 +10,8 @@ import config from '../../config/auth';
   * Create JSON Web Token and sign it to current user.
   * Token is valid for 2 hours.
   *
-  * @param {Object} user
-  * @return {String}
+  * @param {Object} user User object.
+  * @return {String} Generated JW Token.
   */
 export function signToken(user) {
   return JWT.sign({
@@ -25,8 +25,8 @@ export function signToken(user) {
 /**
  * Generate hashed user password with 10 characters salt.
  *
- * @param {String} password
- * @return {String}
+ * @param {String} password User password.
+ * @return {String} Hashed password.
  */
 export async function generatePassword(password) {
   const saltRounds = 10;
