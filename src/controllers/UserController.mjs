@@ -26,6 +26,7 @@ export default {
    */
   async userList(req, res, next) {
     try {
+      console.log(req);
       const limit = Number(req.query.limit);
 
       const [users, count] = await Promise.all([
@@ -50,7 +51,7 @@ export default {
 
   /**
    * Update user.
-   * TODO
+   * @TODO
    */
   async userUpdate(req, res, next) {
     try {
@@ -65,6 +66,46 @@ export default {
       }
 
       res.json(updatedUser);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  /**
+   * Delete user.
+   *
+   * @TODO Delete posts created by user or make them created by anon.
+   */
+  async userDelete(req, res, next) {
+    try {
+      const deletedUser = await User.findByIdAndDelete(req.params.id);
+
+      if (!deletedUser) {
+        return res.status(404).json({ message: `User with id ${req.params.id} not found.` });
+      }
+
+      res.json(deletedUser);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  /**
+   * Block user.
+   *
+   * @TODO Delete posts created by user or make them created by anon.
+   */
+  async userCancel(req, res, next) {
+    try {
+      const { active } = req.value.body;
+
+      const canceledUser = await User.findByIdAndUpdate(req.params.id, { active }, { new: true });
+
+      if (!canceledUser) {
+        return res.status(404).json({ message: `User with id ${req.params.id} not found.` });
+      }
+
+      res.json(canceledUser);
     } catch (err) {
       next(err);
     }

@@ -3,7 +3,6 @@
  */
 import paginate from 'express-paginate';
 import Post from '../models/Post';
-// import Media from '../models/widgets/Media';
 
 export default {
   /**
@@ -27,6 +26,10 @@ export default {
           .exec(),
         Post.countDocuments({}),
       ]);
+
+      if (!count) {
+        return res.status(404).json({ message: 'No Posts found.' });
+      }
 
       const pageCount = Math.ceil(count / limit);
 
@@ -56,23 +59,11 @@ export default {
 
   /**
    * Create post.
-   * TODO Use dynamic mongoose fields.
+   * @TODO Use dynamic mongoose fields.
    */
   async postCreate(req, res, next) {
     try {
-      const {
-        title,
-        author,
-        status,
-        widgets,
-      } = req.value.body;
-
-      const post = new Post({
-        title,
-        author,
-        status,
-        widgets,
-      });
+      const post = new Post(req.value.body);
 
       await post.save();
 
@@ -87,7 +78,11 @@ export default {
    */
   async postUpdate(req, res, next) {
     try {
-      const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body);
+      const updatedPost = await Post.findByIdAndUpdate(
+        req.params.id,
+        req.value.body,
+        { new: true },
+      );
 
       res.json(updatedPost);
     } catch (err) {

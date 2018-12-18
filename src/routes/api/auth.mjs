@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/register', validateBody(schemas.registerSchema), AuthController.userRegister);
 
-router.post('/login', [validateBody(schemas.loginSchema), AuthService.local()], AuthController.userLogin);
+router.post('/login', validateBody(schemas.loginSchema), AuthService.local(), AuthController.userLogin);
 
 router.get('/login/google', AuthService.google());
 

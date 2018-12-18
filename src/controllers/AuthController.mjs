@@ -2,6 +2,7 @@
  * Module dependencies.
  */
 import bcrypt from 'bcrypt';
+import AccessControl from '../helpers/accessControl';
 import User from '../models/User';
 import { signToken, generatePassword } from '../helpers/auth';
 
@@ -50,7 +51,7 @@ export default {
       const user = await User.findOne({ 'local.email': email });
 
       if (user) {
-        // TODO Move password check to Model methods.
+        // @TODO Move password check to Model methods.
         const match = await bcrypt.compare(password, user.local.password);
 
         if (!match) {
@@ -81,7 +82,7 @@ export default {
 
       const token = signToken(user);
 
-      // TODO change response header to application/json
+      // @TODO change response header to application/json
       res.status(201).json({ user, token });
     } catch (err) {
       next(err);
@@ -101,7 +102,7 @@ export default {
 
       const token = signToken(user);
 
-      // TODO change response header to application/json
+      // @TODO change response header to application/json
       res.status(201).json({ user, token });
     } catch (err) {
       next(err);
@@ -111,24 +112,32 @@ export default {
   /**
    * Middleware for protecting routes based on User role.
    *
-   * TODO Use accesscontrol module
+   * @TODO Use accesscontrol module
    * @see https://github.com/onury/accesscontrol
    *
-   * @param {Array} roles
+   * @param {Array} roles Roles to access route.
    */
-  userRoleAuth(roles) {
+  userEnsureAccess(role, action, resource) {
     return async (req, res, next) => {
       try {
-        const { user } = req;
-
-        const foundedUser = await User.findById(user._id);
+        const foundedUser = await User.findById(req.params.id);
 
         if (!foundedUser) {
           res.status(404).json({ message: 'No User found' });
         }
 
-        if (roles.indexOf(foundedUser.role) > -1) {
+        // Unlimited power.
+        if (role === 'admin') {
           return next();
+        }
+
+        //
+        if (req.user._id.toString() === req.params.id) {
+          const permission = AccessControl.can(role)[action](resource);
+
+          if (permission.granted) {
+            return next();
+          }
         }
 
         res.status(401).json({ message: 'Unauthorized' });

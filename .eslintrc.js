@@ -3,6 +3,7 @@ module.exports = {
   "rules": {
     "no-console": 0,
     "consistent-return": 0,
-    "no-underscore-dangle": 0
+    "no-underscore-dangle": 0,
+    "array-callback-return": 0
   }
 };

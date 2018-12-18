@@ -1,18 +1,19 @@
 import express from 'express';
 import PostController from '../../controllers/PostController';
-// import AuthService from '../../services/AuthService';
 import { validateBody, schemas } from '../../helpers/schemaValidator';
+import AuthService from '../../services/AuthService';
+import AccessControlService from '../../services/AccessControlService';
 
-const postRouter = express.Router();
+const router = express.Router();
 
-postRouter.get('/articles', PostController.postList);
+router.get('/posts', AccessControlService.checkPermissions, PostController.postList);
 
-postRouter.get('/article/:id', PostController.postGetOne);
+router.get('/post/:id', AuthService.jwt(), AccessControlService.checkPermissions, PostController.postGetOne);
 
-postRouter.post('/articles', validateBody(schemas.postSchema), PostController.postCreate);
+router.post('/posts', validateBody(schemas.postSchema), PostController.postCreate);
 
-postRouter.put('/article/:id', validateBody(schemas.postSchema), PostController.postUpdate);
+router.put('/post/:id', validateBody(schemas.postSchema), PostController.postUpdate);
 
-postRouter.delete('/article/:id', PostController.postDelete);
+router.delete('/post/:id', PostController.postDelete);
 
-export default postRouter;
+export default router;

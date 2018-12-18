@@ -2,6 +2,7 @@
  * Module dependencies.
  */
 import mkdirp from 'mkdirp';
+import multer from 'multer';
 
 /**
  * Middleware for creating default directory for all uploading files.
@@ -15,7 +16,7 @@ export function ensureDirectoryCreated(res, req, next) {
 }
 
 /**
- * Middleware got creating directory for all uploading images.
+ * Middleware for creating directory for all uploading images.
  */
 export function createUploadDirectory(req, res, next) {
   const currentDate = new Date().toLocaleDateString();
@@ -35,14 +36,52 @@ export function createUploadDirectory(req, res, next) {
  * File filter callback for multer module.
  *
  * @param {Array} mimeTypes Allowed mimetypes.
- * @returns {Function}
+ * @returns {Function} Express middleware.
  */
-export function fileFilter(mimeTypes) {
+function fileFilter(mimeTypes) {
   return (req, file, cb) => {
     if (!mimeTypes.includes(file.mimetype)) {
-      cb(new Error(`Only ${mimeTypes.toString()} mimetypes are available.`), false);
+      return cb(new multer.MulterError(`Only ${mimeTypes.toString()} mimetypes are available.`), false);
     }
 
     cb(null, true);
   };
+}
+
+/**
+ * Initialize multer Middleware for uplaoding single file.
+ *
+ * @param {String} name File field name from multipart/form-data type.
+ * @returns {Function} Multer Middleware.
+ */
+export function uploadSingle(name) {
+  const storage = multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, req.value.folder);
+    },
+    filename(req, file, cb) {
+      cb(null, file.originalname);
+    },
+  });
+
+  return multer({ storage, fileFilter: fileFilter(this.allowedMimeTypes) }).single(name);
+}
+
+/**
+ * Initialize multer Middleware for uplaoding multiple files.
+ *
+ * @param {String} name File field names from multipart/form-data type.
+ * @returns {Function} Multer Middleware.
+ */
+export function uploadMultiple(name) {
+  const storage = multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, req.value.folder);
+    },
+    filename(req, file, cb) {
+      cb(null, file.originalname);
+    },
+  });
+
+  return multer({ storage, fileFilter: fileFilter(this.allowedMimeTypes) }).array(name);
 }

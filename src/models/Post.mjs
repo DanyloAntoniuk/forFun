@@ -2,10 +2,11 @@
  * Module dependencies.
  */
 import mongoose from 'mongoose';
-// import timestamps from 'mongoose-timestamp';
 
 /**
  * Mongoose Schema for Post entity.
+ *
+ * @todo Create dynamic schema for content types.
  */
 const PostSchema = mongoose.Schema({
   title: {
@@ -31,8 +32,7 @@ const PostSchema = mongoose.Schema({
       refPath: 'widgets.fieldType',
     },
   }],
+  fields: [{}],
 }, { timestamps: true });
-
-// PostSchema.plugin(timestamps);
 
 export default mongoose.model('Post', PostSchema);

@@ -7,7 +7,7 @@ import Joi from 'joi';
  * Validation for incoming requests JSON.
  *
  * @param {Object} schema Joi schema to validate.
- * @return {Function} Express middleware.
+ * @returns {Function} Express middleware.
  */
 export function validateBody(schema) {
   // eslint-disable-next-line consistent-return
@@ -62,9 +62,6 @@ const objectID = Joi.string()
 
 const array = Joi.array();
 
-const number = Joi.number()
-  .required();
-
 /**
  * Available schemas.
  */
@@ -76,14 +73,16 @@ export const schemas = {
     role,
   }),
   loginSchema: Joi.object().keys({ email, password }),
+  userCancelSchema: Joi.object().keys({ active }),
   postSchema: Joi.object().keys({
     title: textField,
     status,
     author: objectID,
     widgets: array,
+    fields: array,
   }),
   widgets: {
-    imageSchema: {
+    uploadSchema: {
       title: textField,
     },
     videoSchema: {

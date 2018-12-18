@@ -34,6 +34,14 @@ const UserSchema = mongoose.Schema({
       type: String,
       lowercase: true,
     },
+    name: {
+      familyName: {
+        type: String,
+      },
+      givenName: {
+        type: String,
+      },
+    },
   },
   github: {
     id: {

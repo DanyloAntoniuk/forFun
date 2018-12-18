@@ -84,7 +84,7 @@ class AuthService {
     this.passport.use(new GoogleStrategy({
       clientID: config.oauth.google.clientID,
       clientSecret: config.oauth.google.clientSecret,
-      // TODO use real host name.
+      // @TODO use real host name.
       callbackURL: 'http://localhost:3000/api/login/google/oauthCallback',
     },
     async (req, accessToken, refreshToken, profile, done) => {
@@ -100,6 +100,10 @@ class AuthService {
           google: {
             id: profile.id,
             email: profile.emails[0].value,
+            name: {
+              familyName: profile.name.familyName,
+              givenName: profile.name.givenName,
+            },
           },
           role: 'authenticated',
         });
@@ -148,7 +152,7 @@ class AuthService {
       }
     }));
 
-    // Scope property is required for Google api.
+    // Scope property is required for Github api.
     return this.passport.authenticate('github', { session: false, scope: ['profile', 'email'] });
   }
 }

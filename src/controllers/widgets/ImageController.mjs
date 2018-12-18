@@ -2,10 +2,8 @@
  * Module dependencies.
  */
 import paginate from 'express-paginate';
-import multer from 'multer';
 import fs from 'fs';
 import Image from '../../models/widgets/Image';
-import { fileFilter } from '../../helpers/widgets';
 
 export default {
   /**
@@ -14,43 +12,10 @@ export default {
   allowedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg'],
 
   /**
-   * Initialize multer Middleware for uplaoding single file.
-   *
-   * @param {String} name Image field name from multipart/form-data type.
-   */
-  uploadSingle(name) {
-    const storage = multer.diskStorage({
-      destination(req, file, cb) {
-        cb(null, req.value.folder);
-      },
-      filename(req, file, cb) {
-        cb(null, file.originalname);
-      },
-    });
-
-    return multer({ storage, fileFilter: fileFilter(this.allowedMimeTypes) }).single(name);
-  },
-
-  /**
-   * Initialize multer Middleware for uplaoding multiple files.
-   *
-   * @param {String} name Image field names from multipart/form-data type.
-   */
-  uploadMultiple(name) {
-    const storage = multer.diskStorage({
-      destination(req, file, cb) {
-        cb(null, req.value.folder);
-      },
-      filename(req, file, cb) {
-        cb(null, file.originalname);
-      },
-    });
-
-    return multer({ storage, fileFilter: fileFilter(this.allowedMimeTypes) }).array(name);
-  },
-
-  /**
    * Create image.
+   *
+   * @@TODO Don't save duplicate images in different folders.
+   * Save path to existing image.
    */
   async imageCreate(req, res, next) {
     try {
@@ -61,7 +26,6 @@ export default {
         size,
       } = req.file;
       const { title, imageTitle, imageAlt } = req.body;
-      console.log(originalname, mimetype, path, size);
 
       const image = new Image({
         title,
@@ -89,20 +53,20 @@ export default {
 
   /**
    * Create multiple images.
-   * TODO
+   * @@TODO
    */
-  async imageCreateMultiple(req, res, next) {
-    // try {
-    //   console.log(req.files);
-    //   const images = await Image.insertMany(req.files);
+  // async imageCreateMultiple(req, res, next) {
+  // try {
+  //   console.log(req.files);
+  //   const images = await Image.insertMany(req.files);
 
-    //   await images.save();
+  //   await images.save();
 
-    //   res.status(201).json(images);
-    // } catch (err) {
-    //   next(err);
-    // }
-  },
+  //   res.status(201).json(images);
+  // } catch (err) {
+  //   next(err);
+  // }
+  // },
 
   /**
    * Get single image.
