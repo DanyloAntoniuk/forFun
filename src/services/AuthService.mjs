@@ -30,7 +30,6 @@ class AuthService {
   jwt() {
     const { ExtractJwt } = passportJwt;
 
-    // eslint-disable-next-line consistent-return
     this.passport.use(new JwtStrategy({
       jwtFromRequest: ExtractJwt.fromHeader('authorization'),
       secretOrKey: config.JWT_SECRET,
@@ -38,7 +37,6 @@ class AuthService {
     async (jwtPayload, done) => {
       try {
         const user = await User.findById(jwtPayload.sub);
-
         if (!user) {
           return done(null, false);
         }
@@ -56,7 +54,6 @@ class AuthService {
    * Local authentication with email and password.
    */
   local() {
-    // eslint-disable-next-line consistent-return
     this.passport.use(new LocalStrategy({
       usernameField: 'email',
     },

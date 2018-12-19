@@ -26,7 +26,6 @@ export default {
    */
   async userList(req, res, next) {
     try {
-      console.log(req);
       const limit = Number(req.query.limit);
 
       const [users, count] = await Promise.all([
@@ -37,6 +36,10 @@ export default {
           .exec(),
         User.countDocuments({}),
       ]);
+
+      if (!count) {
+        return res.status(404).json({ message: 'No Users found.' });
+      }
 
       const pageCount = Math.ceil(count / req.query.limit);
 

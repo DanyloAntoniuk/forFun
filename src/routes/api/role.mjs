@@ -1,10 +1,14 @@
 import express from 'express';
-// import AuthService from '../../services/AuthService';
+import AuthService from '../../services/AuthService';
+import AccessControlService from '../../services/AccessControlService';
 // import { validateBody, schemas } from '../../helpers/schemaValidator';
-// import AuthController from '../../controllers/AuthController';
 import Role from '../../models/Role';
 
 const router = express.Router();
+
+router.use(AuthService.jwt(), AccessControlService.checkPermissions);
+
+// @TODO
 
 router.post('/roles', async (req, res, next) => {
   try {

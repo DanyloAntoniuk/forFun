@@ -20,10 +20,6 @@ const RoleSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  attributes: {
-    type: String,
-    required: true,
-  },
 }, { timestamps: true });
 
 export default mongoose.model('Role', RoleSchema);

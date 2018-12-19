@@ -12,7 +12,7 @@ router.get('/post/:id', AuthService.jwt(), AccessControlService.checkPermissions
 
 router.post('/posts', validateBody(schemas.postSchema), PostController.postCreate);
 
-router.put('/post/:id', validateBody(schemas.postSchema), PostController.postUpdate);
+router.put('/post/:id', validateBody(schemas.postSchema), AuthService.jwt(), AccessControlService.checkPermissions, PostController.postUpdate);
 
 router.delete('/post/:id', PostController.postDelete);
 

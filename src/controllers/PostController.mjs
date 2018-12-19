@@ -51,6 +51,10 @@ export default {
         .populate('author')
         .populate('widgets.id');
 
+      if (!post) {
+        return res.status(404).json({ message: `Post with id ${req.params.id} not found.` });
+      }
+
       res.json(post);
     } catch (err) {
       next(err);
@@ -84,6 +88,10 @@ export default {
         { new: true },
       );
 
+      if (!updatedPost) {
+        return res.status(404).json({ message: `Post with id ${req.params.id} not found.` });
+      }
+
       res.json(updatedPost);
     } catch (err) {
       next(err);
@@ -96,6 +104,10 @@ export default {
   async postDelete(req, res, next) {
     try {
       const deletedPost = await Post.findByIdAndDelete(req.params.id);
+
+      if (!deletedPost) {
+        return res.status(404).json({ message: `Post with id ${req.params.id} not found.` });
+      }
 
       res.json(deletedPost);
     } catch (err) {

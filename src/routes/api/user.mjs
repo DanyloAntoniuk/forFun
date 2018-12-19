@@ -7,14 +7,16 @@ import AccessControlService from '../../services/AccessControlService';
 
 const router = express.Router();
 
-router.get('/user/:id([0-9a-f]{24})', AuthService.jwt(), AccessControlService.checkPermissions, UserController.userGetOne);
+router.use(AuthService.jwt(), AccessControlService.checkPermissions);
 
-router.get('/users', AuthService.jwt(), UserController.userList);
+router.get('/user/:id([0-9a-f]{24})', UserController.userGetOne);
 
-router.post('/user/:id/cancel', AuthService.jwt(), validateBody(schemas.userCancelSchema), AuthService.jwt(), UserController.userCancel);
+router.get('/users', UserController.userList);
 
-router.delete('/user/:id', AuthService.jwt(), UserController.userDelete);
+router.post('/user/:id/cancel', validateBody(schemas.userCancelSchema), AuthService.jwt(), UserController.userCancel);
 
-router.put('/user/:id', AuthService.jwt(), UserController.userUpdate);
+router.delete('/user/:id', UserController.userDelete);
+
+router.put('/user/:id', UserController.userUpdate);
 
 export default router;

@@ -71,7 +71,7 @@ export default {
    * @param {String} action Action to filter.
    * @returns {String} Permission for given action.
    */
-  async filterPermissions(roleActions, action) {
+  filterPermissions(roleActions, action) {
     const leanActions = roleActions.map(el => el.action);
 
     const leanAction = leanActions.map((el) => {
@@ -83,7 +83,13 @@ export default {
     return leanAction.filter(Boolean)[0];
   },
 
-  async getModelName(resource) {
+  /**
+   * Get mongoose model name from resource name.
+   *
+   * @param {String} resource Resource name.
+   * @returns {String} Model name.
+   */
+  getModelName(resource) {
     return resource.charAt(0).toUpperCase() + resource.substring(1);
   },
 };
