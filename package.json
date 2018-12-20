@@ -2,41 +2,16 @@
   "name": "node_test",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start-watch": "nodemon --experimental-modules src/index.mjs"
+    "client": "cd client && npm start",
+    "server": "cd server && npm start",
+    "start": "concurrently --kill-others \"npm run server\" \"npm run client\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@babel/polyfill": "^7.0.0",
-    "accesscontrol": "^2.2.1",
-    "bcrypt": "^3.0.2",
-    "body-parser": "^1.18.3",
-    "express": "^4.16.3",
-    "express-fileupload": "^1.0.0",
-    "express-paginate": "^1.0.0",
-    "helmet": "^3.15.0",
-    "joi": "^14.3.0",
-    "jsonwebtoken": "^8.4.0",
-    "mkdirp": "^0.5.1",
-    "mongoose": "^5.3.0",
-    "mongoose-unique-validator": "^2.0.2",
-    "morgan": "^1.9.1",
-    "multer": "^1.4.1",
-    "nodemailer": "^4.7.0",
-    "passport": "^0.4.0",
-    "passport-github": "^1.1.0",
-    "passport-google-oauth": "^1.0.0",
-    "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0"
-  },
   "devDependencies": {
-    "eslint": "^5.9.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "nodemon": "^1.18.7"
+    "concurrently": "^4.1.0"
   }
 }

@@ -15,7 +15,7 @@ class AccessConrolService {
     this.action = null;
     this.permission = null;
 
-    // this.checkPermissions = this.checkPermissions.bind(this);
+    this.checkPermissions = this.checkPermissions.bind(this);
   }
 
   /**

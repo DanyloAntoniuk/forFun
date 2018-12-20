@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
 import path from 'path';
+import cors from 'cors';
 import config from '../config/database';
 import routes from './routes/index';
 
@@ -27,6 +28,7 @@ database.on('error', (err) => {
 
 const app = express();
 
+app.use(cors());
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,7 +43,7 @@ const dirname = path.join(path.resolve('./'));
 const logStream = fs.createWriteStream(path.join(dirname, 'morgan-logs.log'), { flags: 'a' });
 app.use(morgan('combined', { stream: logStream }));
 
-const PORT = process.env.port || 3000;
+const PORT = process.env.port || 3001;
 
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
