@@ -131,7 +131,6 @@ export default {
           return next();
         }
 
-        //
         if (req.user._id.toString() === req.params.id) {
           const permission = AccessControl.can(role)[action](resource);
 
