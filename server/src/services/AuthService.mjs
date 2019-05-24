@@ -36,7 +36,7 @@ class AuthService {
     },
     async (jwtPayload, done) => {
       try {
-        const user = await User.findById(jwtPayload.sub);
+        const user = await User.findById(jwtPayload.userID);
         if (!user) {
           return done(null, false);
         }

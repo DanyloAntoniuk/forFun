@@ -6,11 +6,9 @@ import Role from '../../models/Role';
 
 const router = express.Router();
 
-router.use(AuthService.jwt(), AccessControlService.checkPermissions);
-
 // @TODO
 
-router.post('/roles', async (req, res, next) => {
+router.post('/roles', AuthService.jwt(), AccessControlService.checkPermissions, async (req, res, next) => {
   try {
     const role = new Role(req.body);
 
