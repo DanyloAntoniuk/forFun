@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PostsService } from './posts.service';
+import { MatTableDataSource } from '@angular/material';
+import { Posts } from './posts';
 
 @Component({
   selector: 'posts-table',
@@ -8,21 +10,22 @@ import { PostsService } from './posts.service';
   providers: [ PostsService ],
 })
 export class PostsComponent implements OnInit {
-  posts: Object = {};
-  displayedColumns: string[] = ['title', 'status', 'author', 'createdAt', 'updatedAt'];
+  posts: MatTableDataSource<Posts>;
+  displayedColumns: string[] = ['title', 'status', 'createdAt', 'updatedAt'];
 
   constructor(private postsService: PostsService) {
   }
 
   ngOnInit() {
-    this.showTestData();
+    this.showPosts();
   }
 
-  showTestData() {
+  showPosts() {
     this.postsService.getPosts()
     .subscribe((data: any) => {
       console.log(data);
-      this.posts = data.posts;
-    })
+      this.posts = new MatTableDataSource(data);
+    });
   }
+
 }
