@@ -13,12 +13,7 @@ import config from '../../config/auth';
   * @returns {String} Generated JW Token.
   */
 export function signToken(user) {
-  return JWT.sign({
-    iss: 'megasecret',
-    sub: user.id,
-    iat: new Date().getTime(),
-    exp: new Date().setHours(new Date().getHours() + 2),
-  }, config.JWT_SECRET);
+  return JWT.sign({ userID: user.id }, config.JWT_SECRET, { expiresIn: '2h' });
 }
 
 /**

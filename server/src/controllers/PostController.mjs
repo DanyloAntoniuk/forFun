@@ -35,6 +35,7 @@ export default {
 
       res.json({
         posts,
+        count,
         hasMore: paginate.hasNextPages(req)(pageCount),
       });
     } catch (err) {

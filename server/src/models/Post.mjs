@@ -21,7 +21,7 @@ const PostSchema = mongoose.Schema({
   status: {
     type: String,
     reqiured: true,
-    enum: ['Unpublished', 'Published', 'Archive'],
+    enum: ['Unpublished', 'Published', 'Archived'],
   },
   widgets: [{
     fieldType: {

@@ -29,7 +29,7 @@ class AccessConrolService {
       accessControl.getActionFromMethod(req.method),
     ]);
 
-    const roleActions = await Role.find({ role: req.user.role }).select('action -_id');
+    const roleActions = await Role.find({ role: req.user.role, resource: this.resource }).select('action -_id');
     this.permission = accessControl.filterPermissions(roleActions, this.action);
   }
 

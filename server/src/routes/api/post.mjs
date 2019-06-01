@@ -10,7 +10,7 @@ router.get('/posts', PostController.postList);
 
 router.get('/post/:id', PostController.postGetOne);
 
-router.post('/posts', AuthService.jwt(), AccessControlService.checkPermissions, validateBody(schemas.postSchema), PostController.postCreate);
+router.post('/posts', validateBody(schemas.postSchema), PostController.postCreate);
 
 router.put('/post/:id', AuthService.jwt(), AccessControlService.checkPermissions, validateBody(schemas.postSchema), PostController.postUpdate);
 
