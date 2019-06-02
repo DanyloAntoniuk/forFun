@@ -2,7 +2,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { MatTableModule, MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
+import { MatTableModule, 
+  MatToolbarModule, 
+  MatButtonModule, 
+  MatSidenavModule, 
+  MatIconModule, 
+  MatListModule,
+  MatProgressSpinnerModule,
+  MatCardModule,
+  MatSortModule,
+  MatPaginatorModule,
+} from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -31,6 +41,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatListModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
+    MatProgressSpinnerModule,
+    MatCardModule,
+    MatSortModule,
+    MatPaginatorModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

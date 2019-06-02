@@ -1,22 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Posts } from './posts';
-import { map } from 'rxjs/operators';
-import * as moment from 'moment';
+import { PostApi } from './posts';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class PostsService {
   constructor(private http: HttpClient) {}
 
-  getPosts(): Observable<Posts[]> {
-    return this.http.get<Posts[]>('http://localhost:3001/api/posts?page=10')
-      .pipe(
-        map(data => data.posts)
-      );
+  getPosts(page: number): Observable<PostApi> {
+    return this.http.get<PostApi>(`${environment.endpoint}/posts?limit=5&page=${page}`);
   }
 
-  getPost(id: string): Observable<Posts> {
-    return this.http.get<Posts>(`http://localhost:3001/api/posts/${id}`);
+  getPost(id: string): Observable<PostApi> {
+    return this.http.get<PostApi>(`${environment.endpoint}/posts/${id}`);
   }
 }
