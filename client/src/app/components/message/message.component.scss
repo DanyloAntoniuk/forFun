@@ -1,0 +1,19 @@
+.alert {
+  width: 100%;
+  margin: 10px 0 10px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  &-success {
+    background-color: lighten(#5cb85c, 15%);
+    border-color: lighten(#5cb85c, 10%);
+    color: darken(#5cb85c, 15%);
+  }
+  &-warn {
+    background-color: lighten(#E2A41F, 15%);
+    border-color: lighten(#E2A41F, 10%);
+    color: darken(#E2A41F, 15%);
+  }
+  &-error {
+    color: #f44336
+  }
+}

@@ -27,6 +27,7 @@ import { LoginComponent } from './login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthInterceptor } from './helpers/auth.interceptor';
 import { AuthService } from './login/Auth.service';
+import { MessageComponent } from './components/message/message.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { AuthService } from './login/Auth.service';
     PostsComponent,
     AppNavComponent,
     LoginComponent,
+    MessageComponent,
   ],
   imports: [
     BrowserModule,

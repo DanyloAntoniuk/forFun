@@ -2,17 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from './Auth.service';
+import { MessageService } from '../services/message.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  providers: [AuthService],
+  providers: [AuthService, MessageService],
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
-  hide = true;
   mainError: string;
 
   constructor(
@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
+    private messageService: MessageService,
     ) {}
 
   ngOnInit() {
@@ -32,7 +33,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     const { controls } = this.loginForm;
 
-    if(this.loginForm.invalid) {
+    if (this.loginForm.invalid) {
       return;
     }
 
@@ -42,7 +43,26 @@ export class LoginComponent implements OnInit {
     },
     error => {
       this.loading = false;
-      this.mainError = 'Email or Password is incorrect';
+      this.messageService.error('Email or password is incorrect');
     });
   }
+
+  getErrorByFieldName(fieldName: string)  {
+    const { errors, value } = this.loginForm.controls[fieldName];
+    const capitalizedFieldName = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+
+    switch (true) {
+      case errors.email: {
+        return `${value} is not a valid email`;
+      }
+      case errors.required: {
+        return `${capitalizedFieldName} field is required`;
+      }
+      case !!errors.minlength.requiredLength: {
+        return `${capitalizedFieldName} must be at least ${errors.minlength.requiredLength} characters long`;
+      }
+    }
+  }
 }
+
+
