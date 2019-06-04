@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatTableModule, 
   MatToolbarModule, 
   MatButtonModule, 
@@ -12,6 +12,8 @@ import { MatTableModule,
   MatCardModule,
   MatSortModule,
   MatPaginatorModule,
+  MatInputModule,
+  MatFormFieldModule,
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -21,12 +23,17 @@ import { from } from 'rxjs';
 import { AppNavComponent } from './shared/app-nav/app-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { LoginComponent } from './login/login.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AuthInterceptor } from './helpers/auth.interceptor';
+import { AuthService } from './login/Auth.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     PostsComponent,
     AppNavComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,8 +52,15 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatCardModule,
     MatSortModule,
     MatPaginatorModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [
+    AuthService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

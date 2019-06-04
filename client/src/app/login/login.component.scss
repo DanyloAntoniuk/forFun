@@ -1,0 +1,26 @@
+.login-main {
+  margin-top: 10%;
+}
+
+mat-card {
+  min-width: 20%;
+}
+
+mat-card-title, mat-card-content {
+  display: flex;
+  justify-content: center;
+}
+
+mat-form-field, form {
+  width: 100%
+}
+
+.form-action {
+  display: flex;
+  justify-content: flex-end;
+}
+
+mat-spinner {
+  display: inline;
+  margin: 7px;
+}

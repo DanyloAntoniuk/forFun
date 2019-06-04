@@ -1,9 +1,9 @@
-import { Component, ViewChild, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { PostsService } from './posts.service';
-import { MatTableDataSource, MatPaginator, MatSort, PageEvent } from '@angular/material';
+import { MatPaginator, MatSort } from '@angular/material';
 import { Post } from './posts';
 import * as moment from 'moment';
-import { merge, Observable, of as observableOf } from 'rxjs';
+import { of as observableOf } from 'rxjs';
 import { delay, startWith, switchMap, map, catchError } from 'rxjs/operators';
 
 @Component({
