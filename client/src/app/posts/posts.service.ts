@@ -12,7 +12,7 @@ export class PostsService {
     return this.http.get<PostApi>(`${environment.endpoint}/posts?limit=5&page=${page}`);
   }
 
-  getPost(id: string): Observable<PostApi> {
-    return this.http.get<PostApi>(`${environment.endpoint}/posts/${id}`);
+  getPost(title: string): Observable<PostApi> {
+    return this.http.get<PostApi>(`${environment.endpoint}/post/${title}`);
   }
 }

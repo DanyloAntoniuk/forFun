@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { PostsService } from './posts.service';
-import { MatPaginator, MatSort } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Post } from './posts';
 import * as moment from 'moment';
 import { of as observableOf } from 'rxjs';
@@ -16,18 +16,18 @@ import { Router } from '@angular/router';
   providers: [ PostsService, AuthService ],
 })
 export class PostsComponent implements AfterViewInit {
-  posts: Post[];
-  displayedColumns: string[] = ['No.','title', 'status', 'createdAt', 'updatedAt'];
+  posts: MatTableDataSource<Post>;
+  displayedColumns: string[] = ['No.', 'title', 'status', 'createdAt', 'updatedAt', 'actions'];
   currentUser: User;
 
   isLoading = true;
   resultsLength = 0;
 
-  @ViewChild(MatSort) sort: MatSort
+  @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
-    private postsService: PostsService, 
+    private postsService: PostsService,
     private authService: AuthService,
     private router: Router,
     ) {
@@ -66,12 +66,27 @@ export class PostsComponent implements AfterViewInit {
           };
         });
 
-        this.posts = table;
-      });
+        this.posts = new MatTableDataSource(table);
+
+        this.posts.sortingDataAccessor = sortDate;
+        this.posts.sort = this.sort;
+    });
   }
 
   goToPost(element: Post) {
     this.router.navigate(['/post', element.title]);
   }
 
+  deletePost(element: Post) {
+    console.log(element);
+  }
 }
+
+const sortDate = (item: Post, property: string) => {
+  switch (property) {
+    case 'createdAt': {
+      return new Date(item.createdAt);
+    }
+    default: return item[property];
+  }
+};

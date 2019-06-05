@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get('/posts', PostController.postList);
 
-router.get('/post/:id', PostController.postGetOne);
+router.get('/post/:title', PostController.postGetOne);
 
 router.post('/posts', validateBody(schemas.postSchema), PostController.postCreate);
 

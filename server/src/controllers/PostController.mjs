@@ -48,7 +48,8 @@ export default {
    */
   async postGetOne(req, res, next) {
     try {
-      const post = await Post.findById(req.params.id)
+      const { title } = req.params;
+      const post = await Post.find({ title })
         .populate('author')
         .populate('widgets.id');
 
@@ -56,7 +57,7 @@ export default {
         return res.status(404).json({ message: `Post with id ${req.params.id} not found.` });
       }
 
-      res.json(post);
+      return res.json(post[0]);
     } catch (err) {
       next(err);
     }
