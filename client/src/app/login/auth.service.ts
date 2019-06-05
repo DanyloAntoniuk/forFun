@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { User } from '../models/user';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
@@ -8,14 +8,14 @@ import { map } from 'rxjs/operators';
 @Injectable()
 export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
-  private currentUser: Observable<User>;
+  currentUser: Observable<User>;
 
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  login(email: string, password: string) {
+  login(email: string, password: string): Observable<User> {
     return this.http.post<any>(`${environment.endpoint}/login`, { email, password })
       .pipe(
         map(user => {
@@ -24,11 +24,11 @@ export class AuthService {
 
           return user;
         })
-      )
+      );
   }
 
   logout() {
-    localStorage.removeItem('currentuser');
+    localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
   }
 }

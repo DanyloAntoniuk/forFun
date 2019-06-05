@@ -5,11 +5,11 @@
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <app-message></app-message>
         <mat-form-field>
-          <input matInput placeholder="Email" formControlName="email"/>
+          <input matInput placeholder="Email" autocomplete="email" formControlName="email"/>
           <mat-error *ngIf="loginForm.get('email').errors">{{getErrorByFieldName('email')}}</mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input [type]="hide ? 'password' : 'text'" placeholder="Password" matInput formControlName="password"/>
+          <input [type]="hide ? 'password' : 'text'" autocomplete="current-password" placeholder="Password" matInput formControlName="password"/>
           <button mat-icon-button matSuffix type="button" (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
@@ -19,7 +19,7 @@
           <button mat-button [disabled]="loading" type="submit" class="btn btn-primary">Login
             <mat-spinner *ngIf="loading" color="primary" [diameter]="17"></mat-spinner>
           </button>
-          <a mat-button routerLink="/register" class="btn btn-link">Register</a>
+          <!-- <a mat-button routerLink="/register" class="btn btn-link">Register</a> -->
         </div>
       </form>
     </mat-card-content>

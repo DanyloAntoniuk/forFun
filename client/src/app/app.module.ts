@@ -28,6 +28,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthInterceptor } from './helpers/auth.interceptor';
 import { AuthService } from './login/Auth.service';
 import { MessageComponent } from './components/message/message.component';
+import { PostComponent } from './components/post/post.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { MessageComponent } from './components/message/message.component';
     AppNavComponent,
     LoginComponent,
     MessageComponent,
+    PostComponent,
   ],
   imports: [
     BrowserModule,

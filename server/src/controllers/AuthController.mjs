@@ -35,7 +35,7 @@ export default {
 
       const token = signToken(user);
 
-      res.status(201).json({ user, token });
+      return res.status(201).json({ user, token });
     } catch (err) {
       next(err);
     }
@@ -55,15 +55,15 @@ export default {
         const match = await bcrypt.compare(password, user.local.password);
 
         if (!match) {
-          res.status(400).json({ message: 'Password is incorrect.' });
+          return res.status(400).json({ message: 'Password is incorrect.' });
         }
 
         const token = signToken(user);
 
-        res.status(200).json({ user, token });
-      } else {
-        res.status(404).json({ message: `User ${email} is not registered.` });
+        return res.status(200).json({ user, token });
       }
+
+      return res.status(404).json({ message: `User ${email} is not registered.` });
     } catch (err) {
       next(err);
     }

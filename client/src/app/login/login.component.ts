@@ -13,6 +13,7 @@ import { MessageService } from '../services/message.service';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
+  hide = true;
   mainError: string;
 
   constructor(
@@ -39,7 +40,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(controls.email.value, controls.password.value)
     .subscribe((user) => {
-      console.log(user);
+      this.router.navigate(['posts']);
     },
     error => {
       this.loading = false;
