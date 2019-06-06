@@ -14,6 +14,7 @@ import { MatTableModule,
   MatPaginatorModule,
   MatInputModule,
   MatFormFieldModule,
+  MatDialogModule,
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -26,9 +27,11 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { LoginComponent } from './login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthInterceptor } from './helpers/auth.interceptor';
-import { AuthService } from './login/Auth.service';
+import { AuthService } from './login/auth.service';
 import { MessageComponent } from './components/message/message.component';
 import { PostComponent } from './components/post/post.component';
+import { DateAgoPipe } from './pipes/date-ago.pipe';
+import { DialogComponent } from './components/dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,8 @@ import { PostComponent } from './components/post/post.component';
     LoginComponent,
     MessageComponent,
     PostComponent,
+    DateAgoPipe,
+    DialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,7 +65,9 @@ import { PostComponent } from './components/post/post.component';
     MatInputModule,
     FormsModule,
     ReactiveFormsModule,
+    MatDialogModule,
   ],
+  entryComponents: [DialogComponent,],
   providers: [
     AuthService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

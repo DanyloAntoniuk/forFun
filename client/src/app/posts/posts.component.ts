@@ -1,13 +1,13 @@
 import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { PostsService } from './posts.service';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { Post } from './posts';
-import * as moment from 'moment';
-import { of as observableOf } from 'rxjs';
+import { of as observableOf, merge } from 'rxjs';
 import { delay, startWith, switchMap, map, catchError } from 'rxjs/operators';
-import { AuthService } from '../login/Auth.service';
+import { AuthService } from '../login/auth.service';
 import { User } from '../models/user';
 import { Router } from '@angular/router';
+import { DialogComponent } from '../components/dialog/dialog.component';
 
 @Component({
   selector: 'posts-table',
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   providers: [ PostsService, AuthService ],
 })
 export class PostsComponent implements AfterViewInit {
-  posts: MatTableDataSource<Post>;
+  posts = new MatTableDataSource<Post>();
   displayedColumns: string[] = ['No.', 'title', 'status', 'createdAt', 'updatedAt', 'actions'];
   currentUser: User;
 
@@ -30,6 +30,7 @@ export class PostsComponent implements AfterViewInit {
     private postsService: PostsService,
     private authService: AuthService,
     private router: Router,
+    private dialog: MatDialog,
     ) {
     this.authService.currentUser.subscribe(user => this.currentUser = user);
   }
@@ -39,6 +40,8 @@ export class PostsComponent implements AfterViewInit {
   }
 
   handlePosts() {
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
     this.paginator.page
       .pipe(
         startWith({}),
@@ -58,15 +61,7 @@ export class PostsComponent implements AfterViewInit {
           return observableOf([]);
         })
       ).subscribe((posts: Post[]) => {
-        const table = posts.map((post: Post) => {
-          return {
-            ...post,
-            createdAt: moment(post.createdAt).format('MMM DD YYYY, HH:mm'),
-            updatedAt: moment(post.updatedAt).fromNow(),
-          };
-        });
-
-        this.posts = new MatTableDataSource(table);
+        this.posts = new MatTableDataSource(posts);
 
         this.posts.sortingDataAccessor = sortDate;
         this.posts.sort = this.sort;
@@ -78,12 +73,29 @@ export class PostsComponent implements AfterViewInit {
   }
 
   deletePost(element: Post) {
-    console.log(element);
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '300px',
+      data: {
+        title: element.title,
+        type: 'Post',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.postsService.delete(element._id).subscribe(() => {
+          this.handlePosts();
+        });
+      }
+    });
   }
 }
 
 const sortDate = (item: Post, property: string) => {
   switch (property) {
+    case 'updatedAt': {
+      return new Date(item.updatedAt);
+    }
     case 'createdAt': {
       return new Date(item.createdAt);
     }

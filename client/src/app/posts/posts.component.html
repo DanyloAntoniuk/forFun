@@ -10,7 +10,7 @@
         </mat-progress-spinner>
       </mat-card>
 
-<table mat-table [dataSource]="posts" matSort matSortActive="createdAt">
+<table mat-table [dataSource]="posts" matSort matSortActive="updatedAt">
 
   <!-- Name Column -->
   <ng-container matColumnDef="No.">
@@ -38,12 +38,12 @@
 
   <ng-container matColumnDef="createdAt">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
-    <td mat-cell *matCellDef="let element"> {{element.createdAt}} </td>
+    <td mat-cell *matCellDef="let element"> {{element.createdAt | date:'MMM dd yyyy, HH:mm'}} </td>
   </ng-container>
 
   <ng-container matColumnDef="updatedAt">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Updated At </th>
-    <td mat-cell *matCellDef="let element"> {{element.updatedAt}} </td>
+    <td mat-cell *matCellDef="let element"> {{element.updatedAt | dateAgo}} </td>
   </ng-container>
 
   <ng-container matColumnDef="actions">

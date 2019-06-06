@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PostApi } from './posts';
+import { PostApi, Post } from './posts';
 import { environment } from '../../environments/environment';
 
 @Injectable()
@@ -12,7 +12,15 @@ export class PostsService {
     return this.http.get<PostApi>(`${environment.endpoint}/posts?limit=5&page=${page}`);
   }
 
-  getPost(title: string): Observable<PostApi> {
-    return this.http.get<PostApi>(`${environment.endpoint}/post/${title}`);
+  getPost(id: string): Observable<PostApi> {
+    return this.http.get<PostApi>(`${environment.endpoint}/posts/${id}`);
+  }
+
+  createPost(post: Post): Observable<Post> {
+    return this.http.post<Post>(`${environment.endpoint}/posts`, post);
+  }
+
+  delete(id: string): Observable<any> {
+    return this.http.delete<Post>(`${environment.endpoint}/post/${id}`);
   }
 }
