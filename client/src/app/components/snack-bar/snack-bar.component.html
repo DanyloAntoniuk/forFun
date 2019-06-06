@@ -1,0 +1,11 @@
+<div fxLayout="row" class="snack-container">
+  <div>
+    <span>{{data}}</span>
+  </div>
+  <button (click)="snackBarRef.dismiss()" mat-icon-button>
+    <mat-icon>close</mat-icon>
+  </button>
+  <div>
+    <button mat-raised-button (click)="snackBarRef.dismissWithAction()">Discard deletion</button>
+  </div>
+</div>
