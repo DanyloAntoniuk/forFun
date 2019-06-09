@@ -14,6 +14,9 @@ router.post('/posts', validateBody(schemas.postSchema), PostController.postCreat
 
 router.put('/post/:id', AuthService.jwt(), AccessControlService.checkPermissions, validateBody(schemas.postSchema), PostController.postUpdate);
 
-router.delete('/post/:id', AuthService.jwt(), AccessControlService.checkPermissions, PostController.postDelete);
+// router.delete('/post/:id', AuthService.jwt(), AccessControlService.checkPermissions, PostController.postDelete);
+router.delete('/post/:id', PostController.postDelete);
+
+router.delete('/posts', PostController.postDeleteMany);
 
 export default router;

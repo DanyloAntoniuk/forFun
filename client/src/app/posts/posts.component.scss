@@ -22,3 +22,21 @@ th {
   align-items: center;
   justify-content: center;
 }
+
+.no-records {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  height: 48px;
+}
+
+.page-selector {
+  width: 30px;
+  margin-left: 10px;
+  font-size: 14px;
+}
+
+.page-selector-label {
+  font-size: 12px;
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+  color: rgba(0,0,0,.54);
+}

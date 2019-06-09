@@ -16,6 +16,7 @@ export default {
       // Limit must be int for paginate.
       const limit = Number(req.query.limit);
 
+      console.log(req.query);
       const [posts, count] = await Promise.all([
         Post.find({})
           .populate('author')
@@ -112,6 +113,16 @@ export default {
       }
 
       res.json(deletedPost);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async postDeleteMany(req, res, next) {
+    try {
+      const result = await Post.deleteMany({ _id: { $in: req.body } });
+
+      return res.json({ message: `Succesfuly deleted ${result.n} records` });
     } catch (err) {
       next(err);
     }

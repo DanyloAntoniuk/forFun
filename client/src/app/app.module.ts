@@ -15,6 +15,9 @@ import { MatTableModule,
   MatInputModule,
   MatFormFieldModule,
   MatDialogModule,
+  MatSnackBarModule,
+  MatCheckboxModule,
+  MatSelectModule,
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -32,6 +35,7 @@ import { MessageComponent } from './components/message/message.component';
 import { PostComponent } from './components/post/post.component';
 import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { DialogComponent } from './components/dialog/dialog.component';
+import { SnackBarComponent } from './components/snack-bar/snack-bar.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +47,7 @@ import { DialogComponent } from './components/dialog/dialog.component';
     PostComponent,
     DateAgoPipe,
     DialogComponent,
+    SnackBarComponent,
   ],
   imports: [
     BrowserModule,
@@ -66,8 +71,14 @@ import { DialogComponent } from './components/dialog/dialog.component';
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
+    MatSnackBarModule,
+    MatCheckboxModule,
+    MatSelectModule,
   ],
-  entryComponents: [DialogComponent,],
+  entryComponents: [
+    DialogComponent,
+    SnackBarComponent,
+  ],
   providers: [
     AuthService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

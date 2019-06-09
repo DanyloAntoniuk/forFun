@@ -1,13 +1,16 @@
-import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import { PostsService } from './posts.service';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
 import { Post } from './posts';
-import { of as observableOf, merge } from 'rxjs';
-import { delay, startWith, switchMap, map, catchError } from 'rxjs/operators';
+import { of as observableOf, fromEvent } from 'rxjs';
+import { startWith, switchMap, map, catchError, debounceTime, distinctUntilChanged, tap, mergeMap } from 'rxjs/operators';
 import { AuthService } from '../login/auth.service';
 import { User } from '../models/user';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DialogComponent } from '../components/dialog/dialog.component';
+import { SnackBarComponent } from '../components/snack-bar/snack-bar.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'posts-table',
@@ -16,21 +19,28 @@ import { DialogComponent } from '../components/dialog/dialog.component';
   providers: [ PostsService, AuthService ],
 })
 export class PostsComponent implements AfterViewInit {
-  posts = new MatTableDataSource<Post>();
-  displayedColumns: string[] = ['No.', 'title', 'status', 'createdAt', 'updatedAt', 'actions'];
   currentUser: User;
 
+  posts = new MatTableDataSource<Post>();
+  displayedColumns: string[] = ['select', 'No.', 'title', 'status', 'createdAt', 'updatedAt', 'actions'];
+  selection = new SelectionModel<Post>(true, []);
+  emptyTable = false;
   isLoading = true;
   resultsLength = 0;
+  pages = [];
+  test = 'asdad';
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('filter') filter: ElementRef;
 
   constructor(
     private postsService: PostsService,
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private dialog: MatDialog,
+    private snackBar: MatSnackBar
     ) {
     this.authService.currentUser.subscribe(user => this.currentUser = user);
   }
@@ -39,25 +49,98 @@ export class PostsComponent implements AfterViewInit {
     this.handlePosts();
   }
 
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.posts.data.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.posts.data.forEach(row => this.selection.select(row));
+  }
+
+  deleteMany() {
+    const ids = this.selection.selected.map((post: Post) => post._id);
+
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '300px',
+      position: { top: '20%' },
+      data: `Do you realy wont to delete ${ids.length} ${this.selection.selected.length > 1 ? 'records' : 'record'}`,
+    });
+
+    dialogRef.afterClosed().subscribe(accepted => {
+      if (accepted) {
+       this.postsService.deleteManyPosts(ids).subscribe(() => {
+          this.selection.clear();
+          this.handlePosts();
+
+          const snackBarRef = this.snackBar.openFromComponent(SnackBarComponent, {
+            data: `${ids.length} ${this.selection.selected.length > 1 ? 'records' : 'record'} was deleted`,
+          });
+
+          // snackBarRef.afterDismissed().subscribe((dismissedByAction) => {
+          //   if (dismissedByAction) {
+          //     this.postsService.createPost(element).subscribe(() => {
+          //       this.handlePosts();
+          //     });
+          //   }
+          // });
+        });
+      }
+    });
+
+  }
+
   handlePosts() {
+    fromEvent(this.filter.nativeElement, 'keyup')
+      .pipe(
+        debounceTime(150),
+        distinctUntilChanged(),
+        map(() => {
+          return this.postsService.getPosts(this.paginator.pageIndex + 1, this.filter.nativeElement.value);
+        }),
+        // mergeMap(() => {
+        //   return this.postsService.getPosts(this.paginator.pageIndex + 1, this.filter.nativeElement.value);
+        // }),
+        map((data) => {
+          data.subscribe((test) => {
+            this.test = test.posts[0]._id;
+
+            return test;
+          });
+        })
+      )
+      .subscribe();
+
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
     this.paginator.page
       .pipe(
         startWith({}),
         switchMap(() => {
+          this.emptyTable = false;
           this.isLoading = true;
 
-          return this.postsService.getPosts(this.paginator.pageIndex + 1).pipe(delay(1000));
+          return this.postsService.getPosts(this.paginator.pageIndex + 1);
         }),
         map((data) => {
-          // Flip flag to show that loading has finished.
           this.isLoading = false;
           this.resultsLength = data.count;
 
+          const numberOfPages = Math.ceil(this.resultsLength / this.paginator.pageSize);
+          this.pages = Array(numberOfPages).fill(0).map((value, i) => i + 1);
+
           return data.posts;
         }),
-        catchError(() => {
+        catchError((err: HttpErrorResponse) => {
+          this.isLoading = false;
+
+          if (err.status === 404) {
+            this.emptyTable = true;
+          }
+
           return observableOf([]);
         })
       ).subscribe((posts: Post[]) => {
@@ -68,6 +151,12 @@ export class PostsComponent implements AfterViewInit {
     });
   }
 
+  handleChange(value: number) {
+    this.paginator.pageIndex = value - 1;
+
+    this.handlePosts();
+  }
+
   goToPost(element: Post) {
     this.router.navigate(['/post', element.title]);
   }
@@ -75,17 +164,52 @@ export class PostsComponent implements AfterViewInit {
   deletePost(element: Post) {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '300px',
-      data: {
-        title: element.title,
-        type: 'Post',
-      },
+      position: { top: '20%' },
+      data: `Do you realy wont to delete Post ${element.title}`,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.postsService.delete(element._id).subscribe(() => {
-          this.handlePosts();
-        });
+    dialogRef.afterClosed().subscribe(accepted => {
+      if (accepted) {
+          const posts = this.posts.data.filter(post => post._id !== element._id);
+
+          this.posts = new MatTableDataSource(posts);
+
+          console.log(this.paginator);
+          if (this.paginator.length % this.paginator.pageSize === 0) {
+            this.resultsLength -= 1;
+            this.pages.pop();
+          }
+
+        // this.postsService.deletePost(element._id).subscribe(() => {
+        //   this.handlePosts();
+        //   setTimeout(() =>  {
+        //     if (this.paginator.length % this.paginator.pageSize === 0) {
+        //       this.paginator.pageIndex -= 1;
+
+        //       this.handlePosts();
+        //     }
+        //   });
+
+        //   const snackBarRef = this.snackBar.openFromComponent(SnackBarComponent, {
+        //     data: `${element.title} was deleted`,
+        //   });
+
+        //   snackBarRef.afterDismissed().subscribe((dismissedByAction) => {
+        //     if (dismissedByAction) {
+        //       this.postsService.createPost(element).subscribe(() => {
+        //         this.handlePosts();
+
+        //         setTimeout(() =>  {
+        //           if (this.paginator.length % this.paginator.pageSize === 0) {
+        //             this.paginator.pageIndex += 1;
+
+        //             this.handlePosts();
+        //           }
+        //         });
+        //       });
+        //     }
+        //   });
+        // });
       }
     });
   }

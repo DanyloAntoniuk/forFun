@@ -8,19 +8,23 @@ import { environment } from '../../environments/environment';
 export class PostsService {
   constructor(private http: HttpClient) {}
 
-  getPosts(page: number): Observable<PostApi> {
-    return this.http.get<PostApi>(`${environment.endpoint}/posts?limit=5&page=${page}`);
+  getPosts(page: number, filterValue?: string): Observable<PostApi> {
+    return this.http.get<PostApi>(`${environment.endpoint}/posts?limit=5&page=${page}&filterValue=${filterValue}`);
   }
 
-  getPost(id: string): Observable<PostApi> {
-    return this.http.get<PostApi>(`${environment.endpoint}/posts/${id}`);
+  getPost(title: string): Observable<PostApi> {
+    return this.http.get<PostApi>(`${environment.endpoint}/post/${title}`);
   }
 
-  createPost(post: Post): Observable<Post> {
-    return this.http.post<Post>(`${environment.endpoint}/posts`, post);
+  deletePost(id: string): Observable<object> {
+    return this.http.delete<any>(`${environment.endpoint}/post/${id}`);
   }
 
-  delete(id: string): Observable<any> {
-    return this.http.delete<Post>(`${environment.endpoint}/post/${id}`);
+  createPost(post: Post): Observable<object> {
+    return this.http.post(`${environment.endpoint}/posts`, post);
+  }
+
+  deleteManyPosts(posts: string[]): Observable<object> {
+    return this.http.request('delete', `${environment.endpoint}/posts`, { body: posts });
   }
 }

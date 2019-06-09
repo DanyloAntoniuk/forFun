@@ -76,6 +76,10 @@ export const schemas = {
   loginSchema: Joi.object().keys({ email, password }),
   userCancelSchema: Joi.object().keys({ active }),
   postSchema: Joi.object().keys({
+    _id: objectID.optional(),
+    createdAt: Joi.string().optional(), // @TODO validate field
+    updatedAt: Joi.string().optional(), // @TODO validate field
+    __v: Joi.number().optional(),
     title: textField,
     status,
     author: objectID,
