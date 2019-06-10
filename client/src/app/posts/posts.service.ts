@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PostApi, Post } from './posts';
 import { environment } from '../../environments/environment';
@@ -8,8 +8,9 @@ import { environment } from '../../environments/environment';
 export class PostsService {
   constructor(private http: HttpClient) {}
 
-  getPosts(page: number, filterValue?: string): Observable<PostApi> {
-    return this.http.get<PostApi>(`${environment.endpoint}/posts?limit=5&page=${page}&filterValue=${filterValue}`);
+  getPosts(queryParams: {}): Observable<PostApi> {
+    return this.http.get<PostApi>(`${environment.endpoint}/posts`, { params: new HttpParams({ fromObject: queryParams }) }
+    );
   }
 
   getPost(title: string): Observable<PostApi> {

@@ -112,7 +112,14 @@ export class PostsComponent implements AfterViewInit {
           this.emptyTable = false;
           this.isLoading = true;
 
-          return this.postsService.getPosts(this.paginator.pageIndex + 1, this.filter.nativeElement.value);
+          const httpParams = {
+            page: this.paginator.pageIndex + 1,
+            sortField: this.sort.active ? this.sort.active : '',
+            sortDirection: this.sort.direction ? this.sort.direction : '',
+            filterValue: this.filter.nativeElement.value,
+          };
+
+          return this.postsService.getPosts(httpParams);
         }),
         map((data: PostApi) => {
           this.isLoading = false;
