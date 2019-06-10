@@ -4,7 +4,6 @@
         Remove selected {{selection.selected.length > 1 ? 'rows': 'row'}}
     </button>
 </div>
-<div>{{test}}</div>
 <mat-form-field>
     <input matInput placeholder="Filter" #filter>
 </mat-form-field>
@@ -39,7 +38,7 @@
     <!-- Name Column -->
     <ng-container matColumnDef="No.">
       <th mat-header-cell *matHeaderCellDef> No. </th>
-      <td mat-cell *matCellDef="let i = index"> {{i + 1}} </td>
+      <td mat-cell *matCellDef="let i = index"> {{paginator.pageIndex === 0 ? i + 1: (paginator.pageIndex * paginator.pageSize) + i + 1}} </td>
     </ng-container>
 
     <!-- Name Column -->

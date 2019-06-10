@@ -16,29 +16,56 @@ export default {
       // Limit must be int for paginate.
       const limit = Number(req.query.limit);
 
-      console.log(req.query);
-      const [posts, count] = await Promise.all([
-        Post.find({})
-          .populate('author')
-          .populate('widgets.id')
-          .limit(limit)
-          .skip(req.skip)
-          .lean()
-          .exec(),
-        Post.countDocuments({}),
-      ]);
+      if (req.query.filterValue !== 'undefined') {
+        const [posts, count] = await Promise.all([
+          Post.find({ title: { $regex: req.query.filterValue, $options: 'i' } })
+            .populate('author')
+            .populate('widgets.id')
+            .limit(limit)
+            .skip(req.skip)
+            .lean()
+            .exec(),
+          Post.countDocuments({ title: { $regex: req.query.filterValue, $options: 'i' } }),
+        ]);
+        console.log(posts, count);
 
-      if (!count) {
-        return res.status(404).json({ message: 'No Posts found.' });
+        if (!count) {
+          return res.json({ message: 'No Posts found.' });
+        }
+
+        const pageCount = Math.ceil(count / limit);
+
+        res.json({
+          posts,
+          count,
+          hasMore: paginate.hasNextPages(req)(pageCount),
+        });
+      } else {
+        const [posts, count] = await Promise.all([
+          Post.find({})
+            .populate('author')
+            .populate('widgets.id')
+            .limit(limit)
+            .skip(req.skip)
+            .lean()
+            .exec(),
+          Post.countDocuments({}),
+        ]);
+
+        if (!count) {
+          return res.status(404).json({ message: 'No Posts found.' });
+        }
+
+        const pageCount = Math.ceil(count / limit);
+
+        res.json({
+          posts,
+          count,
+          hasMore: paginate.hasNextPages(req)(pageCount),
+        });
       }
 
-      const pageCount = Math.ceil(count / limit);
 
-      res.json({
-        posts,
-        count,
-        hasMore: paginate.hasNextPages(req)(pageCount),
-      });
     } catch (err) {
       next(err);
     }

@@ -1,9 +1,9 @@
 import { Component, ViewChild, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import { PostsService } from './posts.service';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
-import { Post } from './posts';
-import { of as observableOf, fromEvent } from 'rxjs';
-import { startWith, switchMap, map, catchError, debounceTime, distinctUntilChanged, tap, mergeMap } from 'rxjs/operators';
+import { Post, PostApi } from './posts';
+import { merge, of as observableOf, fromEvent } from 'rxjs';
+import { startWith, switchMap, map, catchError, debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 import { AuthService } from '../login/auth.service';
 import { User } from '../models/user';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -28,7 +28,6 @@ export class PostsComponent implements AfterViewInit {
   isLoading = true;
   resultsLength = 0;
   pages = [];
-  test = 'asdad';
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -94,38 +93,28 @@ export class PostsComponent implements AfterViewInit {
   }
 
   handlePosts() {
-    fromEvent(this.filter.nativeElement, 'keyup')
+    const filterObservable = fromEvent(this.filter.nativeElement, 'keyup')
+    .pipe(
+      debounceTime(350),
+      map((event: any) => event.target.value),
+      filter(filterValue => filterValue.length > 2 || filterValue.length === 0),
+      distinctUntilChanged()
+    );
+
+    const matTableObservables = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        debounceTime(150),
-        distinctUntilChanged(),
-        map(() => {
-          return this.postsService.getPosts(this.paginator.pageIndex + 1, this.filter.nativeElement.value);
-        }),
-        // mergeMap(() => {
-        //   return this.postsService.getPosts(this.paginator.pageIndex + 1, this.filter.nativeElement.value);
-        // }),
-        map((data) => {
-          data.subscribe((test) => {
-            this.test = test.posts[0]._id;
+        startWith({})
+      );
 
-            return test;
-          });
-        })
-      )
-      .subscribe();
-
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-
-    this.paginator.page
+    merge(filterObservable, matTableObservables)
       .pipe(
-        startWith({}),
         switchMap(() => {
           this.emptyTable = false;
           this.isLoading = true;
 
-          return this.postsService.getPosts(this.paginator.pageIndex + 1);
+          return this.postsService.getPosts(this.paginator.pageIndex + 1, this.filter.nativeElement.value);
         }),
-        map((data) => {
+        map((data: PostApi) => {
           this.isLoading = false;
           this.resultsLength = data.count;
 
@@ -143,12 +132,13 @@ export class PostsComponent implements AfterViewInit {
 
           return observableOf([]);
         })
-      ).subscribe((posts: Post[]) => {
+      )
+      .subscribe((posts) => {
         this.posts = new MatTableDataSource(posts);
 
         this.posts.sortingDataAccessor = sortDate;
         this.posts.sort = this.sort;
-    });
+      });
   }
 
   handleChange(value: number) {
