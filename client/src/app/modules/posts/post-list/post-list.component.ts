@@ -1,24 +1,24 @@
 import { Component, ViewChild, OnInit, AfterViewInit, ElementRef } from '@angular/core';
-import { PostsService } from './posts.service';
+import { PostsService } from '../posts.service';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
-import { Post, PostApi } from './posts';
+import { Post, PostApi } from '../posts';
 import { merge, of as observableOf, fromEvent } from 'rxjs';
 import { startWith, switchMap, map, catchError, debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
-import { AuthService } from '../login/auth.service';
-import { User } from '../models/user';
+import { AuthService } from '../../../core/auth/auth.service';
+import { User } from '../../../core/auth/user';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DialogComponent } from '../components/dialog/dialog.component';
-import { SnackBarComponent } from '../components/snack-bar/snack-bar.component';
+import { DialogComponent } from '../../../shared/components/dialog/dialog.component';
+import { SnackBarComponent } from '../../../shared/components/snack-bar/snack-bar.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'posts-table',
-  templateUrl: './posts.component.html',
-  styleUrls: ['./posts.component.scss'],
+  templateUrl: './post-list.component.html',
+  styleUrls: ['./post-list.component.scss'],
   providers: [ PostsService, AuthService ],
 })
-export class PostsComponent implements AfterViewInit {
+export class PostListComponent implements AfterViewInit {
   currentUser: User;
 
   posts = new MatTableDataSource<Post>();
