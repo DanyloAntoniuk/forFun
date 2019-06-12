@@ -4,13 +4,13 @@ import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar } fro
 import { Post, PostApi } from '../posts';
 import { merge, of as observableOf, fromEvent } from 'rxjs';
 import { startWith, switchMap, map, catchError, debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
-import { AuthService } from '../../../core/auth/auth.service';
-import { User } from '../../../core/auth/user';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DialogComponent } from '../../../shared/components/dialog/dialog.component';
-import { SnackBarComponent } from '../../../shared/components/snack-bar/snack-bar.component';
+import { DialogComponent } from '../../../../shared/components/dialog/dialog.component';
+import { SnackBarComponent } from '../../../../shared/components/snack-bar/snack-bar.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SelectionModel } from '@angular/cdk/collections';
+import { AuthService } from 'src/app/core/auth/auth.service';
+import { User } from 'src/app/core/auth/user';
 
 @Component({
   selector: 'posts-table',

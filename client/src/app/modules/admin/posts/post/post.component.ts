@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PostsService } from 'src/app/modules/posts/posts.service';
-import { Post } from 'src/app/modules/posts/posts';
+import { PostsService } from '../posts.service';
+import { Post } from '../posts';
 
 @Component({
   selector: 'app-post',
@@ -23,7 +23,6 @@ export class PostComponent implements OnInit {
 
   loadPost() {
     const { title } = this.route.snapshot.params;
-
     this.postService.getPost(title).subscribe(post => {
       console.log(post);
     });

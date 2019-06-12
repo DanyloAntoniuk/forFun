@@ -26,6 +26,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { CommonModule } from '@angular/common';
     DateAgoPipe,
   ],
   imports: [
+    CommonModule,
     MatTableModule,
     MatToolbarModule,
     MatButtonModule,
@@ -57,13 +59,18 @@ import { CommonModule } from '@angular/common';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    CommonModule,
+    RouterModule,
   ],
   entryComponents: [
     DialogComponent,
     SnackBarComponent,
   ],
   exports: [
+    AppNavComponent,
+    DialogComponent,
+    MessageComponent,
+    SnackBarComponent,
+    DateAgoPipe,
     MatTableModule,
     MatToolbarModule,
     MatButtonModule,
@@ -85,12 +92,6 @@ import { CommonModule } from '@angular/common';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    CommonModule,
-    AppNavComponent,
-    DialogComponent,
-    MessageComponent,
-    SnackBarComponent,
-    DateAgoPipe,
   ],
 })
 export class SharedModule { }
