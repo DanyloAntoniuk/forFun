@@ -97,7 +97,9 @@ export class PostListComponent implements AfterViewInit {
     .pipe(
       debounceTime(350),
       map((event: any) => event.target.value),
-      filter(filterValue => filterValue.length > 2 || filterValue.length === 0),
+      filter(filterValue => {
+        return filterValue.length > 2 || filterValue.length === 0;
+      }),
       distinctUntilChanged()
     );
 
@@ -106,6 +108,9 @@ export class PostListComponent implements AfterViewInit {
         startWith({})
       );
 
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    filterObservable.subscribe(() => this.paginator.pageIndex = 0);
+
     merge(filterObservable, matTableObservables)
       .pipe(
         switchMap(() => {
@@ -113,6 +118,7 @@ export class PostListComponent implements AfterViewInit {
           this.isLoading = true;
 
           const httpParams = {
+            limit: this.paginator.pageSize,
             page: this.paginator.pageIndex + 1,
             sortField: this.sort.active ? this.sort.active : '',
             sortDirection: this.sort.direction ? this.sort.direction : '',
@@ -123,6 +129,13 @@ export class PostListComponent implements AfterViewInit {
         }),
         map((data: PostApi) => {
           this.isLoading = false;
+
+          if (!data.count) {
+            this.emptyTable = true;
+
+            return [];
+          }
+
           this.resultsLength = data.count;
 
           const numberOfPages = Math.ceil(this.resultsLength / this.paginator.pageSize);
@@ -137,13 +150,12 @@ export class PostListComponent implements AfterViewInit {
             this.emptyTable = true;
           }
 
-          return observableOf([]);
+          return [];
         })
       )
       .subscribe((posts) => {
         this.posts = new MatTableDataSource(posts);
 
-        this.posts.sortingDataAccessor = sortDate;
         this.posts.sort = this.sort;
       });
   }
@@ -171,7 +183,6 @@ export class PostListComponent implements AfterViewInit {
 
           this.posts = new MatTableDataSource(posts);
 
-          console.log(this.paginator);
           if (this.paginator.length % this.paginator.pageSize === 0) {
             this.resultsLength -= 1;
             this.pages.pop();
@@ -211,15 +222,3 @@ export class PostListComponent implements AfterViewInit {
     });
   }
 }
-
-const sortDate = (item: Post, property: string) => {
-  switch (property) {
-    case 'updatedAt': {
-      return new Date(item.updatedAt);
-    }
-    case 'createdAt': {
-      return new Date(item.createdAt);
-    }
-    default: return item[property];
-  }
-};
