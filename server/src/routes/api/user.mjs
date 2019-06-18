@@ -8,12 +8,12 @@ const router = express.Router();
 
 router.get('/user/:id([0-9a-f]{24})', UserController.userGetOne);
 
-router.get('/users', UserController.userList);
+router.get('/users', AuthService.jwt(), UserController.userList);
 
-router.post('/user/:id/cancel', validateBody(schemas.userCancelSchema), UserController.userCancel);
+router.post('/user/:id/cancel', AuthService.jwt(), validateBody(schemas.userCancelSchema), UserController.userCancel);
 
-router.delete('/user/:id', UserController.userDelete);
+router.delete('/user/:id', AuthService.jwt(), UserController.userDelete);
 
-router.put('/user/:id', UserController.userUpdate);
+router.put('/user/:id', AuthService.jwt(), UserController.userUpdate);
 
 export default router;

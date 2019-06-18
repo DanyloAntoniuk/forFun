@@ -1,0 +1,37 @@
+@import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
+.register-main {
+  margin-top: 10%;
+}
+
+.social-button {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px; 
+}
+
+mat-card {
+  width: 400px;
+}
+
+mat-card-title, mat-card-content {
+  display: flex;
+  justify-content: center;
+}
+
+mat-form-field, form {
+  width: 100%
+}
+
+.form-action {
+  display: flex;
+  justify-content: space-between;
+  ::ng-deep
+  .mat-spinner, .mat-progress-spinner {
+    display: inline;
+    margin: 7px;
+      circle {
+        stroke: rgba(0,0,0,.87);
+    }
+  }
+}

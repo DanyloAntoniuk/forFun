@@ -51,8 +51,8 @@ export default {
 
       const pageCount = Math.ceil(count / limit);
 
-      res.json({
-        posts,
+      return res.json({
+        data: posts,
         count,
         hasMore: paginate.hasNextPages(req)(pageCount),
       });

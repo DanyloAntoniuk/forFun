@@ -19,7 +19,7 @@
           <button mat-button [disabled]="loading" type="submit" class="btn btn-primary">Login
             <mat-spinner *ngIf="loading" color="primary" [diameter]="17"></mat-spinner>
           </button>
-          <!-- <a mat-button routerLink="/register" class="btn btn-link">Register</a> -->
+          <a mat-button [routerLink]="['/register']" class="btn btn-link">Register</a>
         </div>
       </form>
     </mat-card-content>

@@ -76,6 +76,7 @@ export default {
    */
   async googleOauthCallback(req, res, next) {
     try {
+      console.log(req);
       const { email } = req.user.google;
 
       const user = await User.findOne({ 'google.email': email });
@@ -84,6 +85,7 @@ export default {
 
       // @TODO change response header to application/json
       res.status(201).json({ user, token });
+      //res.redirect(`http://localhost:4200/admin/posts?user=${user}`);
     } catch (err) {
       next(err);
     }

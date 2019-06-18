@@ -10,21 +10,21 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService, private router: Router) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // if (this.router.url === '/login') {
-    //   return next.handle(request);
-    // }
+    if (this.router.url === '/login') {
+      return next.handle(request);
+    }
 
-    return next.handle(request);
-      // .pipe(
-      //   catchError(err => {
-      //     if (err.status === 401) {
-      //       this.authService.logout();
-      //       this.router.navigate(['/login']);
-      //     }
+    return next.handle(request)
+      .pipe(
+        catchError(err => {
+          if (err.status === 401) {
+            this.authService.logout();
+            this.router.navigate(['/login']);
+          }
 
-      //     const error = err.error.message || err.statusText;
-      //     return throwError(error);
-      //   })
-      // );
+          const error = err.error.message || err.statusText;
+          return throwError(error);
+        })
+      );
   }
 }

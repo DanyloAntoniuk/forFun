@@ -35,6 +35,4 @@ const PostSchema = mongoose.Schema({
   fields: [{}],
 }, { timestamps: true });
 
-PostSchema.index({ title: 'text' });
-
 export default mongoose.model('Post', PostSchema);

@@ -1,32 +1,33 @@
 import { NgModule } from '@angular/core';
-import { MatTableModule,
+import {
   MatToolbarModule,
   MatButtonModule,
   MatSidenavModule,
   MatIconModule,
   MatListModule,
-  MatProgressSpinnerModule,
-  MatCardModule,
-  MatSortModule,
-  MatPaginatorModule,
-  MatInputModule,
-  MatFormFieldModule,
   MatDialogModule,
   MatSnackBarModule,
-  MatCheckboxModule,
+  MatFormFieldModule,
   MatSelectModule,
+  MatProgressSpinnerModule,
+  MatCardModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatInputModule,
+  MatSortModule,
+  MatCheckboxModule,
 } from '@angular/material';
 import { AppNavComponent } from './components/app-nav/app-nav.component';
 import { DialogComponent } from './components/dialog/dialog.component';
 import { MessageComponent } from './components/message/message.component';
 import { SnackBarComponent } from './components/snack-bar/snack-bar.component';
 import { DateAgoPipe } from './pipes/date-ago.pipe';
-import { LayoutModule } from '@angular/cdk/layout';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { DataTableComponent } from './data-table/data-table.component';
+import { AuthService } from '../core/auth/auth.service';
+import { CrudService } from '../core/crud.service';
 
 @NgModule({
   declarations: [
@@ -35,35 +36,34 @@ import { RouterModule } from '@angular/router';
     MessageComponent,
     SnackBarComponent,
     DateAgoPipe,
+    DataTableComponent,
   ],
   imports: [
     CommonModule,
-    MatTableModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
     MatIconModule,
+    MatToolbarModule,
     MatListModule,
+    MatSidenavModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatSnackBarModule,
+    MatInputModule,
+    MatSelectModule,
     MatProgressSpinnerModule,
     MatCardModule,
     MatSortModule,
-    MatPaginatorModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatDialogModule,
-    MatSnackBarModule,
+    MatTableModule,
     MatCheckboxModule,
-    MatSelectModule,
-    LayoutModule,
+    MatPaginatorModule,
     FlexLayoutModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
     RouterModule,
   ],
   entryComponents: [
     DialogComponent,
     SnackBarComponent,
+  ],
+  providers: [
+    AuthService,
   ],
   exports: [
     AppNavComponent,
@@ -71,27 +71,7 @@ import { RouterModule } from '@angular/router';
     MessageComponent,
     SnackBarComponent,
     DateAgoPipe,
-    MatTableModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatProgressSpinnerModule,
-    MatCardModule,
-    MatSortModule,
-    MatPaginatorModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    MatCheckboxModule,
-    MatSelectModule,
-    LayoutModule,
-    FlexLayoutModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
+    DataTableComponent,
   ],
 })
 export class SharedModule { }

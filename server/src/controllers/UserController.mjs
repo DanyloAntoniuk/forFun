@@ -27,24 +27,40 @@ export default {
   async userList(req, res, next) {
     try {
       const limit = Number(req.query.limit);
+      let users;
+      let count;
 
-      const [users, count] = await Promise.all([
-        User.find({})
-          .limit(limit)
-          .skip(req.skip)
-          .lean()
-          .exec(),
-        User.countDocuments({}),
-      ]);
+      if (req.query.filterValue !== 'undefined') {
+        [users, count] = await Promise.all([
+          User.find({ role: { $regex: req.query.filterValue, $options: 'i' } })
+            .limit(limit)
+            .skip(req.skip)
+            .lean()
+            .sort({ [req.query.sortField]: req.query.sortDirection })
+            .exec(),
+          User.countDocuments({ role: { $regex: req.query.filterValue, $options: 'i' } }),
+        ]);
+      } else {
+        [users, count] = await Promise.all([
+          User.find({})
+            .limit(limit)
+            .skip(req.skip)
+            .lean()
+            .sort({ [req.query.sortField]: req.query.sortDirection })
+            .exec(),
+          User.countDocuments({}),
+        ]);
+      }
 
       if (!count) {
-        return res.status(404).json({ message: 'No Users found.' });
+        return res.json({ message: 'No Users found.' });
       }
 
       const pageCount = Math.ceil(count / req.query.limit);
 
       res.json({
-        users,
+        data: users,
+        count,
         hasMore: paginate.hasNextPages(req)(pageCount),
       });
     } catch (err) {

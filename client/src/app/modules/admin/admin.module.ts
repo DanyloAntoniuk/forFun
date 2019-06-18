@@ -18,6 +18,8 @@ import {
   MatInputModule,
   MatButtonModule,
 } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { AuthGuard } from '../auth/auth.guard';
 
 @NgModule({
   declarations: [
@@ -37,9 +39,11 @@ import {
     MatSortModule,
     MatInputModule,
     MatTableModule,
+    FlexLayoutModule,
     CommonModule,
     routing,
     SharedModule,
-  ]
+  ],
+  providers: [AuthGuard]
 })
 export class AdminModule { }
