@@ -9,7 +9,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class PostListComponent implements AfterViewInit {
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
-    console.log(router, activatedRoute);
   }
   dataTableConfig = {
     displayedColumns: ['title', 'status'],

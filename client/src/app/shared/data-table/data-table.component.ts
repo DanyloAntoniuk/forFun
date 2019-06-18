@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Input } from '
 import { MatTableDataSource, MatSort, MatPaginator, MatDialog, MatSnackBar } from '@angular/material';
 import { SelectionModel, DataSource } from '@angular/cdk/collections';
 import { AuthService } from 'src/app/core/auth/auth.service';
-import { Router } from '@angular/router';
+import { Router, UrlSegment, ActivatedRoute } from '@angular/router';
 import { DialogComponent } from '../components/dialog/dialog.component';
 import { SnackBarComponent } from '../components/snack-bar/snack-bar.component';
 import { fromEvent, merge } from 'rxjs';
@@ -34,7 +34,7 @@ export class DataTableComponent implements AfterViewInit, OnInit {
 
   constructor(
     private dataService: CrudService,
-    private authService: AuthService,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
@@ -162,7 +162,15 @@ export class DataTableComponent implements AfterViewInit, OnInit {
   }
 
   goToRecord(element) {
-    this.router.navigate(['/post', element.title]);
+    this.activatedRoute.url.subscribe((urlSegment: UrlSegment[]) => {
+      this.router.navigate([`admin/${urlSegment[0].path}`, element.title]);
+    });
+  }
+
+  editRecord(element) {
+    this.activatedRoute.url.subscribe((urlSegment: UrlSegment[]) => {
+      this.router.navigate([`admin/${urlSegment[0].path}/edit`, element.title]);
+    });
   }
 
   deleteRecord(element) {

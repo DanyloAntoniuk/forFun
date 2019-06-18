@@ -20,6 +20,7 @@ import {
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AuthGuard } from '../auth/auth.guard';
+import { PostEditComponent } from './posts/post-edit/post-edit.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { AuthGuard } from '../auth/auth.guard';
     PostComponent,
     PostListComponent,
     UsersComponent,
+    PostEditComponent,
   ],
   imports: [
     MatProgressSpinnerModule,

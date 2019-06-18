@@ -18,7 +18,6 @@ export class CrudService {
   }
 
   getRecord(title: string): Observable<object> {
-    console.log(this.resourceName, title);
     return this.http.get<object>(`${environment.endpoint}/${this.resourceName}/${title}`);
   }
 
