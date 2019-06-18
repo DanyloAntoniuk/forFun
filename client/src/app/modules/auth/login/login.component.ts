@@ -30,19 +30,22 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.loading = true;
-    const { controls } = this.loginForm;
-
     if (this.loginForm.invalid) {
       return;
     }
 
+    this.loading = true;
+    const { controls } = this.loginForm;
+
     this.authService.login(controls.email.value, controls.password.value)
       .subscribe((user) => {
+        this.loading = false;
+
         this.router.navigate(['admin/posts']);
       },
       error => {
         this.loading = false;
+        
         this.messageService.error('Email or password is incorrect');
       });
   }
