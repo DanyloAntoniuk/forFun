@@ -5,28 +5,11 @@ import { Field } from '../../models/field.interface';
 import { FieldConfig } from '../../models/field-config.interface';
 
 @Component({
-  selector: 'form-input',
+  selector: 'app-form-input',
   styleUrls: ['form-input.component.scss'],
-  template: `
-    <div 
-      class="dynamic-field form-input" 
-      [formGroup]="group">
-      <label>{{ config.label }}</label>
-      <mat-form-field>
-        <input matInput
-          type="text"
-          [placeholder]="config.placeholder"
-          [errorStateMatcher]="config.errorStateMatcher"
-          [formControlName]="config.name"
-        >
-        <mat-error *ngIf="!valid">dasdas</mat-error>
-      </mat-form-field>
-    </div>
-  `
+  templateUrl: 'form-input.component.html',
 })
-export class FormInputComponent implements Field, OnInit {
+export class FormInputComponent implements Field {
   config: FieldConfig;
   group: FormGroup;
-
-  ngOnInit() {}
 }

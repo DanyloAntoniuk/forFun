@@ -1,5 +1,5 @@
-import { ComponentFactoryResolver, ComponentRef, Directive, Input, OnChanges, OnInit, Type, ViewContainerRef } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { ComponentFactoryResolver, ComponentRef, Directive, Input, OnChanges, OnInit, Type, ViewContainerRef, ViewChild } from '@angular/core';
+import { FormGroup, FormGroupDirective } from '@angular/forms';
 
 import { FormButtonComponent } from '../form-button/form-button.component';
 import { FormInputComponent } from '../form-input/form-input.component';
@@ -7,17 +7,21 @@ import { FormSelectComponent } from '../form-select/form-select.component';
 
 import { Field } from '../../models/field.interface';
 import { FieldConfig } from '../../models/field-config.interface';
+import { FormEmailComponent } from '../form-email/form-email.component';
 
 const components: {[type: string]: Type<Field>} = {
   button: FormButtonComponent,
   input: FormInputComponent,
-  select: FormSelectComponent
+  select: FormSelectComponent,
+  email: FormEmailComponent,
 };
 
 @Directive({
-  selector: '[dynamicField]'
+  selector: '[appDynamicField]'
 })
 export class DynamicFieldDirective implements Field, OnChanges, OnInit {
+  @Input() formGroupDirective: FormGroupDirective;
+
   @Input()
   config: FieldConfig;
 
@@ -51,5 +55,6 @@ export class DynamicFieldDirective implements Field, OnChanges, OnInit {
 
     this.component.instance.config = this.config;
     this.component.instance.group = this.group;
+    this.component.instance.formGroupDirective = this.formGroupDirective;
   }
 }
