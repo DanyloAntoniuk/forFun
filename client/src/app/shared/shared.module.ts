@@ -28,6 +28,7 @@ import { RouterModule } from '@angular/router';
 import { DataTableComponent } from './data-table/data-table.component';
 import { AuthService } from '../core/auth/auth.service';
 import { CrudService } from '../core/crud.service';
+import { FormInputComponent } from './components/form-elements/form-input/form-input.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { CrudService } from '../core/crud.service';
     SnackBarComponent,
     DateAgoPipe,
     DataTableComponent,
+    FormInputComponent,
   ],
   imports: [
     CommonModule,
