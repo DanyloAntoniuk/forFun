@@ -4,7 +4,7 @@ import { ErrorStateMatcher } from '@angular/material';
 export interface FieldConfig {
   disabled?: boolean,
   label?: string,
-  errorStateMatcher?: ErrorStateMatcher,
+  //errorStateMatcher?: ErrorStateMatcher,
   name: string,
   options?: string[],
   placeholder?: string,

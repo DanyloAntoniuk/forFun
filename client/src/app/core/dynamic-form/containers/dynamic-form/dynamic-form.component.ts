@@ -4,9 +4,7 @@ import { FormGroup, FormBuilder, FormGroupDirective } from '@angular/forms';
 import { FieldConfig } from '../../models/field-config.interface';
 
 @Component({
-  exportAs: 'dynamicForm',
-  selector: 'dynamic-form',
-  providers: [FormGroupDirective],
+  selector: 'app-dynamic-form',
   styleUrls: ['dynamic-form.component.scss'],
   templateUrl: 'dynamic-form.component.html',
 })
@@ -26,7 +24,7 @@ export class DynamicFormComponent implements OnInit {
   get valid() { return this.form.valid; }
   get value() { return this.form.value; }
 
-  constructor(private fb: FormBuilder, private fromGroupDirective: FormGroupDirective) {}
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
     this.form = this.createGroup();
@@ -64,9 +62,10 @@ export class DynamicFormComponent implements OnInit {
   }
 
   handleSubmit(event: Event) {
-    //event.preventDefault();
+    event.preventDefault();
     event.stopPropagation();
-    this.submit.emit({ value: this.value, fd: this.formGroupDirective } );
+
+    this.submit.emit(this.value);
   }
 
   setDisabled(name: string, disable: boolean) {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormGroupDirective } from '@angular/forms';
 
 import { Field } from '../../models/field.interface';
 import { FieldConfig } from '../../models/field-config.interface';
@@ -24,4 +24,5 @@ import { FieldConfig } from '../../models/field-config.interface';
 export class FormSelectComponent implements Field {
   config: FieldConfig;
   group: FormGroup;
+  formGroupDirective: FormGroupDirective;
 }

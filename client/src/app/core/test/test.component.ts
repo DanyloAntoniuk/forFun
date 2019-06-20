@@ -20,16 +20,30 @@ export class TestComponent implements OnInit {
       name: 'name',
       placeholder: 'Enter your name',
       validation: [Validators.required, Validators.minLength(4)],
-      errorStateMatcher: new EmailErrorStateMatcher(),
+      //errorStateMatcher: new EmailErrorStateMatcher(),
     },
-    // {
-    //   type: 'select',
-    //   label: 'Favourite Food',
-    //   name: 'food',
-    //   options: ['Pizza', 'Hot Dogs', 'Knakworstje', 'Coffee'],
-    //   placeholder: 'Select an option',
-    //   validation: [Validators.required]
-    // },
+    {
+      type: 'email',
+      label: 'Email',
+      name: 'email',
+      placeholder: 'Enter your email',
+      validation: [Validators.required, Validators.email],
+      //errorStateMatcher: new EmailErrorStateMatcher(),
+    },
+    {
+      type: 'password',
+      // label: 'Favourite Food',
+      name: 'password',
+      placeholder: 'Password',
+      validation: [Validators.required, Validators.minLength(6)],
+    },
+    {
+      type: 'confirmPassword',
+      // label: 'Favourite Food',
+      name: 'confirm-password',
+      placeholder: 'Confirm password',
+      validation: [Validators.required],
+    },
     {
       label: 'Submit',
       name: 'submit',
@@ -40,17 +54,6 @@ export class TestComponent implements OnInit {
   }
 
   submit(value: {[name: string]: any}) {
-    this.config[0].errorStateMatcher = new EmailErrorStateMatcher(this.formGroupDirective);
-  }
-}
-
-class EmailErrorStateMatcher implements ErrorStateMatcher {
-  constructor(private test?: {}) {}
-  isErrorState(control: FormControl | null, form: NgForm) {
-    console.log(this.test, form);
-    
-    const isSubmitted = form && form.submitted;
-
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    //this.config[0].errorStateMatcher = new EmailErrorStateMatcher(this.formGroupDirective);
   }
 }

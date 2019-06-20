@@ -4,7 +4,8 @@
   (submit)="handleSubmit($event)">
   <div
     *ngFor="let field of config;"
-    dynamicField
+    [formGroupDirective]="formGroupDirective"
+    appDynamicField
     [config]="field"
     [group]="form">
 </div>

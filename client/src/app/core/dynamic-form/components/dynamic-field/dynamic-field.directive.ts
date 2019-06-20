@@ -8,12 +8,15 @@ import { FormSelectComponent } from '../form-select/form-select.component';
 import { Field } from '../../models/field.interface';
 import { FieldConfig } from '../../models/field-config.interface';
 import { FormEmailComponent } from '../form-email/form-email.component';
+import { FormPasswordComponent } from '../form-password/form-password.component';
 
 const components: {[type: string]: Type<Field>} = {
   button: FormButtonComponent,
   input: FormInputComponent,
   select: FormSelectComponent,
   email: FormEmailComponent,
+  password: FormPasswordComponent,
+  confirmPassword: FormPasswordComponent,
 };
 
 @Directive({
