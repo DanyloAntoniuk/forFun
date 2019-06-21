@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormElement } from '../formElement';
 import { FieldConfig } from '../../models/field-config.interface';
-import { FormGroup, FormGroupDirective, AbstractControl } from '@angular/forms';
-import { map } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { FormGroup, FormGroupDirective, AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 
 // @TODO use real password field name
 const PASWORD_FIELD_NAME = 'password';
@@ -13,31 +11,31 @@ const PASWORD_FIELD_NAME = 'password';
   templateUrl: './form-password.component.html',
   styleUrls: ['./form-password.component.scss']
 })
-export class FormPasswordComponent extends FormElement implements OnInit{
+export class FormPasswordComponent extends FormElement implements OnInit {
   config: FieldConfig;
   group: FormGroup;
   formGroupDirective: FormGroupDirective;
 
   ngOnInit() {
     if (this.config.type === 'confirmPassword') {
-      //this.group.get(this.config.name).setValidators([...this.config.validation, this.checkPasswordsMatch(this.group)]);
-      //this.group.get(this.config.name).updateValueAndValidity();
-      this.group.get(this.config.name).setAsyncValidators(this.checkPasswordsMatch(this.group));
-      this.group.get(this.config.name).updateValueAndValidity();
+      this.group.setValidators(this.checkPasswordsMatch());
     }
   }
 
-  checkPasswordsMatch(group) {
-    return (control: AbstractControl) => {
-      //const password = group.value[PASWORD_FIELD_NAME];
+  checkPasswordsMatch(): ValidatorFn {
+    return (group: FormGroup): ValidationErrors => {
+      const password = group.controls[PASWORD_FIELD_NAME];
+      const confirmPassword = group.controls[this.config.name];
+  
+      if (confirmPassword.errors && !confirmPassword.errors.notMatch) {
+        return;
+      }
 
-      return group.valueChanges.pipe(
-        map((data) => {
-          console.log(data, control);
-          if (control.value && data[PASWORD_FIELD_NAME] !== control.value) {
-            return of({ notMatch: true });
-          }
-        }));
+      if (password.value !== confirmPassword.value) {
+        confirmPassword.setErrors({ notMatch: true });
+      } else {
+        confirmPassword.setErrors(null);
+      }
     }
   }
 
@@ -47,7 +45,6 @@ export class FormPasswordComponent extends FormElement implements OnInit{
         return `${this.label} must be at least ${this.errors.minlength.requiredLength} characters long`;
       }
     } else {
-      console.log(this.errors);
       if (this.errors && this.errors.notMatch) {
         return `Passwords do not match`;
       }

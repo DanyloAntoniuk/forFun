@@ -2,13 +2,17 @@ import { Field } from '../models/field.interface';
 import { FieldConfig } from '../models/field-config.interface';
 import { FormGroup, FormGroupDirective, FormControl, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
-import { OnInit } from '@angular/core';
+import { OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
 
-export abstract class FormElement implements Field, OnInit {
+export abstract class FormElement implements Field, AfterViewInit {
   config: FieldConfig;
   group: FormGroup;
   formGroupDirective: FormGroupDirective;
   errorStateMatcher: ErrorStateMatcher;
+
+  constructor() {
+    this.errorStateMatcher = new ErrorStateMatcher();
+  }
 
   get errors() {
     return this.group.controls[this.config.name].errors;
@@ -29,7 +33,7 @@ export abstract class FormElement implements Field, OnInit {
     return capitalizedFieldName;
   }
 
-  ngOnInit () {
+  ngAfterViewInit () {
     this.errorStateMatcher = new DynamicErrorStateMatcher(this.formGroupDirective);
   }
 

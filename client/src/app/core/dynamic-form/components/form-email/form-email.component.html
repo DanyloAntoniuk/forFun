@@ -1,6 +1,6 @@
 <div class="dynamic-field form-input" [formGroup]="group">
-  <label>{{ config.label }}</label>
   <mat-form-field>
+    <mat-label *ngIf="config.label">{{ config.label }}</mat-label>
     <input matInput
       type="email"
       [placeholder]="config.placeholder"

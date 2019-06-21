@@ -13,6 +13,7 @@ import { MessageService } from 'src/app/shared/message.service';
 import { RouterModule } from '@angular/router';
 import { NotFoundComponent } from 'src/app/core/errorHandlers/not-found/not-found.component';
 import { AuthGuard } from './auth.guard';
+import { DynamicFormModule } from 'src/app/core/dynamic-form/dynamic-form.module';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { AuthGuard } from './auth.guard';
     CommonModule,
     RouterModule,
     SharedModule,
+    DynamicFormModule,
   ],
   providers: [
     AuthGuard,

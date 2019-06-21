@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { MessageService } from 'src/app/shared/message.service';
+import { FieldConfig } from 'src/app/core/dynamic-form/models/field-config.interface';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,29 @@ export class LoginComponent implements OnInit {
   loading = false;
   hide = true;
   mainError: string;
+
+  config: FieldConfig[] = [
+    {
+      type: 'email',
+      label: 'Email',
+      name: 'email',
+      placeholder: 'Enter your email',
+      validation: [Validators.required, Validators.email],
+      //errorStateMatcher: new EmailErrorStateMatcher(),
+    },
+    {
+      type: 'password',
+      // label: 'Favourite Food',
+      name: 'password',
+      placeholder: 'Password',
+      validation: [Validators.required, Validators.minLength(6)],
+    },
+    {
+      label: 'Submit',
+      name: 'submit',
+      type: 'button'
+    }
+  ];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -29,7 +53,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  submit() {
     if (this.loginForm.invalid) {
       return;
     }
