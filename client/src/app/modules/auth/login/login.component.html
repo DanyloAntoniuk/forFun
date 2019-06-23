@@ -2,36 +2,16 @@
   <mat-card>
     <mat-card-title>Login</mat-card-title>
     <mat-card-content>
+        <app-message></app-message>
         <app-dynamic-form
           class="dynamic-form"
           [config]="config"
           #form
           (submit)="submit($event)">
-          <!-- <a mat-button [routerLink]="['/register']" class="btn btn-link">Register</a> -->
         </app-dynamic-form>
-      <!-- <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <app-message></app-message>
-        <mat-form-field>
-          <input matInput placeholder="Email" autocomplete="email" formControlName="email"/>
-          <mat-error *ngIf="loginForm.get('email').errors">{{getErrorByFieldName('email')}}</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <input [type]="hide ? 'password' : 'text'" autocomplete="current-password" placeholder="Password" matInput formControlName="password"/>
-          <button mat-icon-button matSuffix type="button" (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-          </button>
-          <mat-error *ngIf="loginForm.get('password').errors">{{getErrorByFieldName('password')}}</mat-error>
-        </mat-form-field>
-        <div class="form-action">
-          <button mat-button [disabled]="loading" type="submit" class="btn btn-primary">Login
-            <mat-spinner *ngIf="loading" color="primary" [diameter]="17"></mat-spinner>
-          </button>
-        </div>
-      </form> -->
+        <span class="register-link">Don't have account?
+          <a mat-button [routerLink]="['/register']">Register</a>
+        </span>
     </mat-card-content>
   </mat-card>
 </div>
-<!-- <div class="app">
-  {{ form.valid }}
-  {{ form.value | json }}
-</div> -->

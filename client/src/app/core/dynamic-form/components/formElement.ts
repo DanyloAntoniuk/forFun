@@ -24,7 +24,7 @@ export abstract class FormElement implements Field, AfterViewInit {
 
   get label(): string {
     if (this.config.label) {
-      return this.config.label
+      return this.config.label;
     }
 
     const label = this.config.name.replace(/-/g, ' ');
@@ -33,7 +33,7 @@ export abstract class FormElement implements Field, AfterViewInit {
     return capitalizedFieldName;
   }
 
-  ngAfterViewInit () {
+  ngAfterViewInit() {
     this.errorStateMatcher = new DynamicErrorStateMatcher(this.formGroupDirective);
   }
 

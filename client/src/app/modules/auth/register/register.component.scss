@@ -14,24 +14,25 @@ mat-card {
   width: 400px;
 }
 
-mat-card-title, mat-card-content {
-  display: flex;
-  justify-content: center;
+mat-card-title {
+  text-align: center;
+  
+  &, mat-card-content {
+    display: flex;
+    justify-content: center;
+  }
 }
 
-mat-form-field, form {
-  width: 100%
-}
-
-.form-action {
-  display: flex;
-  justify-content: space-between;
-  ::ng-deep
-  .mat-spinner, .mat-progress-spinner {
-    display: inline;
-    margin: 7px;
-      circle {
-        stroke: rgba(0,0,0,.87);
+:host ::ng-deep {
+  .dynamic-form {
+    &, mat-form-field {
+      width: 100%;
     }
   }
+}
+
+.login-link {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
 }

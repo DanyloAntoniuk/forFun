@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { MessageService } from 'src/app/shared/message.service';
 import { HttpClient } from '@angular/common/http';
+import { FieldConfig } from 'src/app/core/dynamic-form/models/field-config.interface';
 
 @Component({
   selector: 'app-register',
@@ -11,53 +12,61 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  registerForm: FormGroup;
-  loading = false;
   hide = true;
-  mainError: string;
+  config: FieldConfig[];
 
   constructor(
-    private formBuilder: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private messageService: MessageService,
-    private http: HttpClient,
-    ) {}
+  ) { }
 
   ngOnInit() {
-    this.registerForm = this.formBuilder.group({
-      email: ['', [Validators.email, Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required, this.comparePasswords]],
-    });
+    this.config = [
+      {
+        type: 'email',
+        label: 'Email',
+        name: 'email',
+        placeholder: 'Enter your email',
+        validation: [Validators.required, Validators.email],
+      },
+      {
+        type: 'password',
+        name: 'password',
+        placeholder: 'Password',
+        validation: [Validators.required, Validators.minLength(6)],
+      },
+      {
+        type: 'confirmPassword',
+        name: 'confirm-password',
+        placeholder: 'Confirm password',
+        validation: [Validators.required],
+      },
+      {
+        label: 'Register',
+        name: 'submit',
+        type: 'button',
+        disabled: false,
+      },
+    ];
   }
 
-  comparePasswords(passwordKey) {
-    // console.log(passwordKey);
-  }
-
-  onSubmit() {
-    if (this.registerForm.invalid) {
-      return;
-    }
-
-    this.loading = true;
-    const { controls } = this.registerForm;
-
+  submit(values: {[key: string]: string}) {
+    this.config[this.config.length - 1].disabled = true;
     const userData = {
-      email: controls.email.value,
-      password: controls.password.value,
+      email: values.email,
+      password: values.password,
       active: true,
       role: 'authenticated',
     };
 
     this.authService.register(userData)
-      .subscribe((user) => {
+      .subscribe(() => {
+        this.config[this.config.length - 1].disabled = false;
+
         this.router.navigate(['admin/posts']);
       },
-      error => {
-        this.loading = false;
-        //this.messageService.error('Email or password is incorrect');
+      () => {
+        this.config[this.config.length - 1].disabled = false;
       });
   }
 
@@ -69,22 +78,5 @@ export class RegisterComponent implements OnInit {
   // @TODO
   signInGithub() {
     window.location.href = 'http://localhost:3001/api/login/github';
-  }
-
-  getErrorByFieldName(fieldName: string)  {
-    const { errors, value } = this.registerForm.controls[fieldName];
-    const capitalizedFieldName = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
-
-    switch (true) {
-      case errors.email: {
-        return `${value} is not a valid email`;
-      }
-      case errors.required: {
-        return `${capitalizedFieldName} field is required`;
-      }
-      case !!errors.minlength.requiredLength: {
-        return `${capitalizedFieldName} must be at least ${errors.minlength.requiredLength} characters long`;
-      }
-    }
   }
 }

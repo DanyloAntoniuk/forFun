@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayoutAlign="center center" class="register-main">
+<!-- <div fxLayout="row" fxLayoutAlign="center center" class="register-main">
   <mat-card>
     <mat-card-title>Register</mat-card-title>
     <mat-card-content>
@@ -66,4 +66,28 @@
       </form>
     </mat-card-content>
   </mat-card>
-</div>
+</div> -->
+<div fxLayout="row" fxLayoutAlign="center center" class="register-main">
+    <mat-card>
+      <mat-card-title>Register</mat-card-title>
+      <mat-card-content>
+          <a mat-raised-button color="black" class="social-button" (click)="signInGoogle()">Sing in with Google
+              <i class="fa fa-google"></i>
+          </a>
+          <a mat-raised-button color="black" class="social-button" (click)="signInGithub()">Sing in with Github
+              <i class="fa fa-github"></i>
+          </a>
+          <hr>
+          <app-message></app-message>
+          <app-dynamic-form
+            class="dynamic-form"
+            [config]="config"
+            #form
+            (submit)="submit($event)">
+          </app-dynamic-form>
+          <span class="login-link">Already registered?
+            <a mat-button [routerLink]="['/login']">Login</a>
+          </span>
+      </mat-card-content>
+    </mat-card>
+  </div>

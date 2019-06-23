@@ -1,5 +1,6 @@
 <div class="dynamic-field form-button" [formGroup]="group">
   <button mat-raised-button [disabled]="config.disabled" type="submit">
-    {{ config.label }}
+      {{ config.label }}
+      <mat-spinner *ngIf="config.disabled" color="primary" [diameter]="17"></mat-spinner>
   </button>
 </div>

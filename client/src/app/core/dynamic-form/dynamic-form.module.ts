@@ -8,7 +8,7 @@ import { FormButtonComponent } from './components/form-button/form-button.compon
 import { FormInputComponent } from './components/form-input/form-input.component';
 import { FormSelectComponent } from './components/form-select/form-select.component';
 import { TestComponent } from '../test/test.component';
-import { MatInputModule, MatButtonModule } from '@angular/material';
+import { MatInputModule, MatButtonModule, MatProgressSpinnerModule, MatIconModule } from '@angular/material';
 import { FormEmailComponent } from './components/form-email/form-email.component';
 import { FormPasswordComponent } from './components/form-password/form-password.component';
 
@@ -19,6 +19,8 @@ import { FormPasswordComponent } from './components/form-password/form-password.
     FormsModule,
     MatInputModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
   ],
   declarations: [
     DynamicFieldDirective,

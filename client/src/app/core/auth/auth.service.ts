@@ -27,7 +27,7 @@ export class AuthService {
       );
   }
 
-  register(userData: {}): Observable<User> {
+  register(userData: {[key: string]: string | boolean}): Observable<User> {
     return this.http.post<User>(`${environment.endpoint}/register`, userData)
     .pipe(
       map(user => {

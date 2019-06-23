@@ -8,7 +8,7 @@ import { FieldConfig } from '../../models/field-config.interface';
   styleUrls: ['dynamic-form.component.scss'],
   templateUrl: 'dynamic-form.component.html',
 })
-export class DynamicFormComponent implements OnInit {
+export class DynamicFormComponent implements OnInit, OnChanges {
   @ViewChild(FormGroupDirective) formGroupDirective: FormGroupDirective;
 
   @Input()
@@ -20,8 +20,8 @@ export class DynamicFormComponent implements OnInit {
   form: FormGroup;
 
   get controls() { return this.config.filter(({type}) => type !== 'button'); }
-  get changes() { return this.form.valueChanges; }
-  get valid() { return this.form.valid; }
+  // get changes() { return this.form.valueChanges; }
+  // get valid() { return this.form.valid; }
   get value() { return this.form.value; }
 
   constructor(private fb: FormBuilder) { }
@@ -65,12 +65,16 @@ export class DynamicFormComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
 
+    if (this.form.invalid) {
+      return;
+    }
+
     this.submit.emit(this.value);
   }
 
   setDisabled(name: string, disable: boolean) {
     if (this.form.controls[name]) {
-      const method = disable ? 'disable': 'enable';
+      const method = disable ? 'disable' : 'enable';
       this.form.controls[name][method]();
       return;
     }

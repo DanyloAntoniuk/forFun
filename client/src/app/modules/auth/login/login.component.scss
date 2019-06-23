@@ -6,9 +6,13 @@ mat-card {
   width: 400px;
 }
 
-mat-card-title, mat-card-content {
-  display: flex;
-  justify-content: center;
+mat-card-title {
+  text-align: center;
+  
+  &, mat-card-content {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 :host ::ng-deep {
@@ -27,4 +31,10 @@ mat-card-title, mat-card-content {
 mat-spinner {
   display: inline;
   margin: 7px;
+}
+
+.register-link {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
 }

@@ -17,7 +17,6 @@ export default {
       const limit = Number(req.query.limit);
       let posts;
       let count;
-      console.log(req.query);
 
       if (req.query.filterValue !== 'undefined') {
         [posts, count] = await Promise.all([

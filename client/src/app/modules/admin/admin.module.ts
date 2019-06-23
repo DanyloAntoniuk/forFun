@@ -21,6 +21,7 @@ import {
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AuthGuard } from '../auth/auth.guard';
 import { PostEditComponent } from './posts/post-edit/post-edit.component';
+import { CrudService } from 'src/app/core/crud.service';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,9 @@ import { PostEditComponent } from './posts/post-edit/post-edit.component';
     routing,
     SharedModule,
   ],
-  providers: [AuthGuard]
+  providers: [
+    AuthGuard,
+    CrudService,
+  ]
 })
 export class AdminModule { }

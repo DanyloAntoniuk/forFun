@@ -15,6 +15,7 @@ export class FormPasswordComponent extends FormElement implements OnInit {
   config: FieldConfig;
   group: FormGroup;
   formGroupDirective: FormGroupDirective;
+  hide = true;
 
   ngOnInit() {
     if (this.config.type === 'confirmPassword') {
@@ -26,7 +27,7 @@ export class FormPasswordComponent extends FormElement implements OnInit {
     return (group: FormGroup): ValidationErrors => {
       const password = group.controls[PASWORD_FIELD_NAME];
       const confirmPassword = group.controls[this.config.name];
-  
+
       if (confirmPassword.errors && !confirmPassword.errors.notMatch) {
         return;
       }
@@ -36,7 +37,7 @@ export class FormPasswordComponent extends FormElement implements OnInit {
       } else {
         confirmPassword.setErrors(null);
       }
-    }
+    };
   }
 
   getError(): string {

@@ -20,6 +20,6 @@ export class FormEmailComponent extends FormElement implements Field {
       return `${this.value} is not a valid email`;
     }
 
-    return super.getRequiredError()
+    return super.getRequiredError();
   }
 }
