@@ -13,20 +13,25 @@ const routes: Routes = [
     children: [
       {
         path: 'posts',
-        component: PostListComponent,
-      },
-      {
-        path: 'posts/:title',
-        component: PostComponent,
-      },
-      {
-        path: 'posts/edit/:title',
-        component: PostEditComponent,
+        children: [
+          {
+            path: '',
+            component: PostListComponent,
+          },
+          {
+            path: ':title',
+            component: PostComponent,
+          },
+          {
+            path: 'edit/:title',
+            component: PostEditComponent,
+          },
+        ]
       },
       {
         path: 'users',
         component: UsersComponent,
-        canActivate: [AuthGuard],
+        //canLoad: [AuthGuard],
       },
     ],
   },

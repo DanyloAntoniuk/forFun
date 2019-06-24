@@ -3,17 +3,25 @@ import { HttpClient, HttpParams, HttpHandler } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PostApi, Post } from '../modules/admin/posts/posts';
 import { environment } from 'src/environments/environment';
-import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
+import { ActivatedRoute, Router, UrlSegment, ActivationEnd, NavigationEnd, RouterEvent, Event } from '@angular/router';
+import { filter, map } from 'rxjs/operators';
 
 @Injectable()
 export class CrudService {
   resourceName: string;
 
-  constructor(private http: HttpClient, private activatedRoute: ActivatedRoute) {
-    this.activatedRoute.url.subscribe((urlSegment: UrlSegment[]) => {
-      console.log(this.activatedRoute);
-      this.resourceName = urlSegment[0].path;
-    });
+  constructor(private http: HttpClient, private router: Router) {
+    this.router.events
+      .pipe(
+        filter((event: Event) => event instanceof NavigationEnd),
+        map((event: NavigationEnd) => {
+          const urlSegments = event.url.split('/');
+          
+          // Asume entity name is third element in array.
+          return urlSegments[2];
+        }),
+      )
+      .subscribe((path: string) => this.resourceName = path);
   }
 
   getRecords(queryParams: {}): Observable<any> {

@@ -43,7 +43,6 @@ export class DataTableComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
-    console.log(this.router);
     this.displayedColumns = ['select', 'No.', ...this.dataTableConfig.displayedColumns, 'createdAt', 'updatedAt', 'actions'];
   }
 
@@ -160,18 +159,6 @@ export class DataTableComponent implements AfterViewInit, OnInit {
     this.paginator.pageIndex = value - 1;
 
     this.handleData();
-  }
-
-  goToRecord(element) {
-    this.activatedRoute.url.subscribe((urlSegment: UrlSegment[]) => {
-      this.router.navigate([`admin/${urlSegment[0].path}`, element.title]);
-    });
-  }
-
-  editRecord(element) {
-    this.activatedRoute.url.subscribe((urlSegment: UrlSegment[]) => {
-      this.router.navigate([`/edit`, element.title]);
-    });
   }
 
   deleteRecord(element) {

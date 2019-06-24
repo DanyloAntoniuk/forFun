@@ -66,6 +66,7 @@ export default {
   async postGetOne(req, res, next) {
     try {
       const { title } = req.params;
+      console.log(title);
       const post = await Post.find({ title })
         .populate('author')
         .populate('widgets.id');
