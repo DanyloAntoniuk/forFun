@@ -1,5 +1,5 @@
 <div>
-  <button mat-raised-button>Add new</button>
+  <a routerLink="./create" mat-raised-button>Add new</a>
   <button *ngIf="!selection.isEmpty()" mat-raised-button color="primary" (click)="deleteMany()">
       Remove selected {{selection.selected.length > 1 ? 'rows': 'row'}}
   </button>
@@ -17,7 +17,7 @@
     </mat-progress-spinner>
   </mat-card>
 
-  <table mat-table [dataSource]="data" matSort matSortActive="updatedAt">
+  <table mat-table [dataSource]="data" matSort matSortActive="updatedAt" matSortDirection="desc">
 
   <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>

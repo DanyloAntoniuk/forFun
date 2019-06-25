@@ -11,10 +11,7 @@ import { FieldConfig } from 'src/app/core/dynamic-form/models/field-config.inter
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
   loading = false;
-  hide = true;
-  mainError: string;
   config: FieldConfig[];
 
   constructor(

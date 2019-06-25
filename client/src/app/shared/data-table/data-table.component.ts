@@ -193,4 +193,8 @@ export class DataTableComponent implements AfterViewInit, OnInit {
       }
     });
   }
+
+  goToAddRecord() {
+    this.router.navigate(['./add'])
+  }
 }

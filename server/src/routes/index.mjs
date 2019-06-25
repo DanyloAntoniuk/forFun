@@ -4,10 +4,11 @@ import User from './api/user';
 import Auth from './api/auth';
 import Role from './api/role';
 import Widgets from './api/widgets/index';
+import ContentType from './api/contentType';
 
 const router = express.Router();
 
-router.use('/api', Auth, User, Post, Role, Widgets);
+router.use('/api', Auth, User, Post, Role, Widgets, ContentType);
 
 // eslint-disable-next-line no-unused-vars
 router.use((err, req, res, next) => {

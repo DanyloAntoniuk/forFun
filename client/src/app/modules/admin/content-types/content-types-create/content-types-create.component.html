@@ -1,0 +1,26 @@
+<div fxLayout="row" fxLayoutAlign="center center" class="login-main">
+    <mat-card>
+      <mat-card-title>Create</mat-card-title>
+      <mat-card-content>
+          <app-message></app-message>
+          <form [formGroup]="form">
+              <mat-form-field>
+                <input placeholder="Title" matInput type="text" formControlName="title"/>
+                <mat-error *ngIf="form.get('title').errors">error</mat-error>
+              </mat-form-field>
+              <div formArrayName="fields">
+                  <div *ngFor="let item of fields.controls; let i = index" [formGroupName]="i">
+                  <label>
+                    Field Title: <input formControlName="title" />
+                  </label>
+                  <label>
+                      Field Type: <input formControlName="type" />
+                    </label>
+                  <!-- <button type="button" (click)="deleteSellingPoint(pointIndex)">Delete Selling Point</button> -->
+                  </div>
+                  <button type="button" (click)="addNext()">Add Field</button>
+                </div>
+          </form>
+      </mat-card-content>
+    </mat-card>
+  </div>

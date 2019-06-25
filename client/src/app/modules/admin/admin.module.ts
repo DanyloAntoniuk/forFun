@@ -22,6 +22,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { AuthGuard } from '../auth/auth.guard';
 import { PostEditComponent } from './posts/post-edit/post-edit.component';
 import { CrudService } from 'src/app/core/crud.service';
+import { ContentTypeListComponent } from './content-types/content-type-list/content-type-list.component';
+import { ContentTypesCreateComponent } from './content-types/content-types-create/content-types-create.component';
+import { DynamicFormModule } from 'src/app/core/dynamic-form/dynamic-form.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -30,6 +34,8 @@ import { CrudService } from 'src/app/core/crud.service';
     PostListComponent,
     UsersComponent,
     PostEditComponent,
+    ContentTypeListComponent,
+    ContentTypesCreateComponent,
   ],
   imports: [
     MatProgressSpinnerModule,
@@ -46,6 +52,7 @@ import { CrudService } from 'src/app/core/crud.service';
     CommonModule,
     routing,
     SharedModule,
+    ReactiveFormsModule,
   ],
   providers: [
     AuthGuard,
