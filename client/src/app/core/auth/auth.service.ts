@@ -15,10 +15,12 @@ export class AuthService {
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
+  // Log in user.
   login(email: string, password: string): Observable<User> {
     return this.http.post<User>(`${environment.endpoint}/login`, { email, password })
       .pipe(
         map(user => {
+          // Store user data.
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.currentUserSubject.next(user);
 
@@ -27,10 +29,12 @@ export class AuthService {
       );
   }
 
+  // Register new user.
   register(userData: {[key: string]: string | boolean}): Observable<User> {
     return this.http.post<User>(`${environment.endpoint}/register`, userData)
     .pipe(
       map(user => {
+        // Store user data.
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
 
@@ -39,6 +43,7 @@ export class AuthService {
     );
   }
 
+  // Log out user.
   logout() {
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);

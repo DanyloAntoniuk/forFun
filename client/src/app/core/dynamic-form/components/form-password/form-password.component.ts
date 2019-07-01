@@ -15,14 +15,17 @@ export class FormPasswordComponent extends FormElement implements OnInit {
   config: FieldConfig;
   group: FormGroup;
   formGroupDirective: FormGroupDirective;
+  // Show/hide password indicator.
   hide = true;
 
   ngOnInit() {
+    // Add validation if confirmPassword field provided in config.
     if (this.config.type === 'confirmPassword') {
       this.group.setValidators(this.checkPasswordsMatch());
     }
   }
 
+  // Check if password fields match.
   checkPasswordsMatch(): ValidatorFn {
     return (group: FormGroup): ValidationErrors => {
       const password = group.controls[PASWORD_FIELD_NAME];

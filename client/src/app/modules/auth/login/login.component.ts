@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // Config for Dynamic Form.
     this.config = [
       {
         type: 'email',
@@ -45,6 +46,7 @@ export class LoginComponent implements OnInit {
   }
 
   submit(values: {[key: string]: string}) {
+    // Show loading indicator.
     this.config[this.config.length - 1].disabled = true;
 
     this.authService.login(values.email, values.password)

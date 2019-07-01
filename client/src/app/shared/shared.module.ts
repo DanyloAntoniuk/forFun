@@ -29,6 +29,7 @@ import { DataTableComponent } from './data-table/data-table.component';
 import { AuthService } from '../core/auth/auth.service';
 import { CrudService } from '../core/crud.service';
 import { FormInputComponent } from './components/form-elements/form-input/form-input.component';
+import { PageTitleComponent } from './components/page-title/page-title.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { FormInputComponent } from './components/form-elements/form-input/form-i
     DateAgoPipe,
     DataTableComponent,
     FormInputComponent,
+    PageTitleComponent,
   ],
   imports: [
     CommonModule,
@@ -74,6 +76,7 @@ import { FormInputComponent } from './components/form-elements/form-input/form-i
     SnackBarComponent,
     DateAgoPipe,
     DataTableComponent,
+    PageTitleComponent,
   ],
 })
 export class SharedModule { }

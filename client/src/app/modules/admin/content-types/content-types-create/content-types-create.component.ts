@@ -12,6 +12,7 @@ export class ContentTypesCreateComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder) { }
 
+  // Type coercion for fields array.
   get fields() {
     return this.form.get('fields') as FormArray;
   }
@@ -23,15 +24,12 @@ export class ContentTypesCreateComponent implements OnInit {
     });
   }
 
-  addField() {
-    return this.formBuilder.group({
-      title: ['', Validators.required],
-      type: [''],
-    });
-  }
-
+  // Add new field to form.
   addNext() {
-    this.fields.push(this.formBuilder.group(this.addField()));
+    this.fields.push(this.formBuilder.group({
+        title: ['', Validators.required],
+        type: [''],
+      })
+    );
   }
-
 }

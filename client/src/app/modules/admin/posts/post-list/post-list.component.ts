@@ -1,18 +1,13 @@
-import { Component, AfterViewInit } from '@angular/core';
-import { DataTableConfig } from 'src/app/shared/data-table/data-table';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-posts-table',
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.scss'],
 })
-export class PostListComponent implements AfterViewInit {
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
-  }
+export class PostListComponent {
+  // Config for Data table.
   dataTableConfig = {
     displayedColumns: ['title', 'status'],
   };
-
-  ngAfterViewInit() {}
 }

@@ -1,8 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { MatTableDataSource, MatSort, MatPaginator, MatDialog, MatSnackBar } from '@angular/material';
-import { SelectionModel, DataSource } from '@angular/cdk/collections';
-import { AuthService } from 'src/app/core/auth/auth.service';
-import { Router, UrlSegment, ActivatedRoute } from '@angular/router';
+import { SelectionModel } from '@angular/cdk/collections';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DialogComponent } from '../components/dialog/dialog.component';
 import { SnackBarComponent } from '../components/snack-bar/snack-bar.component';
 import { fromEvent, merge } from 'rxjs';
@@ -34,7 +33,6 @@ export class DataTableComponent implements AfterViewInit, OnInit {
 
   constructor(
     private dataService: CrudService,
-    private activatedRoute: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
@@ -43,6 +41,7 @@ export class DataTableComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
+    // Combine dipslayed columns with required columns.
     this.displayedColumns = ['select', 'No.', ...this.dataTableConfig.displayedColumns, 'createdAt', 'updatedAt', 'actions'];
   }
 
@@ -50,6 +49,7 @@ export class DataTableComponent implements AfterViewInit, OnInit {
     this.handleData();
   }
 
+  // Check if all rows in table are selected.
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.data.data.length;
@@ -57,12 +57,14 @@ export class DataTableComponent implements AfterViewInit, OnInit {
     return numSelected === numRows;
   }
 
+  // Toggle selection.
   masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
       this.data.data.forEach(row => this.selection.select(row));
   }
 
+  // Delete selected records.
   deleteMany() {
     const ids = this.selection.selected.map((data: any) => data._id);
 
@@ -87,9 +89,12 @@ export class DataTableComponent implements AfterViewInit, OnInit {
     });
   }
 
+  // Load and create datatable source.
   handleData() {
+    // Search filter.
     const filterObservable = fromEvent(this.filter.nativeElement, 'keyup')
     .pipe(
+      // To prevent multiple requests, start after 350ms and more than 2 characters typed.
       debounceTime(350),
       map((event: any) => event.target.value),
       filter(filterValue => {
@@ -103,15 +108,18 @@ export class DataTableComponent implements AfterViewInit, OnInit {
         startWith({})
       );
 
+    // Move to first page after sort order or filter criteria changed.
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
     filterObservable.subscribe(() => this.paginator.pageIndex = 0);
 
     merge(filterObservable, matTableObservables)
       .pipe(
         switchMap(() => {
+          // Show loading indicator.
           this.isEmptyTable = false;
           this.isLoading = true;
 
+          // Query params for sorting, pagination and filtering on server side.
           const httpParams = {
             limit: this.paginator.pageSize,
             page: this.paginator.pageIndex + 1,
@@ -125,6 +133,7 @@ export class DataTableComponent implements AfterViewInit, OnInit {
         map((response) => {
           this.isLoading = false;
 
+          // Show 'no records' if empty table.
           if (!response.count) {
             this.isEmptyTable = true;
 
@@ -133,7 +142,9 @@ export class DataTableComponent implements AfterViewInit, OnInit {
 
           this.resultsLength = response.count;
 
+          // Number of pages based on current page size
           const numberOfPages = Math.ceil(this.resultsLength / this.paginator.pageSize);
+          // Array from 1 to number of pages to iterate through in select list.
           this.pages = Array(numberOfPages).fill(0).map((value, i) => i + 1);
 
           return response.data;
@@ -155,12 +166,14 @@ export class DataTableComponent implements AfterViewInit, OnInit {
       });
   }
 
+  // Change page number of table.
   handleChange(value: number) {
     this.paginator.pageIndex = value - 1;
 
     this.handleData();
   }
 
+  // Delete one record.
   deleteRecord(element) {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '300px',
@@ -194,6 +207,7 @@ export class DataTableComponent implements AfterViewInit, OnInit {
     });
   }
 
+  // Go to create record page.
   goToAddRecord() {
     this.router.navigate(['./add'])
   }

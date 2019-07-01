@@ -21,6 +21,7 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // Config for Dynamic Form.
     this.config = [
       {
         type: 'email',
@@ -51,7 +52,9 @@ export class RegisterComponent implements OnInit {
   }
 
   submit(values: {[key: string]: string}) {
+    // Show loading indicator.
     this.config[this.config.length - 1].disabled = true;
+    // Populate with required fields.
     const userData = {
       email: values.email,
       password: values.password,

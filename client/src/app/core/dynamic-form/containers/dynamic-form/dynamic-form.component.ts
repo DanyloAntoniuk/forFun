@@ -19,10 +19,14 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   form: FormGroup;
 
-  get controls() { return this.config.filter(({type}) => type !== 'button'); }
+  get controls() { 
+    return this.config.filter(({type}) => type !== 'button'); 
+  }
   // get changes() { return this.form.valueChanges; }
   // get valid() { return this.form.valid; }
-  get value() { return this.form.value; }
+  get value() { 
+    return this.form.value; 
+  }
 
   constructor(private fb: FormBuilder) { }
 
@@ -49,18 +53,22 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     }
   }
 
+  // Create form group with fields from config.
   createGroup() {
     const group = this.fb.group({});
     this.controls.forEach(control => group.addControl(control.name, this.createControl(control)));
+
     return group;
   }
 
+  // Create form field with attributes from config.
   createControl(config: FieldConfig) {
     const { disabled, validation, value } = config;
 
     return this.fb.control({ disabled, value }, validation);
   }
 
+  // Pass submit event to child components.
   handleSubmit(event: Event) {
     event.preventDefault();
     event.stopPropagation();

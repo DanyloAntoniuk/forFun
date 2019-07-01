@@ -5,4 +5,4 @@ import { Component, ViewChild } from '@angular/core';
   templateUrl: './app-nav.component.html',
   styleUrls: ['./app-nav.component.scss']
 })
-export class AppNavComponent {}
+export class AppNavComponent { }

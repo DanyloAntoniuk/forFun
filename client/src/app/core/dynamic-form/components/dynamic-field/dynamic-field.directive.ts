@@ -10,6 +10,7 @@ import { FieldConfig } from '../../models/field-config.interface';
 import { FormEmailComponent } from '../form-email/form-email.component';
 import { FormPasswordComponent } from '../form-password/form-password.component';
 
+// Available form field types.
 const components: {[type: string]: Type<Field>} = {
   button: FormButtonComponent,
   input: FormInputComponent,
@@ -25,11 +26,9 @@ const components: {[type: string]: Type<Field>} = {
 export class DynamicFieldDirective implements Field, OnChanges, OnInit {
   @Input() formGroupDirective: FormGroupDirective;
 
-  @Input()
-  config: FieldConfig;
+  @Input() config: FieldConfig;
 
-  @Input()
-  group: FormGroup;
+  @Input() group: FormGroup;
 
   component: ComponentRef<Field>;
 
@@ -39,6 +38,7 @@ export class DynamicFieldDirective implements Field, OnChanges, OnInit {
   ) { }
 
   ngOnChanges() {
+    // Update form field component if config changed.
     if (this.component) {
       this.component.instance.config = this.config;
       this.component.instance.group = this.group;
@@ -53,9 +53,11 @@ export class DynamicFieldDirective implements Field, OnChanges, OnInit {
         Supported types: ${supportedTypes}`
       );
     }
+    // Create new component instance.
     const component = this.resolver.resolveComponentFactory<Field>(components[this.config.type]);
     this.component = this.container.createComponent(component);
 
+    // Assign values for component.
     this.component.instance.config = this.config;
     this.component.instance.group = this.group;
     this.component.instance.formGroupDirective = this.formGroupDirective;

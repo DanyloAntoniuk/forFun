@@ -14,6 +14,7 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(request);
     }
 
+    // Log out user if recieved 401 response.
     return next.handle(request)
       .pipe(
         catchError(err => {
