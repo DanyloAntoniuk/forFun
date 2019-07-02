@@ -10,6 +10,16 @@ th {
   position: relative;
 }
 
+.data-table-actions {
+  padding: 0 20px;
+  .search-input {
+    margin-left: auto;
+  };
+  a {
+    margin-right: 10px;
+  }
+}
+
 .loading-shade {
   position: absolute;
   top: 0;
