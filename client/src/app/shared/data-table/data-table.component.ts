@@ -207,6 +207,16 @@ export class DataTableComponent implements AfterViewInit, OnInit {
     });
   }
 
+  clearFilter() {
+    // Copy filter input value.
+    const filterValue = this.filter.nativeElement.value;
+    this.filter.nativeElement.value = '';
+
+    if (filterValue.length > 2) {
+      this.handleData();
+    }
+  }
+
   // Go to create record page.
   goToAddRecord() {
     this.router.navigate(['./add'])

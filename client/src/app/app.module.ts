@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { AuthModule } from './modules/auth/auth.module';
 import { routing } from './app-routing.module';
 import { DynamicFormModule } from './core/dynamic-form/dynamic-form.module';
+import { TitleService } from './core/title.service';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,11 @@ import { DynamicFormModule } from './core/dynamic-form/dynamic-form.module';
     AuthModule,
     DynamicFormModule,
   ],
-  bootstrap: [AppComponent]
+  providers: [
+    TitleService 
+  ],
+  bootstrap: [
+    AppComponent 
+  ]
 })
 export class AppModule { }

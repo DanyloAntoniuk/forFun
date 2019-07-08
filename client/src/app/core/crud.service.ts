@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHandler } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PostApi, Post } from '../modules/admin/posts/posts';
+import { Post } from '../modules/admin/posts/posts';
 import { environment } from 'src/environments/environment';
-import { ActivatedRoute, Router, UrlSegment, ActivationEnd, NavigationEnd, RouterEvent, Event } from '@angular/router';
+import { Router, NavigationEnd, Event } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 
 @Injectable()

@@ -9,6 +9,7 @@ const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  // @TODO update for () => import('./modules/admin/admin.module).then(m => m.AdminModule)
   { path: 'admin', canLoad: [AuthGuard], loadChildren: './modules/admin/admin.module#AdminModule' },
   { path: 'test', component: TestComponent },
   { path: '404', component: NotFoundComponent },
