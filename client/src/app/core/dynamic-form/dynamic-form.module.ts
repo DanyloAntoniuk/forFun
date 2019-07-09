@@ -11,6 +11,8 @@ import { TestComponent } from '../test/test.component';
 import { MatInputModule, MatButtonModule, MatProgressSpinnerModule, MatIconModule } from '@angular/material';
 import { FormEmailComponent } from './components/form-email/form-email.component';
 import { FormPasswordComponent } from './components/form-password/form-password.component';
+import { FormWysiwygComponent } from './components/form-wysiwyg/form-wysiwyg.component';
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
 @NgModule({
   imports: [
@@ -21,6 +23,8 @@ import { FormPasswordComponent } from './components/form-password/form-password.
     MatButtonModule,
     MatProgressSpinnerModule,
     MatIconModule,
+    FroalaEditorModule.forRoot(),
+    FroalaViewModule.forRoot(), 
   ],
   declarations: [
     DynamicFieldDirective,
@@ -31,6 +35,7 @@ import { FormPasswordComponent } from './components/form-password/form-password.
     FormEmailComponent,
     TestComponent,
     FormPasswordComponent,
+    FormWysiwygComponent,
   ],
   exports: [
     DynamicFormComponent
@@ -44,6 +49,7 @@ import { FormPasswordComponent } from './components/form-password/form-password.
     FormSelectComponent,
     FormEmailComponent,
     FormPasswordComponent,
+    FormWysiwygComponent,
   ]
 })
 export class DynamicFormModule {}

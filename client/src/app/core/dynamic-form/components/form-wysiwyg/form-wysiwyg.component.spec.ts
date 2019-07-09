@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FormInputComponent } from './form-input.component';
+import { FormWysiwygComponent } from './form-wysiwyg.component';
 
-describe('FormInputComponent', () => {
-  let component: FormInputComponent;
-  let fixture: ComponentFixture<FormInputComponent>;
+describe('FormWysiwygComponent', () => {
+  let component: FormWysiwygComponent;
+  let fixture: ComponentFixture<FormWysiwygComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FormInputComponent ]
+      declarations: [ FormWysiwygComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FormInputComponent);
+    fixture = TestBed.createComponent(FormWysiwygComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

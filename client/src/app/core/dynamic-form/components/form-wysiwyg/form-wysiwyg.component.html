@@ -1,0 +1,8 @@
+<div class="dynamic-field wysiwyg-field" [formGroup]="group">
+  <label *ngIf="config.label">{{ config.label }}</label>
+    <textarea
+      [froalaEditor]="config.options"
+      [placeholder]="config.placeholder"
+      [formControlName]="config.name"
+    ></textarea>
+</div>

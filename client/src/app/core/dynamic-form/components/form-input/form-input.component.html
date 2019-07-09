@@ -4,9 +4,9 @@
     <input matInput
       type="text"
       [placeholder]="config.placeholder"
-      [errorStateMatcher]="config.errorStateMatcher"
+      [errorStateMatcher]="errorStateMatcher"
       [formControlName]="config.name"
     >
-    <mat-error *ngIf="!valid">dasdas</mat-error>
+    <mat-error *ngIf="!valid">{{ getError() }}</mat-error>
   </mat-form-field>
 </div>

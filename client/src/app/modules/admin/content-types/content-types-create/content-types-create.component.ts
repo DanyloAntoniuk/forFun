@@ -17,10 +17,20 @@ export class ContentTypesCreateComponent implements OnInit {
     return this.form.get('fields') as FormArray;
   }
 
+  get fieldTypes() {
+    return [
+      'email',
+      'text',
+      'select',
+    ]
+  }
+
+  // @TODO
   ngOnInit() {
     this.form = this.formBuilder.group({
       title: ['', Validators.required],
-      fields: this.formBuilder.array([])
+      body: [''],
+      fields: this.formBuilder.array([]),
     });
   }
 
@@ -31,5 +41,9 @@ export class ContentTypesCreateComponent implements OnInit {
         type: [''],
       })
     );
+  }
+
+  deleteField(index: number) {
+    this.fields.removeAt(index);
   }
 }

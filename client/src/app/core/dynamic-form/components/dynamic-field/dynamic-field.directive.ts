@@ -9,15 +9,17 @@ import { Field } from '../../models/field.interface';
 import { FieldConfig } from '../../models/field-config.interface';
 import { FormEmailComponent } from '../form-email/form-email.component';
 import { FormPasswordComponent } from '../form-password/form-password.component';
+import { FormWysiwygComponent } from '../form-wysiwyg/form-wysiwyg.component';
 
 // Available form field types.
 const components: {[type: string]: Type<Field>} = {
   button: FormButtonComponent,
-  input: FormInputComponent,
+  text: FormInputComponent,
   select: FormSelectComponent,
   email: FormEmailComponent,
   password: FormPasswordComponent,
   confirmPassword: FormPasswordComponent,
+  wysiwyg: FormWysiwygComponent,
 };
 
 @Directive({

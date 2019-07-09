@@ -7,7 +7,6 @@ import {
   MatListModule,
   MatDialogModule,
   MatSnackBarModule,
-  MatFormFieldModule,
   MatSelectModule,
   MatProgressSpinnerModule,
   MatCardModule,
@@ -27,8 +26,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DataTableComponent } from './data-table/data-table.component';
 import { AuthService } from '../core/auth/auth.service';
-import { CrudService } from '../core/crud.service';
-import { FormInputComponent } from './components/form-elements/form-input/form-input.component';
 import { PageTitleComponent } from './components/page-title/page-title.component';
 
 @NgModule({
@@ -39,7 +36,6 @@ import { PageTitleComponent } from './components/page-title/page-title.component
     SnackBarComponent,
     DateAgoPipe,
     DataTableComponent,
-    FormInputComponent,
     PageTitleComponent,
   ],
   imports: [

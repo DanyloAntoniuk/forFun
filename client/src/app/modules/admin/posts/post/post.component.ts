@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Post } from '../posts';
 import { CrudService } from 'src/app/core/crud.service';
 import { HttpClient } from '@angular/common/http';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-post',
@@ -12,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PostComponent implements OnInit {
   post: Post;
+  config;
 
   constructor(
     private postService: CrudService,
@@ -19,13 +21,31 @@ export class PostComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.loadPost();
+    // Config for Dynamic Form.
+    this.config = [
+      {
+        type: 'text',
+        name: 'title',
+        placeholder: 'Title',
+        validation: [Validators.required],
+      },
+      {
+        type: 'wysiwyg',
+        label: 'Body',
+        name: 'body',
+        options: {
+          placeholderText: 'Start typing here...',
+        }
+      },
+      {
+        label: 'Save',
+        name: 'submit',
+        type: 'button',
+      },
+    ];
   }
 
-  loadPost() {
-    const { title } = this.route.snapshot.params;
-    this.postService.getRecord(title).subscribe(post => {
-      console.log(post);
-    });
+  submit(e) {
+    console.log(e);
   }
 }

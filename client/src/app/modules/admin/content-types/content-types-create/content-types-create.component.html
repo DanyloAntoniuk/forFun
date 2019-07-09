@@ -3,20 +3,25 @@
       <mat-card-title>Create</mat-card-title>
       <mat-card-content>
           <app-message></app-message>
+          <!-- @TODO -->
           <form [formGroup]="form">
               <mat-form-field class="content-type-title">
                 <input placeholder="Title" matInput type="text" formControlName="title"/>
                 <mat-error *ngIf="form.get('title').errors">error</mat-error>
               </mat-form-field>
+              <mat-form-field>
+                <input placeholder="Body" matInput type="text" formControlName="body"/>
+              </mat-form-field>
               <div formArrayName="fields">
                 <div *ngFor="let item of fields.controls; let i = index" [formGroupName]="i" fxLayout="row" fxLayoutAlign="space-between center">
+                  <div>No. <span>{{ i + 1 }}</span></div>
                   <mat-form-field>
                     <input placeholder="Field Title" type="text" matInput formControlName="title"/>
                   </mat-form-field>
                   <mat-form-field>
                     <input placeholder="Field Type" type="text" matInput formControlName="type"/>
                   </mat-form-field>
-                  <button mat-icon-button type="button" (click)="deleteSellingPoint(i)">
+                  <button mat-icon-button type="button" (click)="deleteField(i)">
                     <mat-icon>close</mat-icon>
                   </button>
                 </div>
