@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild, ElementRef, ContentChildren, ContentChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormGroupDirective } from '@angular/forms';
 
 import { FieldConfig } from '../../models/field-config.interface';
+import { FormFileUploadComponent } from '../../components/form-file-upload/form-file-upload.component';
+import { DynamicFieldDirective } from '../../components/dynamic-field/dynamic-field.directive';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -10,6 +12,7 @@ import { FieldConfig } from '../../models/field-config.interface';
 })
 export class DynamicFormComponent implements OnInit, OnChanges {
   @ViewChild(FormGroupDirective) formGroupDirective: FormGroupDirective;
+  @ViewChild('dynamicForm') dynamicForm: ElementRef;
 
   @Input()
   config: FieldConfig[] = [];
@@ -72,6 +75,22 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   handleSubmit(event: Event) {
     event.preventDefault();
     event.stopPropagation();
+    
+    // Find input file element within form
+    for(const element of this.dynamicForm.nativeElement.elements) {
+      if (element.type === 'file') {
+        const file = element.files[0];
+        // Find form control name for input file form field
+        let fileInputControlName = this.config.filter((el) => el.type === 'file')[0].name;
+
+        // Remove input file filed from form values
+        const { [fileInputControlName]: deletedKey, ...values } = this.value;
+        // And pass file as input file field value.
+        this.submit.emit({...values, file})
+        return;
+      }
+    }
+    
 
     if (this.form.invalid) {
       return;

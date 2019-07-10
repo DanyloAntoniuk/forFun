@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import 'froala-editor/js/plugins.pkgd.min.js';
 
 import { DynamicFieldDirective } from './components/dynamic-field/dynamic-field.directive';
 import { DynamicFormComponent } from './containers/dynamic-form/dynamic-form.component';
@@ -13,6 +14,7 @@ import { FormEmailComponent } from './components/form-email/form-email.component
 import { FormPasswordComponent } from './components/form-password/form-password.component';
 import { FormWysiwygComponent } from './components/form-wysiwyg/form-wysiwyg.component';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { FormFileUploadComponent } from './components/form-file-upload/form-file-upload.component';
 
 @NgModule({
   imports: [
@@ -36,6 +38,7 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     TestComponent,
     FormPasswordComponent,
     FormWysiwygComponent,
+    FormFileUploadComponent,
   ],
   exports: [
     DynamicFormComponent
@@ -50,6 +53,7 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     FormEmailComponent,
     FormPasswordComponent,
     FormWysiwygComponent,
+    FormFileUploadComponent,
   ]
 })
 export class DynamicFormModule {}

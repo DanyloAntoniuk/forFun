@@ -1,8 +1,9 @@
 <form
+  #dynamicForm
   [formGroup]="form"
   (submit)="handleSubmit($event)">
   <div
-    *ngFor="let field of config;"
+    *ngFor="let field of config"
     [formGroupDirective]="formGroupDirective"
     appDynamicField
     [config]="field"

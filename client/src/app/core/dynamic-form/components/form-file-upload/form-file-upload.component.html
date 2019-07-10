@@ -1,0 +1,13 @@
+<div class="dynamic-field form-file-input" [formGroup]="group">
+    <label>{{ config.label }}</label>
+    <input hidden
+      type="file"
+      #fileInput
+      [placeholder]="config.placeholder"
+      [formControlName]="config.name"
+      (change)="previewImage(fileInput.files)"
+      accept="image/*"
+    >
+    <button type="button" mat-raised-button (click)="fileInput.click()">{{ config.placeholder }}</button>
+    <img *ngIf="imgURL" [src]="imgURL" height="300px">
+  </div>

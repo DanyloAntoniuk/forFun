@@ -30,11 +30,35 @@ export class PostComponent implements OnInit {
         validation: [Validators.required],
       },
       {
+        type: 'file',
+        name: 'image',
+        placeholder: 'Upload Image',
+      },
+      {
         type: 'wysiwyg',
         label: 'Body',
         name: 'body',
         options: {
           placeholderText: 'Start typing here...',
+          toolbarButtons: [
+            'bold', 
+            'italic',
+            'underline',
+            'strikeThrough',
+            'fontSize',
+            'textColor',
+            'backgroundColor',
+            'quote',
+            'formatOL',
+            'formatUL',
+            'insertTable',
+            'insertImage',
+            'insertVideo',
+            'insertLink',
+            'html',
+          ],
+          quickInsertTags: [],
+          charCounterCount: false,
         }
       },
       {
