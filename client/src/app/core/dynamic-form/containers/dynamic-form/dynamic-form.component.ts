@@ -1,9 +1,7 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild, ElementRef, ContentChildren, ContentChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormGroupDirective } from '@angular/forms';
 
 import { FieldConfig } from '../../models/field-config.interface';
-import { FormFileUploadComponent } from '../../components/form-file-upload/form-file-upload.component';
-import { DynamicFieldDirective } from '../../components/dynamic-field/dynamic-field.directive';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -22,6 +20,8 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   form: FormGroup;
 
+  constructor(private fb: FormBuilder) { }
+
   get controls() { 
     return this.config.filter(({type}) => type !== 'button'); 
   }
@@ -30,8 +30,6 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   get value() { 
     return this.form.value; 
   }
-
-  constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
     this.form = this.createGroup();
@@ -91,7 +89,6 @@ export class DynamicFormComponent implements OnInit, OnChanges {
       }
     }
     
-
     if (this.form.invalid) {
       return;
     }

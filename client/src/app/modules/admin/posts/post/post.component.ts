@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Post } from '../posts';
 import { CrudService } from 'src/app/core/crud.service';
-import { HttpClient } from '@angular/common/http';
 import { Validators } from '@angular/forms';
 
 @Component({
@@ -15,10 +14,7 @@ export class PostComponent implements OnInit {
   post: Post;
   config;
 
-  constructor(
-    private postService: CrudService,
-    private route: ActivatedRoute,
-    ) { }
+  constructor() { }
 
   ngOnInit() {
     // Config for Dynamic Form.
@@ -28,6 +24,7 @@ export class PostComponent implements OnInit {
         name: 'title',
         placeholder: 'Title',
         validation: [Validators.required],
+        value: 'test',
       },
       {
         type: 'file',
@@ -38,6 +35,7 @@ export class PostComponent implements OnInit {
         type: 'wysiwyg',
         label: 'Body',
         name: 'body',
+        value: '<h1>test</h1>',
         options: {
           placeholderText: 'Start typing here...',
           toolbarButtons: [
@@ -59,7 +57,7 @@ export class PostComponent implements OnInit {
           ],
           quickInsertTags: [],
           charCounterCount: false,
-        }
+        },
       },
       {
         label: 'Save',
