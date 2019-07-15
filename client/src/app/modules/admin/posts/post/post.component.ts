@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Post } from '../posts';
 import { CrudService } from 'src/app/core/crud.service';
 import { Validators } from '@angular/forms';
+import { FieldConfig } from 'src/app/core/dynamic-form/models/field-config.interface';
 
 @Component({
   selector: 'app-post',
@@ -12,7 +13,7 @@ import { Validators } from '@angular/forms';
 })
 export class PostComponent implements OnInit {
   post: Post;
-  config;
+  config: FieldConfig[];
 
   constructor() { }
 
@@ -23,7 +24,7 @@ export class PostComponent implements OnInit {
         type: 'text',
         name: 'title',
         placeholder: 'Title',
-        validation: [Validators.required],
+        validation: [ Validators.required ],
         value: 'test',
       },
       {

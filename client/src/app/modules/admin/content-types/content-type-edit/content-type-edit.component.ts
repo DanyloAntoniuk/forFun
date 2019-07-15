@@ -1,18 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FieldConfig } from 'src/app/core/dynamic-form/models/field-config.interface';
-import { Validators, FormGroup, FormBuilder, FormArray, FormGroupDirective, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { FormGroup, FormGroupDirective, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { CrudService } from 'src/app/core/crud.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-content-types-create',
-  templateUrl: './content-types-create.component.html',
-  styleUrls: ['./content-types-create.component.scss']
+  selector: 'app-content-type-edit',
+  templateUrl: './content-type-edit.component.html',
+  styleUrls: ['./content-type-edit.component.scss']
 })
-export class ContentTypesCreateComponent implements OnInit {
+export class ContentTypeEditComponent implements OnInit {
   form: FormGroup;
   @ViewChild(FormGroupDirective) formGroupDirective: FormGroupDirective;
-  test = true;
 
   fieldTypes = [
     { name: 'text', value: 'Text' },
@@ -25,7 +23,12 @@ export class ContentTypesCreateComponent implements OnInit {
     private crudService: CrudService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    ) { }
+    ) { 
+      this.form = this.formBuilder.group({
+        title: '',
+        fields: [],
+      });
+    }
 
   // Type coercion for fields array.
   get fields() {
@@ -33,15 +36,20 @@ export class ContentTypesCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.form = this.formBuilder.group({
-      title: ['', Validators.required],
-      fields: this.formBuilder.array([
-        this.formBuilder.group({
-          title: ['Body', Validators.required],
-          type: 'wysiwyg',
-        })
-      ]),
-    });
+    this.crudService.getRecord(this.activatedRoute.snapshot.params.title)
+      .subscribe((record) => {
+        this.form = this.formBuilder.group({
+          title: [record.title, Validators.required],
+          fields: this.formBuilder.array([]),
+        });
+
+        record.fields.forEach(field => {
+          this.fields.push(this.formBuilder.group({
+            title: [field.title, Validators.required],
+            type: [field.type],
+          }));
+        });
+      });
   }
 
   // Add new field to form.
@@ -68,6 +76,10 @@ export class ContentTypesCreateComponent implements OnInit {
   }
 
   submit() {
+    if (!this.form.valid) {
+      return;
+    }
+
     const { value } = this.form;
 
     // Manually set required erorrs for all empty Field Title fields.
@@ -79,9 +91,9 @@ export class ContentTypesCreateComponent implements OnInit {
       }
     });
 
-    this.crudService.createRecord(value)
-      .subscribe(response => {
-        this.router.navigate(['../'], { relativeTo: this.activatedRoute })
+    this.crudService.updateRecord(this.activatedRoute.snapshot.params.title, value)
+      .subscribe(() => {
+        this.router.navigate(['../../'], { relativeTo: this.activatedRoute });
       });
   }
 }

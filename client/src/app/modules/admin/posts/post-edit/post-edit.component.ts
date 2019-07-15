@@ -3,6 +3,7 @@ import { CrudService } from 'src/app/core/crud.service';
 import { Post } from '../posts';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Validators } from '@angular/forms';
+import { FieldConfig } from 'src/app/core/dynamic-form/models/field-config.interface';
 
 @Component({
   selector: 'app-post-edit',
@@ -10,33 +11,71 @@ import { Validators } from '@angular/forms';
   styleUrls: ['./post-edit.component.scss']
 })
 export class PostEditComponent implements OnInit {
-  post: Post;
-  config;
+  config: FieldConfig[];
 
   constructor(
     private crudService: CrudService,
     private activatredRoute: ActivatedRoute,
-  ) { }
+  ) {
+    this.config = [];
+  }
 
   ngOnInit() {
     this.crudService.getRecord(this.activatredRoute.snapshot.params.title)
-      .subscribe((post: Post) => {
-        this.post = post;
-
-        const fieldsToRemove = ['_id', '__v', 'fields', 'widgets'];
-        const fields = Object.keys(post).filter(field => !fieldsToRemove.includes(field));
-
-        this.config = fields.map((field) => {
-          return {
-            type: 'input',
-            label: '',
-            name: 'email',
-            placeholder: 'Enter your email',
-            validation: [Validators.required, Validators.email],
-          };
-        });
-        console.log(post);
-      });
+    .subscribe((post: Post) => {
+      console.log(post);
+      // Config for Dynamic Form.
+      this.config = [
+        {
+          type: 'text',
+          name: 'title',
+          placeholder: 'Title',
+          validation: [Validators.required],
+          value: post.title,
+        },
+        {
+          type: 'file',
+          name: 'image',
+          placeholder: 'Upload Image',
+        },
+        {
+          type: 'wysiwyg',
+          label: 'Body',
+          name: 'body',
+          value: '<h1>tes</h1>',
+          options: {
+            placeholderText: 'Start typing here...',
+            toolbarButtons: [
+              'bold', 
+              'italic',
+              'underline',
+              'strikeThrough',
+              'fontSize',
+              'textColor',
+              'backgroundColor',
+              'quote',
+              'formatOL',
+              'formatUL',
+              'insertTable',
+              'insertImage',
+              'insertVideo',
+              'insertLink',
+              'html',
+            ],
+            quickInsertTags: [],
+            charCounterCount: false,
+          },
+        },
+        {
+          label: 'Save',
+          name: 'submit',
+          type: 'button',
+        },
+      ];
+    });
   }
 
+  submit(e) {
+    console.log(e);
+  }
 }

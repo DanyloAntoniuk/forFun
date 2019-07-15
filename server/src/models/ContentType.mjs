@@ -4,7 +4,7 @@
 import mongoose from 'mongoose';
 
 // @TODO Add more
-const FIELD_TYPES = ['input', 'select'];
+const FIELD_TYPES = ['text', 'wysiwyg', 'file'];
 
 /**
  * Mongoose Schema for ContentType entity.
@@ -22,19 +22,19 @@ const ContentTypeSchema = mongoose.Schema({
   //   reqiured: true,
   // },
   fields: [{
-    fieldTitle: {
+    title: {
       type: String,
       required: true,
     },
-    fieldType: {
+    type: {
       type: String,
       reqiured: true,
       enum: FIELD_TYPES,
     },
-    required: {
-      type: Boolean,
-      default: true,
-    },
+    // required: {
+    //   type: Boolean,
+    //   default: true,
+    // },
   }],
 }, { timestamps: true });
 

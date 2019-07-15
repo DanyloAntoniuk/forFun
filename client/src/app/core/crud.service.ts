@@ -47,4 +47,8 @@ export class CrudService {
   deleteManyRecords(ids: string[]): Observable<any> {
     return this.http.request<any>('delete', `${environment.endpoint}/${this.resourceName}`, { body: ids });
   }
+
+  updateRecord(title: string, body: {[key: string]: any}) {
+    return this.http.put(`${environment.endpoint}/${this.resourceName}/${title}`, body);
+  }
 }

@@ -78,12 +78,35 @@ export default {
   async contentTypeGetOne(req, res, next) {
     try {
       const { title } = req.params;
-      const contentType = await ContentType.find({ _id: title });
+      const contentType = await ContentType.find({ title });
+
       if (!contentType) {
-        return res.status(404).json({ message: `ContentType with id ${req.params.id} not found.` });
+        return res.status(404).json({ message: `ContentType with title ${title} not found.` });
       }
 
-      return res.json(contentType);
+      return res.json(contentType[0]);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  /**
+   * Update Content Type.
+   */
+  async contentTypeUpdate(req, res, next) {
+    try {
+      const { title } = req.params;
+      const updatedContentType = await ContentType.findOneAndUpdate(
+        { title },
+        req.body,
+        { new: true },
+      );
+
+      if (!updatedContentType) {
+        return res.status(404).json({ message: `Post with id ${req.params.id} not found.` });
+      }
+
+      res.json(updatedContentType[0]);
     } catch (err) {
       next(err);
     }

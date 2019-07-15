@@ -1,0 +1,25 @@
+mat-card {
+  margin: 20px;
+  width: 100%;
+}
+
+:host ::ng-deep {
+  .dynamic-form {
+    .form-input {
+      margin: 10px 0;
+
+      mat-form-field {
+        width: 300px;
+      }
+    }
+
+    .wysiwyg-field {
+      margin-bottom: 15px;
+
+      label {
+        display: block;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}

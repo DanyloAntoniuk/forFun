@@ -7,6 +7,7 @@ import { AuthGuard } from '../auth/auth.guard';
 import { PostEditComponent } from './posts/post-edit/post-edit.component';
 import { ContentTypesCreateComponent } from './content-types/content-types-create/content-types-create.component';
 import { ContentTypeListComponent } from './content-types/content-type-list/content-type-list.component';
+import { ContentTypeEditComponent } from './content-types/content-type-edit/content-type-edit.component';
 
 const routes: Routes = [
   {
@@ -45,6 +46,10 @@ const routes: Routes = [
           {
             path: 'create',
             component: ContentTypesCreateComponent,
+          },
+          {
+            path: 'edit/:title',
+            component: ContentTypeEditComponent,
           }
         ],
       },

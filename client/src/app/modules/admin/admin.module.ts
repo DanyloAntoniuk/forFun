@@ -26,6 +26,7 @@ import { ContentTypeListComponent } from './content-types/content-type-list/cont
 import { ContentTypesCreateComponent } from './content-types/content-types-create/content-types-create.component';
 import { DynamicFormModule } from 'src/app/core/dynamic-form/dynamic-form.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ContentTypeEditComponent } from './content-types/content-type-edit/content-type-edit.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     PostEditComponent,
     ContentTypeListComponent,
     ContentTypesCreateComponent,
+    ContentTypeEditComponent,
   ],
   imports: [
     MatProgressSpinnerModule,

@@ -73,6 +73,10 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   handleSubmit(event: Event) {
     event.preventDefault();
     event.stopPropagation();
+
+    if (this.form.invalid) {
+      return;
+    }
     
     // Find input file element within form
     for(const element of this.dynamicForm.nativeElement.elements) {
@@ -87,10 +91,6 @@ export class DynamicFormComponent implements OnInit, OnChanges {
         this.submit.emit({...values, file})
         return;
       }
-    }
-    
-    if (this.form.invalid) {
-      return;
     }
 
     this.submit.emit(this.value);

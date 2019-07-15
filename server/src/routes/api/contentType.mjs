@@ -9,4 +9,6 @@ router.get('/content-types/:title', ContentTypeController.contentTypeGetOne);
 
 router.get('/content-types', ContentTypeController.contentTypesList);
 
+router.put('/content-types/:title', ContentTypeController.contentTypeUpdate);
+
 export default router;

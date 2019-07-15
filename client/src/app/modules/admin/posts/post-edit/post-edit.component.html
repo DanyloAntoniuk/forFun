@@ -1,3 +1,14 @@
-<p>
- {{post?.title}}
-</p>
+<div fxLayout="row" fxFlex="60" class="create-wrapper">
+    <app-message></app-message>
+    <mat-card>
+      <mat-card-title>New Post</mat-card-title>
+      <mat-card-content>
+          <app-dynamic-form
+            class="dynamic-form"
+            [config]="config"
+            #form
+            (submit)="submit($event)">
+          </app-dynamic-form>
+      </mat-card-content>
+    </mat-card>
+  </div>
