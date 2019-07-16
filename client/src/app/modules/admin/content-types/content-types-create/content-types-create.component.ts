@@ -3,6 +3,10 @@ import { FieldConfig } from 'src/app/core/dynamic-form/models/field-config.inter
 import { Validators, FormGroup, FormBuilder, FormArray, FormGroupDirective, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { CrudService } from 'src/app/core/crud.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Route } from '@angular/compiler/src/core';
+import { LoadedRouterConfig } from '@angular/router/src/config';
+import { DynamicContentTypeComponent } from '../dynamic-content-type/dynamic-content-type.component';
+import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-content-types-create',
@@ -79,9 +83,39 @@ export class ContentTypesCreateComponent implements OnInit {
       }
     });
 
+    // const { config } = this.router;
+
+    // config.forEach((route: Route) => {
+    //   if (route.loadChildren) {
+    //     const childRoutes = (route as any)._loadedConfig.routes;
+
+    //     childRoutes.forEach((childRoute: Route) => {
+    //       if (!childRoute.children) {
+    //         childRoute.children = [];
+    //       }
+    //       console.log(childRoute);
+
+    //       childRoute.children.push(
+    //         ({
+    //           path: value.title,
+    //           component: DynamicContentTypeComponent,
+    //         } as Route ),
+    //       );
+    //     });
+    //   }
+    // });
+
+    // this.router.resetConfig(config);
+    // this.router.navigateByUrl(`admin/${value.title}`);
+
+
     this.crudService.createRecord(value)
       .subscribe(response => {
         this.router.navigate(['../'], { relativeTo: this.activatedRoute })
       });
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray((this.form.controls.fields as any).controls, event.previousIndex, event.currentIndex);
   }
 }

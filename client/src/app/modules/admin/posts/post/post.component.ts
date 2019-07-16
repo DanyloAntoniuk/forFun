@@ -31,6 +31,7 @@ export class PostComponent implements OnInit {
         type: 'file',
         name: 'image',
         placeholder: 'Upload Image',
+        validation: [Validators.required]
       },
       {
         type: 'wysiwyg',
@@ -40,24 +41,8 @@ export class PostComponent implements OnInit {
         options: {
           placeholderText: 'Start typing here...',
           toolbarButtons: [
-            'bold', 
-            'italic',
-            'underline',
-            'strikeThrough',
-            'fontSize',
-            'textColor',
-            'backgroundColor',
-            'quote',
-            'formatOL',
-            'formatUL',
-            'insertTable',
-            'insertImage',
-            'insertVideo',
-            'insertLink',
             'html',
           ],
-          quickInsertTags: [],
-          charCounterCount: false,
         },
       },
       {

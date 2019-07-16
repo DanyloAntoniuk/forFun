@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormGroupDirective, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { CrudService } from 'src/app/core/crud.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-content-type-edit',
@@ -95,5 +96,9 @@ export class ContentTypeEditComponent implements OnInit {
       .subscribe(() => {
         this.router.navigate(['../../'], { relativeTo: this.activatedRoute });
       });
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray((this.form.controls.fields as any).controls, event.previousIndex, event.currentIndex);
   }
 }

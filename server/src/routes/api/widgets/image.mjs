@@ -9,7 +9,8 @@ const router = express.Router();
 
 router.get('/images', ImageController.imageList);
 
-router.post('/images', AuthService.jwt(), AccessControlService.checkPermissions, ensureDirectoryCreated, createUploadDirectory, uploadSingle.call(ImageController, 'image'), validateBody(schemas.widgets.uploadSchema), ImageController.imageCreate);
+router.post('/images', ensureDirectoryCreated, createUploadDirectory, uploadSingle.call(ImageController, 'file'), ImageController.imageCreate);
+// router.post('/images', AuthService.jwt(), AccessControlService.checkPermissions, ensureDirectoryCreated, createUploadDirectory, uploadSingle.call(ImageController, 'image'), validateBody(schemas.widgets.uploadSchema), ImageController.imageCreate);
 
 router.get('/image/:id', AccessControlService.checkPermissions, ImageController.imageGetOne);
 

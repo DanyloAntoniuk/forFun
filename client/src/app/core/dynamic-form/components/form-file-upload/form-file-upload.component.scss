@@ -1,0 +1,13 @@
+.file-upload {
+  margin: 0 5px 10px 0;
+}
+
+:host ::ng-deep {
+  .mat-form-field-wrapper {
+    padding-bottom: 1.55em;
+  }
+}
+
+img {
+  max-width: 100%;
+}

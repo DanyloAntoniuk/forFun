@@ -8,8 +8,20 @@
                 <input placeholder="Title" matInput type="text" formControlName="title"/>
                 <mat-error *ngIf="form.get('title').errors">Title field is required</mat-error>
               </mat-form-field>
-              <div formArrayName="fields">
-                <div *ngFor="let item of fields.controls; let i = index" [formGroupName]="i" fxLayout="row" fxLayoutAlign="space-between center">
+              <div 
+                formArrayName="fields" 
+                cdkDropList 
+                (cdkDropListDropped)="drop($event)" 
+                class="field-list"
+              >
+                <div 
+                  *ngFor="let item of fields.controls; let i = index" 
+                  [formGroupName]="i" 
+                  fxLayout="row" 
+                  fxLayoutAlign="space-between center" 
+                  cdkDrag
+                  class="field-box"
+                >
                   <div>No. <span>{{ i + 1 }}</span></div>
                   <mat-form-field>
                     <input placeholder="Field Title" type="text" matInput formControlName="title"/>
@@ -34,9 +46,15 @@
                   <button mat-icon-button type="button" (click)="deleteField(i)">
                     <mat-icon>close</mat-icon>
                   </button>
+                  <div class="field-handle" cdkDragHandle>
+                    <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path>
+                      <path d="M0 0h24v24H0z" fill="none"></path>
+                    </svg>
+                  </div>
                 </div>
               </div>
-              <button mat-raised-button type="button" (click)="addNext()">Add Field</button>
+              <button mat-raised-button class="add-next" type="button" (click)="addNext()">Add Field</button>
               <div class="form-submit">
                 <button mat-raised-button type="submit" (click)="submit()">Save</button>
               </div>

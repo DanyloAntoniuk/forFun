@@ -1,5 +1,4 @@
-import { Component, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
-import { FormElement } from '../formElement';
+import { Component } from '@angular/core';
 import { FieldConfig } from '../../models/field-config.interface';
 import { FormGroup, FormGroupDirective } from '@angular/forms';
 import { Field } from '../../models/field.interface';
@@ -14,15 +13,25 @@ export class FormFileUploadComponent implements Field {
   group: FormGroup;
   formGroupDirective: FormGroupDirective;
   imgURL: string | ArrayBuffer;
+  fileName: string;
 
-  previewImage(files) {
+  // Display image after upload
+  previewImage(files: FileList) {
     if (files.length) {
       const reader = new FileReader();
+      this.fileName = files[0].name;
 
       reader.readAsDataURL(files[0]);
       reader.onload = () => {
         this.imgURL = reader.result;
       };
     }
+  }
+
+  // Clear input and remove image from DOM
+  clearFile(file: HTMLInputElement) {
+    file.value = '';
+    this.fileName = '';
+    this.imgURL = '';
   }
 }

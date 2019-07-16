@@ -18,6 +18,7 @@ import {
   MatInputModule,
   MatButtonModule,
 } from '@angular/material';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AuthGuard } from '../auth/auth.guard';
 import { PostEditComponent } from './posts/post-edit/post-edit.component';
@@ -27,6 +28,7 @@ import { ContentTypesCreateComponent } from './content-types/content-types-creat
 import { DynamicFormModule } from 'src/app/core/dynamic-form/dynamic-form.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContentTypeEditComponent } from './content-types/content-type-edit/content-type-edit.component';
+import { DynamicContentTypeComponent } from './content-types/dynamic-content-type/dynamic-content-type.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,7 @@ import { ContentTypeEditComponent } from './content-types/content-type-edit/cont
     ContentTypeListComponent,
     ContentTypesCreateComponent,
     ContentTypeEditComponent,
+    DynamicContentTypeComponent,
   ],
   imports: [
     MatProgressSpinnerModule,
@@ -56,6 +59,10 @@ import { ContentTypeEditComponent } from './content-types/content-type-edit/cont
     SharedModule,
     ReactiveFormsModule,
     DynamicFormModule,
+    DragDropModule,
+  ],
+  entryComponents: [
+    DynamicContentTypeComponent,
   ],
   providers: [
     AuthGuard,

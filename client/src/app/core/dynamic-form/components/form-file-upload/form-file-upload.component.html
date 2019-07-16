@@ -8,6 +8,14 @@
       (change)="previewImage(fileInput.files)"
       accept="image/*"
     >
-    <button type="button" mat-raised-button (click)="fileInput.click()">{{ config.placeholder }}</button>
-    <img *ngIf="imgURL" [src]="imgURL" height="300px">
+    <button class="file-upload" type="button" mat-raised-button (click)="fileInput.click()">{{ config.placeholder }}</button>
+    <span class="file-name" *ngIf="fileName">
+      {{ fileName }}    
+      <button mat-icon-button type="button" (click)="clearFile(fileInput)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </span>
+    <div *ngIf="imgURL" >
+      <img [src]="imgURL">
+    </div>
   </div>
