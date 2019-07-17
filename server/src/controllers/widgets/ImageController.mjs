@@ -14,7 +14,7 @@ export default {
   /**
    * Create image.
    *
-   * @@TODO Don't save duplicate images in different folders.
+   * @TODO Don't save duplicate images in different folders.
    * Save path to existing image.
    */
   async imageCreate(req, res, next) {
@@ -25,13 +25,22 @@ export default {
         path,
         size,
       } = req.file;
-      const { title, imageTitle, imageAlt } = req.body;
+      const { title } = req.body;
+
+      try {
+        // Prevent creation of duplicates
+        const foundImage = await Image.find({ title });
+
+        if (foundImage.length) {
+          return res.status(201).json(foundImage[0]);
+        }
+      } catch (err) {
+        next(err);
+      }
 
       const image = new Image({
         title,
         image: {
-          title: imageTitle,
-          alt: imageAlt,
           originalName: originalname,
           size,
           mimetype,

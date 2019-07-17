@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../posts';
 import { CrudService } from 'src/app/core/crud.service';
 import { Validators } from '@angular/forms';
 import { FieldConfig } from 'src/app/core/dynamic-form/models/field-config.interface';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-post',
@@ -15,7 +16,11 @@ export class PostComponent implements OnInit {
   post: Post;
   config: FieldConfig[];
 
-  constructor() { }
+  constructor(
+    private crudService: CrudService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+  ) { }
 
   ngOnInit() {
     // Config for Dynamic Form.
@@ -25,19 +30,17 @@ export class PostComponent implements OnInit {
         name: 'title',
         placeholder: 'Title',
         validation: [ Validators.required ],
-        value: 'test',
       },
       {
         type: 'file',
         name: 'image',
         placeholder: 'Upload Image',
-        validation: [Validators.required]
+        validation: [ Validators.required ]
       },
       {
         type: 'wysiwyg',
         label: 'Body',
         name: 'body',
-        value: '<h1>test</h1>',
         options: {
           placeholderText: 'Start typing here...',
           toolbarButtons: [
@@ -53,7 +56,26 @@ export class PostComponent implements OnInit {
     ];
   }
 
-  submit(e) {
-    console.log(e);
+  submit(data: {[key: string]: string | File}) {
+    const { file, ...post } = data;
+    // Create Post data
+    const { title, ...postFields } = post;
+    const postData = {
+      title,
+      fields: { ...postFields },
+      status: 'Published',
+    };
+
+    const formData = new FormData();
+
+    formData.append('image', file);
+    formData.append('title', (file as File).name);
+
+    const imagObservable = this.crudService.createRecord(formData, 'http://localhost:3001/api/widgets/images');
+    const postObservable = this.crudService.createRecord(postData);
+
+    forkJoin(imagObservable, postObservable).subscribe(() => {
+      this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+    })
   }
 }

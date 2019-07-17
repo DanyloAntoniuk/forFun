@@ -14,12 +14,6 @@ const ImageSchema = mongoose.Schema({
     required: true,
   },
   image: {
-    title: {
-      type: String,
-    },
-    alt: {
-      type: String,
-    },
     originalName: {
       type: String,
       required: true,

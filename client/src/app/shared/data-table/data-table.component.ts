@@ -183,7 +183,7 @@ export class DataTableComponent implements AfterViewInit, OnInit {
 
     dialogRef.afterClosed().subscribe(accepted => {
       if (accepted) {
-        this.dataService.deleteRecord(element._id, 'post').subscribe(() => {
+        this.dataService.deleteRecord(element._id).subscribe(() => {
           this.handleData();
 
           // If only 1 record on a page, wait until paginator changes its length

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FieldConfig } from '../../models/field-config.interface';
 import { FormGroup, FormGroupDirective } from '@angular/forms';
 import { FormElement } from '../formElement';
 import { environment } from 'src/environments/environment';
 import { CrudService } from 'src/app/core/crud.service';
+import { FroalaEditorDirective } from 'angular-froala-wysiwyg';
 
 @Component({
   selector: 'app-form-wysiwyg',
@@ -14,7 +15,7 @@ export class FormWysiwygComponent extends FormElement implements OnInit {
   config: FieldConfig;
   group: FormGroup;
   formGroupDirective: FormGroupDirective;
-  editor;
+  editor: any;
 
   constructor(private crudService: CrudService) {
     super();
@@ -28,6 +29,7 @@ export class FormWysiwygComponent extends FormElement implements OnInit {
       'strikeThrough',
       'fontSize',
       'textColor',
+      'paragraphFormat',
       'backgroundColor',
       'quote',
       'formatOL',
@@ -41,26 +43,31 @@ export class FormWysiwygComponent extends FormElement implements OnInit {
     quickInsertTags: [],
     charCounterCount: false,
     imageUpload: true,
-    // imageUploadURL: `${environment.endpoint}/widgets/images`,
     events: {
-      'image.beforeUpload': (img, editor, e) => {
-        console.log(e, editor, img);
+      'image.beforeUpload': (img: FileList) => {
         const formData = new FormData();
 
         formData.append('image', img[0]);
         formData.append('title', img[0].name);
-        formData.append('imageTitle', 'image title');
-        formData.append('imageAlt', 'image alt');
-        
-        console.log(this.editor.image.get())
 
-      }
+        this.crudService.createRecord(formData, `${environment.endpoint}/widgets/images`).subscribe(res => {
+          this.editor.image.insert(res.image.path, null, null, img[0]);
+        });
+
+        // Prevent further image processing.
+        return false;
+      },
     }
+  }
+
+  // Init froala editor
+  froalaInit(e: {[key: string]: any}) {
+    e.initialize();
+    this.editor = e.getEditor();
   }
 
   ngOnInit() {
     this.config.options = this.mergeOptions(this.config.options, this.defaultOptions);
-    console.log(this.config.options);
 
     if (this.config.value) {
       this.group.controls[this.config.name].setValue(this.config.value);
@@ -70,11 +77,6 @@ export class FormWysiwygComponent extends FormElement implements OnInit {
   getError() {
     return null;
   }
-
-  initializeLink(controls) {
-    controls.initialize();
-    this.editor = controls.getEditor();
-}
 
   // Merge user provided options for froala editor with default options(partial deep merge)
   private mergeOptions(providedOptions: {[key: string]: any}, defaultOptions: {[key: string]: any}) {

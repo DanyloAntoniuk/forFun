@@ -40,15 +40,23 @@ export class CrudService {
     return this.http.delete<any>(`${environment.endpoint}/${this.resourceName}/${id}`);
   }
 
-  createRecord(post: Post): Observable<any> {
-    return this.http.post<any>(`${environment.endpoint}/${this.resourceName}`, post);
+  createRecord(data: any, url?: string): Observable<any> {
+    if (url) {
+      return this.http.post<any>(url, data);
+    }
+
+    return this.http.post<any>(`${environment.endpoint}/${this.resourceName}`, data);
   }
 
   deleteManyRecords(ids: string[]): Observable<any> {
     return this.http.request<any>('delete', `${environment.endpoint}/${this.resourceName}`, { body: ids });
   }
 
-  updateRecord(title: string, body: {[key: string]: any}) {
-    return this.http.put(`${environment.endpoint}/${this.resourceName}/${title}`, body);
+  updateRecord(title: string, data: {[key: string]: any}, url?: string) {
+    if (url) {
+      return this.http.post<any>(url, data);
+    }
+  
+    return this.http.put(`${environment.endpoint}/${this.resourceName}/${title}`, data);
   }
 }

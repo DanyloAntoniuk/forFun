@@ -63,6 +63,10 @@ const objectID = Joi.string()
 
 const array = Joi.array();
 
+const object = Joi.object().pattern(
+  Joi.string(), Joi.string(),
+);
+
 /**
  * Available schemas.
  */
@@ -84,7 +88,7 @@ export const schemas = {
     status,
     author: objectID,
     widgets: array,
-    fields: array,
+    fields: Joi.any(),
   }),
   widgets: {
     uploadSchema: {

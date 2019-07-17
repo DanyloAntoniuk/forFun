@@ -13,16 +13,16 @@ const PostSchema = mongoose.Schema({
     type: String,
     reqiured: true,
   },
-  author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    reqiured: true,
-  },
-  contentType: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'ContentType',
-    reqiured: true,
-  },
+  // author: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'User',
+  //   reqiured: true,
+  // },
+  // contentType: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'ContentType',
+  //   reqiured: true,
+  // },
   status: {
     type: String,
     reqiured: true,
@@ -37,7 +37,7 @@ const PostSchema = mongoose.Schema({
       refPath: 'widgets.fieldType',
     },
   }],
-  fields: [{}],
+  fields: {},
 }, { timestamps: true });
 
 export default mongoose.model('Post', PostSchema);
