@@ -53,7 +53,8 @@ export class LoginComponent implements OnInit {
       .subscribe(() => {
         this.config[this.config.length - 1].disabled = false;
 
-        this.router.navigate(['admin/posts']);
+        // Since Angular can't redirect to lazy loaded routes, use timer
+        setTimeout(() => this.router.navigate(['admin/posts']), 0);
       },
       () => {
         this.config[this.config.length - 1].disabled = false;

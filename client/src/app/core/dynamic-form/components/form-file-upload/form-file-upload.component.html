@@ -9,13 +9,14 @@
       accept="image/*"
     >
     <button class="file-upload" type="button" mat-raised-button (click)="fileInput.click()">{{ config.placeholder }}</button>
-    <span class="file-name" *ngIf="fileName">
+    <span class="file-name" *ngIf="fileName" [hidden]="loading">
       {{ fileName }}    
       <button mat-icon-button type="button" (click)="clearFile(fileInput)">
         <mat-icon>close</mat-icon>
       </button>
     </span>
     <div *ngIf="imgURL" >
-      <img [src]="imgURL">
+      <mat-spinner *ngIf="loading" color="primary" [diameter]="37"></mat-spinner>
+      <img [hidden]="loading" (load)="onLoad()" [src]="imgURL">
     </div>
   </div>

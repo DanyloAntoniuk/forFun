@@ -32,7 +32,7 @@ const PostSchema = mongoose.Schema({
     fieldType: {
       type: String,
     },
-    id: {
+    image: {
       type: mongoose.Schema.Types.ObjectId,
       refPath: 'widgets.fieldType',
     },

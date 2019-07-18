@@ -29,6 +29,7 @@ import { DynamicFormModule } from 'src/app/core/dynamic-form/dynamic-form.module
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContentTypeEditComponent } from './content-types/content-type-edit/content-type-edit.component';
 import { DynamicContentTypeComponent } from './content-types/dynamic-content-type/dynamic-content-type.component';
+import { WidgetsService } from 'src/app/core/widgets.service';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { DynamicContentTypeComponent } from './content-types/dynamic-content-typ
   providers: [
     AuthGuard,
     CrudService,
+    WidgetsService,
   ]
 })
 export class AdminModule { }

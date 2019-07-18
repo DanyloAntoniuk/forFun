@@ -22,7 +22,7 @@ export default {
         [posts, count] = await Promise.all([
           Post.find({ title: { $regex: req.query.filterValue, $options: 'i' } })
             .populate('author')
-            .populate('widgets.id')
+            // .populate('widgets.id')
             .limit(limit)
             .skip(req.skip)
             .lean()
@@ -34,7 +34,7 @@ export default {
         [posts, count] = await Promise.all([
           Post.find({})
             .populate('author')
-            .populate('widgets.id')
+            // .populate('widgets.id')
             .limit(limit)
             .skip(req.skip)
             .lean()
@@ -69,7 +69,7 @@ export default {
 
       const post = await Post.find({ title })
         .populate('author')
-        .populate('widgets.id');
+        .populate('widgets.image');
 
       if (!post) {
         return res.status(404).json({ message: `Post with id ${req.params.id} not found.` });

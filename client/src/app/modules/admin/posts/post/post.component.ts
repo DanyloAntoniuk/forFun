@@ -5,12 +5,12 @@ import { CrudService } from 'src/app/core/crud.service';
 import { Validators } from '@angular/forms';
 import { FieldConfig } from 'src/app/core/dynamic-form/models/field-config.interface';
 import { forkJoin } from 'rxjs';
+import { WidgetsService } from 'src/app/core/widgets.service';
 
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.scss'],
-  providers: [ CrudService ],
 })
 export class PostComponent implements OnInit {
   post: Post;
@@ -18,6 +18,7 @@ export class PostComponent implements OnInit {
 
   constructor(
     private crudService: CrudService,
+    private widgetsService: WidgetsService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) { }
@@ -60,22 +61,28 @@ export class PostComponent implements OnInit {
     const { file, ...post } = data;
     // Create Post data
     const { title, ...postFields } = post;
-    const postData = {
-      title,
-      fields: { ...postFields },
-      status: 'Published',
-    };
 
     const formData = new FormData();
 
     formData.append('image', file);
     formData.append('title', (file as File).name);
 
-    const imagObservable = this.crudService.createRecord(formData, 'http://localhost:3001/api/widgets/images');
-    const postObservable = this.crudService.createRecord(postData);
+    this.widgetsService.createRecord('images', formData).subscribe((image: any) => {
+      const postData = {
+        title,
+        fields: { ...postFields },
+        widgets: [
+          {
+            fieldType: 'Image',
+            image: image._id,
+          },
+        ],
+        status: 'Published',
+      };
 
-    forkJoin(imagObservable, postObservable).subscribe(() => {
-      this.router.navigate(['../'], { relativeTo: this.activatedRoute });
-    })
+      this.crudService.createRecord(postData).subscribe((post) => {
+        this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+      });
+    });
   }
 }
