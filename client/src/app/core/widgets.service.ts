@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Post } from '../modules/admin/posts/posts';
 import { environment } from 'src/environments/environment';
-import { Router, NavigationEnd, Event } from '@angular/router';
-import { filter, map } from 'rxjs/operators';
 
-const WIDGETS_API_URL = 'http://localhost:3001/api/widgets';
+const WIDGETS_API_URL = `${environment.endpoint}/widgets`;
 
 @Injectable()
 export class WidgetsService {

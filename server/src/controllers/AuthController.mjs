@@ -35,7 +35,10 @@ export default {
 
       const token = signToken(user);
 
-      return res.status(201).json({ user, token });
+      const userData = user.toObject();
+      delete userData.local.password;
+
+      return res.status(201).json({ user: userData, token });
     } catch (err) {
       next(err);
     }
@@ -60,7 +63,12 @@ export default {
 
         const token = signToken(user);
 
-        return res.status(200).json({ user, token });
+        // While console.log is showing raw mongoose document(????),
+        // it's required to convert it to object to delete properties
+        const userData = user.toObject();
+        delete userData.local.password;
+
+        return res.status(200).json({ user: userData, token });
       }
 
       return res.status(404).json({ message: `User ${email} is not registered.` });
@@ -76,7 +84,6 @@ export default {
    */
   async googleOauthCallback(req, res, next) {
     try {
-      console.log(req);
       const { email } = req.user.google;
 
       const user = await User.findOne({ 'google.email': email });
@@ -85,7 +92,7 @@ export default {
 
       // @TODO change response header to application/json
       res.status(201).json({ user, token });
-      //res.redirect(`http://localhost:4200/admin/posts?user=${user}`);
+      // res.redirect(`http://localhost:4200/admin/posts?user=${user}`);
     } catch (err) {
       next(err);
     }
