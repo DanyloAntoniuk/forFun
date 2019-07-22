@@ -11,8 +11,8 @@
               <div formArrayName="fields" cdkDropList (cdkDropListDropped)="drop($event)" class="field-list">
                 <div 
                   *ngFor="let item of fields.controls; let i = index" 
-                  [formGroupName]="i" 
-                  fxLayout="row" 
+                  [formGroupName]="i"
+                  fxLayout="row"
                   fxLayoutAlign="space-between center"
                   cdkDrag
                   class="field-box"

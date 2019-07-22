@@ -30,6 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ContentTypeEditComponent } from './content-types/content-type-edit/content-type-edit.component';
 import { DynamicContentTypeComponent } from './content-types/dynamic-content-type/dynamic-content-type.component';
 import { WidgetsService } from 'src/app/core/widgets.service';
+import { SystemInfoFormComponent } from './system-info-form/system-info-form.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { WidgetsService } from 'src/app/core/widgets.service';
     ContentTypesCreateComponent,
     ContentTypeEditComponent,
     DynamicContentTypeComponent,
+    SystemInfoFormComponent,
   ],
   imports: [
     MatProgressSpinnerModule,

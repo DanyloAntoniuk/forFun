@@ -12,7 +12,7 @@ import Joi from 'joi';
 export function validateBody(schema) {
   // eslint-disable-next-line consistent-return
   return (req, res, next) => {
-    console.log(req.body);
+    // console.log(req.body);
     const result = Joi.validate(req.body, schema);
 
     if (result.error) {
@@ -81,12 +81,14 @@ export const schemas = {
   userCancelSchema: Joi.object().keys({ active }),
   postSchema: Joi.object().keys({
     _id: objectID.optional(),
-    createdAt: Joi.string().optional(), // @TODO validate field
-    updatedAt: Joi.string().optional(), // @TODO validate field
+    // createdAt: Joi.string().optional(), // @TODO validate field
+    createdAt: Joi.any().optional(),
+    updatedAt: Joi.any().optional(), // @TODO validate field
     __v: Joi.number().optional(),
     title: textField,
     status,
-    author: objectID,
+    // author: objectID,
+    author: Joi.string(),
     widgets: array,
     fields: Joi.any(),
   }),

@@ -102,14 +102,14 @@ export default {
    */
   async postUpdate(req, res, next) {
     try {
-      const updatedPost = await Post.findByIdAndUpdate(
-        req.params.id,
+      const updatedPost = await Post.findOneAndUpdate(
+        { title: req.params.title },
         req.value.body,
         { new: true },
       );
 
       if (!updatedPost) {
-        return res.status(404).json({ message: `Post with id ${req.params.id} not found.` });
+        return res.status(404).json({ message: `Post with title ${req.params.title} not found.` });
       }
 
       res.json(updatedPost);

@@ -16,7 +16,7 @@ export default {
       const { email, password, role } = req.value.body;
 
       // Deny registration with dupplicate emails.
-      const foundedUser = await User.findOne({ 'local.email': email });
+      const foundedUser = await User.findOne({ 'strategy.email': email });
       if (foundedUser) {
         res.status(422).json({ message: `Email ${email} is already registered.` });
       }
@@ -24,8 +24,8 @@ export default {
       const hash = await generatePassword(password);
 
       const user = new User({
-        method: 'local',
-        local: {
+        strategy: {
+          name: 'local',
           email,
           password: hash,
         },
@@ -36,7 +36,7 @@ export default {
       const token = signToken(user);
 
       const userData = user.toObject();
-      delete userData.local.password;
+      delete userData.strategy.password;
 
       return res.status(201).json({ user: userData, token });
     } catch (err) {
@@ -51,11 +51,11 @@ export default {
     try {
       const { email, password } = req.value.body;
 
-      const user = await User.findOne({ 'local.email': email });
+      const user = await User.findOne({ 'strategy.email': email });
 
       if (user) {
         // @TODO Move password check to Model methods.
-        const match = await bcrypt.compare(password, user.local.password);
+        const match = await bcrypt.compare(password, user.strategy.password);
 
         if (!match) {
           return res.status(400).json({ message: 'Password is incorrect.' });
@@ -66,7 +66,7 @@ export default {
         // While console.log is showing raw mongoose document(????),
         // it's required to convert it to object to delete properties
         const userData = user.toObject();
-        delete userData.local.password;
+        delete userData.strategy.password;
 
         return res.status(200).json({ user: userData, token });
       }

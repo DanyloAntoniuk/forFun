@@ -12,7 +12,8 @@ router.get('/posts/:title', PostController.postGetOne);
 
 router.post('/posts', validateBody(schemas.postSchema), PostController.postCreate);
 
-router.put('/posts/:id', AuthService.jwt(), AccessControlService.checkPermissions, validateBody(schemas.postSchema), PostController.postUpdate);
+router.put('/posts/:title', validateBody(schemas.postSchema), PostController.postUpdate);
+//router.put('/posts/:id', AuthService.jwt(), AccessControlService.checkPermissions, validateBody(schemas.postSchema), PostController.postUpdate);
 
 // router.delete('/post/:id', AuthService.jwt(), AccessControlService.checkPermissions, PostController.postDelete);
 router.delete('/posts/:id', PostController.postDelete);

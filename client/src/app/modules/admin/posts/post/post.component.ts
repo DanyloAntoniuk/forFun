@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../posts';
 import { CrudService } from 'src/app/core/crud.service';
 import { Validators } from '@angular/forms';
 import { FieldConfig } from 'src/app/core/dynamic-form/models/field-config.interface';
-import { forkJoin } from 'rxjs';
 import { WidgetsService } from 'src/app/core/widgets.service';
+import { DynamicFormComponent } from 'src/app/core/dynamic-form/containers/dynamic-form/dynamic-form.component';
 
 @Component({
   selector: 'app-post',
@@ -15,6 +15,9 @@ import { WidgetsService } from 'src/app/core/widgets.service';
 export class PostComponent implements OnInit {
   post: Post;
   config: FieldConfig[];
+  systemInfoConfig: FieldConfig[];
+
+  @ViewChild('systemInfoConfigform') systemInfoConfigform: DynamicFormComponent;
 
   constructor(
     private crudService: CrudService,
@@ -55,9 +58,44 @@ export class PostComponent implements OnInit {
         type: 'button',
       },
     ];
+
+    this.systemInfoConfig = [
+      {
+        type: 'text',
+        name: 'author',
+        placeholder: 'Author',
+        validation: [ Validators.required ],
+        value: JSON.parse(localStorage.getItem('currentUser')).user.strategy.email,
+      },
+      {
+        type: 'date',
+        name: 'createdAt',
+        placeholder: 'Created At',
+        validation: [Validators.required],
+        value: new Date(),
+      },
+      {
+        type: 'select',
+        name: 'status',
+        label: 'Status',
+        options: [
+          'Published',
+          'Unpublished',
+          'Archived',
+        ],
+        value: 'Published',
+      },
+    ];
   }
 
   submit(data: {[key: string]: string | File}) {
+    const systemInfoValues = this.systemInfoConfigform.value;
+    
+    if (!systemInfoValues.author || !systemInfoValues.createdAt) {
+      return;
+    }
+
+    console.log(this.systemInfoConfigform.value, this.systemInfoConfigform);
     const { file, ...post } = data;
     // Create Post data
     const { title, ...postFields } = post;
@@ -77,7 +115,7 @@ export class PostComponent implements OnInit {
             image: image._id,
           },
         ],
-        status: 'Published',
+        ...systemInfoValues,
       };
 
       this.crudService.createRecord(postData).subscribe((post) => {

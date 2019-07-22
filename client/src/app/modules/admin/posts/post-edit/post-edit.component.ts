@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CrudService } from 'src/app/core/crud.service';
 import { Post } from '../posts';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Validators } from '@angular/forms';
+import { Validators, FormGroup } from '@angular/forms';
 import { FieldConfig } from 'src/app/core/dynamic-form/models/field-config.interface';
-import { forkJoin } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 import { WidgetsService } from 'src/app/core/widgets.service';
+import { DynamicFormComponent } from 'src/app/core/dynamic-form/containers/dynamic-form/dynamic-form.component';
 
 @Component({
   selector: 'app-post-edit',
@@ -15,6 +14,10 @@ import { WidgetsService } from 'src/app/core/widgets.service';
 })
 export class PostEditComponent implements OnInit {
   config: FieldConfig[];
+  systemInfoConfig: FieldConfig[];
+  postTitle: string;
+
+  @ViewChild('systemInfoConfigform') systemInfoConfigform: DynamicFormComponent;
 
   constructor(
     private crudService: CrudService,
@@ -23,12 +26,14 @@ export class PostEditComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
   ) {
     this.config = [];
+    this.systemInfoConfig = [];
   }
 
   ngOnInit() {
     this.crudService.getRecord(this.activatedRoute.snapshot.params.title)
     .subscribe((post: any) => {
       console.log(post);
+      this.postTitle = post.title;
       // Config for Dynamic Form.
       this.config = [
         {
@@ -60,17 +65,57 @@ export class PostEditComponent implements OnInit {
           type: 'button',
         },
       ];
+
+      this.systemInfoConfig = [
+        {
+          type: 'text',
+          name: 'author',
+          placeholder: 'Author',
+          validation: [ Validators.required ],
+          value: JSON.parse(localStorage.getItem('currentUser')).user.strategy.email,
+        },
+        {
+          type: 'date',
+          name: 'createdAt',
+          placeholder: 'Created At',
+          value: post.createdAt,
+        },
+        {
+          type: 'date',
+          name: 'updatedAt',
+          placeholder: 'Updated At',
+          value: post.updatedAt,
+        },
+        {
+          type: 'select',
+          name: 'status',
+          label: 'Status',
+          options: [
+            'Published',
+            'Unpublished',
+            'Archived',
+          ],
+          value: post.status,
+        },
+      ];
     });
+    
   }
 
   submit(data: {[key: string]: string | File}) {
+    const systemInfoValues = this.systemInfoConfigform.value;
+    systemInfoValues.createdAt = new Date(systemInfoValues.createdAt);
+    if (!systemInfoValues.author || !systemInfoValues.createdAt) {
+      return;
+    }
+    console.log(systemInfoValues);
     const { file, ...post } = data;
     // Create Post data
     const { title, ...postFields } = post;
     const postData = {
       title,
       fields: { ...postFields },
-      status: 'Published',
+      ...systemInfoValues,
     };
 
     // If file input was changed
@@ -91,13 +136,13 @@ export class PostEditComponent implements OnInit {
           ],
         };
   
-        this.crudService.updateRecord((title as string), postWidgetData).subscribe(() => {
-          this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+        this.crudService.updateRecord(this.postTitle, postWidgetData).subscribe(() => {
+          this.router.navigate(['../../'], { relativeTo: this.activatedRoute });
         })
       });
     } else {
-      this.crudService.updateRecord((title as string), postData).subscribe(() => {
-        this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+      this.crudService.updateRecord(this.postTitle, postData).subscribe(() => {
+        this.router.navigate(['../../'], { relativeTo: this.activatedRoute });
       })
     }
   }

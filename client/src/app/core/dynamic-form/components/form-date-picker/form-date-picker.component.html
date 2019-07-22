@@ -1,0 +1,12 @@
+<div class="dynamic-field form-input" [formGroup]="group">
+  <mat-form-field>
+    <input matInput 
+      [matDatepicker]="picker" 
+      [placeholder]="config.placeholder"
+      [errorStateMatcher]="errorStateMatcher" 
+      [formControlName]="config.name">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="!valid">{{ getError() }}</mat-error>
+  </mat-form-field>
+  </div>

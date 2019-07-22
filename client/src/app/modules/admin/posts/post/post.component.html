@@ -12,3 +12,16 @@
       </mat-card-content>
     </mat-card>
   </div>
+  <div fxLayout="row" fxFlex="40" fxLayoutAlign="center flex-start" class="create-wrapper">
+      <mat-card>
+        <mat-card-title>System information</mat-card-title>
+        <mat-card-content>
+          <app-dynamic-form          
+            class="dynamic-form"
+            [config]="systemInfoConfig"
+            #systemInfoConfigform
+          >
+          </app-dynamic-form>
+        </mat-card-content>
+      </mat-card>
+    </div>

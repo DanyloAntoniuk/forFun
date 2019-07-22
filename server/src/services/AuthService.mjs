@@ -59,7 +59,7 @@ class AuthService {
     },
     async (email, password, done) => {
       try {
-        const user = await User.findOne({ 'local.email': email });
+        const user = await User.findOne({ 'strategy.email': email });
 
         if (!user) {
           return done(null, false);

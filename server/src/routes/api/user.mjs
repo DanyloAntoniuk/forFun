@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get('/user/:id([0-9a-f]{24})', UserController.userGetOne);
 
-router.get('/users', AuthService.jwt(), UserController.userList);
+router.get('/users', UserController.userList);
 
 router.post('/user/:id/cancel', AuthService.jwt(), validateBody(schemas.userCancelSchema), UserController.userCancel);
 

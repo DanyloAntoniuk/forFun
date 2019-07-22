@@ -17,7 +17,12 @@ const UserSchema = mongoose.Schema({
     required: true,
     default: true,
   },
-  local: {
+  strategy: {
+    name: {
+      type: String,
+      required: true,
+      enum: ['local', 'google', 'github'],
+    },
     email: {
       type: String,
       lowercase: true,
@@ -25,16 +30,10 @@ const UserSchema = mongoose.Schema({
     password: {
       type: String,
     },
-  },
-  google: {
     id: {
       type: String,
     },
-    email: {
-      type: String,
-      lowercase: true,
-    },
-    name: {
+    fullName: {
       familyName: {
         type: String,
       },
@@ -43,15 +42,41 @@ const UserSchema = mongoose.Schema({
       },
     },
   },
-  github: {
-    id: {
-      type: String,
-    },
-    email: {
-      type: String,
-      lowercase: true,
-    },
-  },
+  // local: {
+  //   email: {
+  //     type: String,
+  //     lowercase: true,
+  //   },
+  //   password: {
+  //     type: String,
+  //   },
+  // },
+  // google: {
+  //   id: {
+  //     type: String,
+  //   },
+  //   email: {
+  //     type: String,
+  //     lowercase: true,
+  //   },
+  //   name: {
+  //     familyName: {
+  //       type: String,
+  //     },
+  //     givenName: {
+  //       type: String,
+  //     },
+  //   },
+  // },
+  // github: {
+  //   id: {
+  //     type: String,
+  //   },
+  //   email: {
+  //     type: String,
+  //     lowercase: true,
+  //   },
+  // },
   role: {
     type: String,
     enum: ['anonymous', 'authenticated', 'editor', 'admin'],

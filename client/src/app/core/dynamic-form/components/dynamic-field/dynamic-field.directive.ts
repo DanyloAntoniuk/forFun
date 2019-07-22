@@ -11,6 +11,8 @@ import { FormEmailComponent } from '../form-email/form-email.component';
 import { FormPasswordComponent } from '../form-password/form-password.component';
 import { FormWysiwygComponent } from '../form-wysiwyg/form-wysiwyg.component';
 import { FormFileUploadComponent } from '../form-file-upload/form-file-upload.component';
+import { FormDatePickerComponent } from '../form-date-picker/form-date-picker.component';
+import { FormCheckboxComponent } from '../form-checkbox/form-checkbox.component';
 
 // Available form field types.
 const components: {[type: string]: Type<Field>} = {
@@ -22,6 +24,8 @@ const components: {[type: string]: Type<Field>} = {
   confirmPassword: FormPasswordComponent,
   wysiwyg: FormWysiwygComponent,
   file: FormFileUploadComponent,
+  date: FormDatePickerComponent,
+  checkbox: FormCheckboxComponent,
 };
 
 @Directive({
