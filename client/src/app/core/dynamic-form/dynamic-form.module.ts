@@ -9,7 +9,7 @@ import { FormButtonComponent } from './components/form-button/form-button.compon
 import { FormInputComponent } from './components/form-input/form-input.component';
 import { FormSelectComponent } from './components/form-select/form-select.component';
 import { TestComponent } from '../test/test.component';
-import { MatInputModule, MatButtonModule, MatProgressSpinnerModule, MatIconModule, MatDatepickerModule, MatNativeDateModule, MatSelectModule } from '@angular/material';
+import { MatInputModule, MatButtonModule, MatProgressSpinnerModule, MatIconModule, MatDatepickerModule, MatNativeDateModule, MatSelectModule, MatAutocompleteModule } from '@angular/material';
 import { FormEmailComponent } from './components/form-email/form-email.component';
 import { FormPasswordComponent } from './components/form-password/form-password.component';
 import { FormWysiwygComponent } from './components/form-wysiwyg/form-wysiwyg.component';
@@ -17,6 +17,7 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { FormFileUploadComponent } from './components/form-file-upload/form-file-upload.component';
 import { FormDatePickerComponent } from './components/form-date-picker/form-date-picker.component';
 import { FormCheckboxComponent } from './components/form-checkbox/form-checkbox.component';
+import { FormAutocompleteComponent } from './components/form-autocomplete/form-autocomplete.component';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { FormCheckboxComponent } from './components/form-checkbox/form-checkbox.
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
+    MatAutocompleteModule,
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(), 
   ],
@@ -46,6 +48,7 @@ import { FormCheckboxComponent } from './components/form-checkbox/form-checkbox.
     FormFileUploadComponent,
     FormDatePickerComponent,
     FormCheckboxComponent,
+    FormAutocompleteComponent,
   ],
   exports: [
     DynamicFormComponent
@@ -62,6 +65,7 @@ import { FormCheckboxComponent } from './components/form-checkbox/form-checkbox.
     FormWysiwygComponent,
     FormFileUploadComponent,
     FormDatePickerComponent,
+    FormAutocompleteComponent,
   ]
 })
 export class DynamicFormModule {}

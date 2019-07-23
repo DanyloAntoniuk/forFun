@@ -11,7 +11,7 @@ export class TitleService {
   ) { }
 
   static transformeTitle(title: string): string {
-    // Remove all encoded characters and from string and make it title case.
+    // Remove all encoded characters from string and make it title case.
     const transformedTitle = decodeURI(title.charAt(0).toUpperCase() + title.slice(1));
 
     if (transformedTitle.indexOf('-') !== -1) {

@@ -13,6 +13,7 @@ import { FormWysiwygComponent } from '../form-wysiwyg/form-wysiwyg.component';
 import { FormFileUploadComponent } from '../form-file-upload/form-file-upload.component';
 import { FormDatePickerComponent } from '../form-date-picker/form-date-picker.component';
 import { FormCheckboxComponent } from '../form-checkbox/form-checkbox.component';
+import { FormAutocompleteComponent } from '../form-autocomplete/form-autocomplete.component';
 
 // Available form field types.
 const components: {[type: string]: Type<Field>} = {
@@ -26,6 +27,7 @@ const components: {[type: string]: Type<Field>} = {
   file: FormFileUploadComponent,
   date: FormDatePickerComponent,
   checkbox: FormCheckboxComponent,
+  autocomplete: FormAutocompleteComponent,
 };
 
 @Directive({

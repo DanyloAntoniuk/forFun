@@ -6,7 +6,7 @@ import AccessControlService from '../../services/AccessControlService';
 
 const router = express.Router();
 
-router.get('/user/:id([0-9a-f]{24})', UserController.userGetOne);
+router.get('/user/:username', UserController.userGetOne);
 
 router.get('/users', UserController.userList);
 

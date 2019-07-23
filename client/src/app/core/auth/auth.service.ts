@@ -14,11 +14,12 @@ export class AuthService {
   login(email: string, password: string): Observable<User> {
     return this.http.post<any>(`${environment.endpoint}/login`, { email, password })
       .pipe(
-        map(token => {
+        map(user => {
           // Store user data.
-          localStorage.setItem('token', token.token);
+          localStorage.setItem('token', user.token);
+          localStorage.setItem('username', user.username);
 
-          return token;
+          return user;
         })
       );
   }
@@ -27,11 +28,12 @@ export class AuthService {
   register(userData: {[key: string]: string | boolean}): Observable<User> {
     return this.http.post<any>(`${environment.endpoint}/register`, userData)
     .pipe(
-      map(token => {
+      map(user => {
         // Store user data.
-        localStorage.setItem('token', JSON.stringify(token));
+        localStorage.setItem('token', user.token);
+        localStorage.setItem('username', user.username);
 
-        return token;
+        return user;
       })
     );
   }

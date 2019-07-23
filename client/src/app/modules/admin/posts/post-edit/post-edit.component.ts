@@ -16,6 +16,7 @@ export class PostEditComponent implements OnInit {
   config: FieldConfig[];
   systemInfoConfig: FieldConfig[];
   postTitle: string;
+  username = localStorage.getItem('username');
 
   @ViewChild('systemInfoConfigform') systemInfoConfigform: DynamicFormComponent;
   widgetID: string;
@@ -76,7 +77,7 @@ export class PostEditComponent implements OnInit {
           name: 'author',
           placeholder: 'Author',
           validation: [ Validators.required ],
-          value: JSON.parse(localStorage.getItem('currentUser')).user.strategy.email,
+          value: post.username,
         },
         {
           type: 'date',
@@ -108,10 +109,11 @@ export class PostEditComponent implements OnInit {
   submit(data: {[key: string]: string | File}) {
     const systemInfoValues = this.systemInfoConfigform.value;
     systemInfoValues.createdAt = new Date(systemInfoValues.createdAt);
-    if (!systemInfoValues.author || !systemInfoValues.createdAt) {
+    systemInfoValues.updatedAt = new Date(systemInfoValues.updatedAt);
+  
+    if (!systemInfoValues.author || !systemInfoValues.createdAt || !systemInfoValues.updatedAt) {
       return;
     }
-    console.log(systemInfoValues);
     const { file, ...post } = data;
     // Create Post data
     const { title, ...postFields } = post;

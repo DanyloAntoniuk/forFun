@@ -10,7 +10,7 @@ export default {
    */
   async userGetOne(req, res, next) {
     try {
-      const user = await User.findById(req.params.id);
+      const user = await User.find({ username: req.params.username });
 
       res.json(user);
     } catch (err) {
@@ -30,15 +30,16 @@ export default {
       let users;
       let count;
 
-      if (req.query.filterValue !== 'undefined') {
+      // or 'undefined'
+      if (req.query.filterValue !== undefined) {
         [users, count] = await Promise.all([
-          User.find({ role: { $regex: req.query.filterValue, $options: 'i' } })
+          User.find({ username: { $regex: req.query.filterValue, $options: 'i' } })
             .limit(limit)
             .skip(req.skip)
             .lean()
             .sort({ [req.query.sortField]: req.query.sortDirection })
             .exec(),
-          User.countDocuments({ role: { $regex: req.query.filterValue, $options: 'i' } }),
+          User.countDocuments({ username: { $regex: req.query.filterValue, $options: 'i' } }),
         ]);
       } else {
         [users, count] = await Promise.all([

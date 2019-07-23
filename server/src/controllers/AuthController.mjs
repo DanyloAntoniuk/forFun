@@ -18,12 +18,14 @@ export default {
       // Deny registration with dupplicate emails.
       const foundedUser = await User.findOne({ 'strategy.email': email });
       if (foundedUser) {
-        res.status(422).json({ message: `Email ${email} is already registered.` });
+        return res.status(422).json({ message: `Email ${email} is already registered.` });
       }
 
       const hash = await generatePassword(password);
+      const username = email.substring(0, email.indexOf('@'));
 
       const user = new User({
+        username,
         strategy: {
           name: 'local',
           email,
@@ -35,7 +37,7 @@ export default {
 
       const token = signToken(user);
 
-      return res.status(201).json({ token });
+      return res.status(201).json({ token, username });
     } catch (err) {
       next(err);
     }

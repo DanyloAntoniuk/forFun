@@ -7,16 +7,14 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class JWTInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService, private router: Router) {}
-
+  // Set Authorization header with JWT for each request
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     const token = localStorage.getItem('token');
-    console.log(token);
 
     if (token) {
       const clone = req.clone({
-        headers: req.headers.set('authorization', token),
+        headers: req.headers.set('Authorization', `Bearer ${token}`),
       });
 
       return next.handle(clone);

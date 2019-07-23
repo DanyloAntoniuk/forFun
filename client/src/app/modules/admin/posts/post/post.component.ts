@@ -20,11 +20,10 @@ import { AuthService } from 'src/app/core/auth/auth.service';
 export class PostComponent implements OnInit {
   post: Post;
   config: FieldConfig[];
-
   systemInfoConfig: FieldConfig[];
+  username = localStorage.getItem('username');
 
-  @ViewChild('systemInfoConfigform') systemInfoConfigform: DynamicFormComponent;
-  currentUser: any;
+  @ViewChild('systemInfoConfigForm') systemInfoConfigForm: DynamicFormComponent;
 
   constructor(
     private crudService: CrudService,
@@ -32,13 +31,10 @@ export class PostComponent implements OnInit {
     private snackBar: MatSnackBar,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-  ) {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-   }
+  ) { }
 
   ngOnInit() {
     // Config for Dynamic Form.
-    console.log(this.currentUser);
     this.config = [
       {
         type: 'text',
@@ -72,17 +68,20 @@ export class PostComponent implements OnInit {
 
     this.systemInfoConfig = [
       {
-        type: 'text',
+        type: 'autocomplete',
         name: 'author',
         placeholder: 'Author',
         validation: [ Validators.required ],
-        value: JSON.parse(localStorage.getItem('currentUser')).user.strategy.email,
+        options: {
+          ref: 'users',
+        },
+        value: this.username,
       },
       {
         type: 'date',
         name: 'createdAt',
         placeholder: 'Created At',
-        validation: [Validators.required],
+        validation: [ Validators.required ],
         value: new Date(),
       },
       {
@@ -100,13 +99,13 @@ export class PostComponent implements OnInit {
   }
 
   submit(data: {[key: string]: string | File}) {
-    const systemInfoValues = this.systemInfoConfigform.value;
+    const systemInfoValues = this.systemInfoConfigForm.value;
 
     if (!systemInfoValues.author || !systemInfoValues.createdAt) {
       return;
     }
 
-    console.log(this.systemInfoConfigform.value, this.systemInfoConfigform);
+    console.log(this.systemInfoConfigForm.value, this.systemInfoConfigForm);
     const { file, ...post } = data;
     // Create Post data
     const { title, ...postFields } = post;

@@ -31,7 +31,7 @@ class AuthService {
     const { ExtractJwt } = passportJwt;
 
     this.passport.use(new JwtStrategy({
-      jwtFromRequest: ExtractJwt.fromHeader('authorization'),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: config.JWT_SECRET,
     },
     async (jwtPayload, done) => {

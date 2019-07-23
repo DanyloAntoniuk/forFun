@@ -7,9 +7,8 @@ import mongoose from 'mongoose';
  * Mongoose Schema for User entity.
  */
 const UserSchema = mongoose.Schema({
-  method: {
+  username: {
     type: String,
-    enum: ['local', 'google', 'github'],
     required: true,
   },
   active: {

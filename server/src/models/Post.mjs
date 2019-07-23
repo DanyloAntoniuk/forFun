@@ -13,6 +13,11 @@ const PostSchema = mongoose.Schema({
     type: String,
     reqiured: true,
   },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    reqiured: true,
+  },
   // author: {
   //   type: mongoose.Schema.Types.ObjectId,
   //   ref: 'User',
@@ -23,6 +28,15 @@ const PostSchema = mongoose.Schema({
   //   ref: 'ContentType',
   //   reqiured: true,
   // },
+  createdAt: {
+    type: Date,
+    reqiured: true,
+  },
+  updatedAt: {
+    type: Date,
+    reqiured: true,
+    default: Date.now,
+  },
   status: {
     type: String,
     reqiured: true,
@@ -38,6 +52,6 @@ const PostSchema = mongoose.Schema({
     },
   }],
   fields: {},
-}, { timestamps: true });
+});
 
 export default mongoose.model('Post', PostSchema);

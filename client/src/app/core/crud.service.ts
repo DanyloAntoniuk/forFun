@@ -23,11 +23,19 @@ export class CrudService {
       .subscribe((path: string) => this.resourceName = path);
   }
 
-  getRecords(queryParams: {}): Observable<any> {
+  getRecords(queryParams: {[key: string]: any}, resourceName?: string): Observable<any> {
+    if (resourceName) {
+      return this.http.get<any[]>(`${environment.endpoint}/${resourceName}`, { params: new HttpParams({ fromObject: queryParams }) });
+    }
+
     return this.http.get<any[]>(`${environment.endpoint}/${this.resourceName}`, { params: new HttpParams({ fromObject: queryParams }) });
   }
 
-  getRecord(title: string): Observable<any> {
+  getRecord(title: string, resourceName?: string): Observable<any> {
+    if (resourceName) {
+      return this.http.delete<any>(`${environment.endpoint}/${resourceName}/${title}`);
+    }
+
     return this.http.get<any>(`${environment.endpoint}/${this.resourceName}/${title}`);
   }
 
