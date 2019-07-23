@@ -8,7 +8,7 @@ const router = express.Router();
 
 // @TODO
 
-router.post('/roles', AuthService.jwt(), AccessControlService.checkPermissions, async (req, res, next) => {
+router.post('/roles', async (req, res, next) => {
   try {
     const role = new Role(req.body);
 

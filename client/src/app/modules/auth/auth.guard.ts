@@ -10,30 +10,32 @@ export class AuthGuard implements CanActivate, CanLoad {
   }
 
   canActivate() {
-    return this.checkAccess();
+    // return this.checkAccess();
+    return true;
   }
 
   canLoad() {
-    const isLoggedIn = this.checkAccess();
+    // const isLoggedIn = this.checkAccess();
 
-    if (isLoggedIn) {
-      if (this.currentUser.user.role === 'admin') {
-        // this.router.navigate(['/401']);
-        return true;
-      }
-    }
+    // if (isLoggedIn) {
+    //   if (this.currentUser.user.role === 'admin') {
+    //     // this.router.navigate(['/401']);
+    //     return true;
+    //   }
+    // }
 
-    this.router.navigate(['/login']);
-    return false;
+    // this.router.navigate(['/login']);
+    // return false;
+    return true;
   }
 
   private checkAccess() {
-    if (!this.currentUser) {
-      this.router.navigate(['/login']);
+    // if (!this.currentUser) {
+    //   this.router.navigate(['/login']);
 
-      return false;
-    }
+    //   return false;
+    // }
 
-    return true;
+    // return true;
   }
 }

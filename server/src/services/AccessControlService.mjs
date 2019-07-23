@@ -38,7 +38,6 @@ class AccessConrolService {
    */
   async checkPermissions(req, res, next) {
     await this.initPermissionsFromRequest(req);
-
     // Return as early as posisble.
     if (!this.permission) {
       return res.status(401).json({ message: 'Unauthorized' });

@@ -56,7 +56,8 @@ export class LoginComponent implements OnInit {
         // Since Angular can't redirect to lazy loaded routes, use timer
         setTimeout(() => this.router.navigate(['admin/posts']), 0);
       },
-      () => {
+      (e) => {
+        console.log(e);
         this.config[this.config.length - 1].disabled = false;
 
         this.messageService.error('Email or password is incorrect');

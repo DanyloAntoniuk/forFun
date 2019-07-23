@@ -15,7 +15,7 @@ export class CrudService {
         filter((event: Event) => event instanceof NavigationEnd),
         map((event: NavigationEnd) => {
           const urlSegments = event.url.split('/');
-          
+
           // Asume entity name is third element in array.
           return urlSegments[2];
         }),

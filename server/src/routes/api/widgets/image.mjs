@@ -12,11 +12,12 @@ router.get('/images', ImageController.imageList);
 router.post('/images', ensureDirectoryCreated, createUploadDirectory, uploadSingle.call(ImageController, 'image'), ImageController.imageCreate);
 // router.post('/images', AuthService.jwt(), AccessControlService.checkPermissions, ensureDirectoryCreated, createUploadDirectory, uploadSingle.call(ImageController, 'image'), validateBody(schemas.widgets.uploadSchema), ImageController.imageCreate);
 
-router.get('/image/:id', AccessControlService.checkPermissions, ImageController.imageGetOne);
+router.get('/images/:id', AccessControlService.checkPermissions, ImageController.imageGetOne);
 
-router.put('/image/:id', AuthService.jwt(), AccessControlService.checkPermissions, createUploadDirectory, uploadSingle.call(ImageController, 'image'), validateBody(schemas.widgets.uploadSchema), ImageController.imageUpdate);
+router.put('/images/:id', createUploadDirectory, uploadSingle.call(ImageController, 'image'), ImageController.imageUpdate);
+// router.put('/image/:id', AuthService.jwt(), AccessControlService.checkPermissions, createUploadDirectory, uploadSingle.call(ImageController, 'image'), validateBody(schemas.widgets.uploadSchema), ImageController.imageUpdate);
 
-router.delete('/image/:id', AuthService.jwt(), AccessControlService.checkPermissions, ImageController.imageDelete);
+router.delete('/images/:id', AuthService.jwt(), AccessControlService.checkPermissions, ImageController.imageDelete);
 
 /**
  * @TODO

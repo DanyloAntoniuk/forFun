@@ -126,7 +126,7 @@ export default {
       const deletedPost = await Post.findByIdAndDelete(req.params.id);
 
       if (!deletedPost) {
-        return res.status(404).json({ message: `Post with id ${req.params.id} not found.` });
+        return res.status(404).json({ message: `Post with title ${req.params.id} not found.` });
       }
 
       res.json(deletedPost);

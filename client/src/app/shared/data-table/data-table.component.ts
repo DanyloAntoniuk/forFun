@@ -9,6 +9,7 @@ import { debounceTime, map, distinctUntilChanged, filter, startWith, switchMap, 
 import { HttpErrorResponse } from '@angular/common/http';
 import { CrudService } from 'src/app/core/crud.service';
 import { DataTableConfig } from './data-table';
+import { AuthService } from 'src/app/core/auth/auth.service';
 
 @Component({
   selector: 'app-data-table',
@@ -26,6 +27,7 @@ export class DataTableComponent implements AfterViewInit, OnInit {
   isLoading = true;
   resultsLength = 0;
   pages = [];
+  currentUser: any;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -34,11 +36,10 @@ export class DataTableComponent implements AfterViewInit, OnInit {
   constructor(
     private dataService: CrudService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
-    ) {
-    // this.authService.currentUser.subscribe(user => this.currentUser = user);
-  }
+  ) { }
 
   ngOnInit() {
     // Combine dipslayed columns with required columns.
@@ -218,7 +219,7 @@ export class DataTableComponent implements AfterViewInit, OnInit {
   }
 
   // Go to create record page.
-  goToAddRecord() {
-    this.router.navigate(['./add'])
+  goToCreateRecord() {
+    this.router.navigate(['./create'], { relativeTo: this.activatedRoute });
   }
 }

@@ -7,45 +7,37 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<User>;
-  private currentUser: Observable<User>;
 
-  constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
-    this.currentUser = this.currentUserSubject.asObservable();
-  }
+  constructor(private http: HttpClient) { }
 
   // Log in user.
   login(email: string, password: string): Observable<User> {
-    return this.http.post<User>(`${environment.endpoint}/login`, { email, password })
+    return this.http.post<any>(`${environment.endpoint}/login`, { email, password })
       .pipe(
-        map(user => {
+        map(token => {
           // Store user data.
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
+          localStorage.setItem('token', token.token);
 
-          return user;
+          return token;
         })
       );
   }
 
   // Register new user.
   register(userData: {[key: string]: string | boolean}): Observable<User> {
-    return this.http.post<User>(`${environment.endpoint}/register`, userData)
+    return this.http.post<any>(`${environment.endpoint}/register`, userData)
     .pipe(
-      map(user => {
+      map(token => {
         // Store user data.
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
+        localStorage.setItem('token', JSON.stringify(token));
 
-        return user;
+        return token;
       })
     );
   }
 
   // Log out user.
   logout() {
-    localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
+    localStorage.removeItem('token');
   }
 }

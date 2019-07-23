@@ -1,5 +1,5 @@
 <div class="data-table-actions" fxLayout="row" fxLayoutAlign="space-between center">
-  <a routerLink="./create" mat-raised-button>Add new</a>
+  <a (click)="goToCreateRecord()" mat-raised-button>Add new</a>
   <button *ngIf="!selection.isEmpty()" mat-raised-button color="primary" (click)="deleteMany()">
       Remove selected {{selection.selected.length > 1 ? 'rows': 'row'}}
   </button>

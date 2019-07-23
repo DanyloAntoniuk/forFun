@@ -16,7 +16,7 @@ export class FormFileUploadComponent implements Field, OnInit {
   fileName: string;
   loading = true;
 
-  ngOnInit () {
+  ngOnInit() {
     if (this.config.options && this.config.options.fileURL) {
       this.fileName = this.config.options.fileName;
       this.imgURL = this.config.options.fileURL;

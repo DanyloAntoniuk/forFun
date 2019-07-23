@@ -5,6 +5,8 @@ import { FormElement } from '../formElement';
 import { environment } from 'src/environments/environment';
 import { CrudService } from 'src/app/core/crud.service';
 import { FroalaEditorDirective } from 'angular-froala-wysiwyg';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-form-wysiwyg',
@@ -17,7 +19,10 @@ export class FormWysiwygComponent extends FormElement implements OnInit {
   formGroupDirective: FormGroupDirective;
   editor: any;
 
-  constructor(private crudService: CrudService) {
+  constructor(
+    private crudService: CrudService,
+    private http: HttpClient,
+    ) {
     super();
   }
 
@@ -57,8 +62,17 @@ export class FormWysiwygComponent extends FormElement implements OnInit {
         // Prevent further image processing.
         return false;
       },
+      // 'video.inserted': (video: HTMLSpanElement[]) => {
+      //   const videoURL = video[0].children.item(0).getAttribute('src');
+
+      //   this.http.get(`https://noembed.com/embed?url=${videoURL}`).subscribe((videoData: {[key: string]: string | number}) => {
+
+      //   });
+
+      //   const videoPayload = {};
+      // },
     }
-  }
+  };
 
   // Init froala editor
   froalaInit(e: {[key: string]: any}) {
@@ -81,7 +95,7 @@ export class FormWysiwygComponent extends FormElement implements OnInit {
   // Merge user provided options for froala editor with default options(partial deep merge)
   private mergeOptions(providedOptions: {[key: string]: any}, defaultOptions: {[key: string]: any}) {
     const options = Object.assign({}, defaultOptions);
-  
+
     for (const key in providedOptions) {
       // If option is an array merge arrays without duplicates.
       if (Array.isArray(providedOptions[key])) {
@@ -98,7 +112,7 @@ export class FormWysiwygComponent extends FormElement implements OnInit {
         }
       }
     }
-  
+
     return options;
   }
 }

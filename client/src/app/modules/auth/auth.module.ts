@@ -22,7 +22,6 @@ import { DynamicFormModule } from 'src/app/core/dynamic-form/dynamic-form.module
     NotFoundComponent,
   ],
   imports: [
-    HttpClientModule,
     MatCardModule,
     FlexLayoutModule,
     ReactiveFormsModule,
@@ -39,7 +38,6 @@ import { DynamicFormModule } from 'src/app/core/dynamic-form/dynamic-form.module
     AuthGuard,
     AuthService,
     MessageService,
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
 })
 export class AuthModule { }

@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { filter, map } from 'rxjs/operators';
 
 @Injectable()
 export class TitleService {
-  constructor (
+  constructor(
     private router: Router,
     private titleService: Title,
   ) { }
@@ -26,8 +26,8 @@ export class TitleService {
       filter(event => event instanceof NavigationEnd),
       map(() => {
           return this.router.url.split('/').reduce((previousValue, currentvalue) => {
-            if (previousValue && currentvalue) { 
-              previousValue = `${previousValue} | `; 
+            if (previousValue && currentvalue) {
+              previousValue = `${previousValue} | `;
             }
             return previousValue + TitleService.transformeTitle(currentvalue);
           });

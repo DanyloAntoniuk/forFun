@@ -7,6 +7,11 @@ import { FieldConfig } from 'src/app/core/dynamic-form/models/field-config.inter
 import { WidgetsService } from 'src/app/core/widgets.service';
 import { DynamicFormComponent } from 'src/app/core/dynamic-form/containers/dynamic-form/dynamic-form.component';
 
+import { MessageService } from 'src/app/shared/message.service';
+import { MatSnackBar } from '@angular/material';
+import { SnackBarComponent } from 'src/app/shared/components/snack-bar/snack-bar.component';
+import { AuthService } from 'src/app/core/auth/auth.service';
+
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
@@ -15,19 +20,25 @@ import { DynamicFormComponent } from 'src/app/core/dynamic-form/containers/dynam
 export class PostComponent implements OnInit {
   post: Post;
   config: FieldConfig[];
+
   systemInfoConfig: FieldConfig[];
 
   @ViewChild('systemInfoConfigform') systemInfoConfigform: DynamicFormComponent;
+  currentUser: any;
 
   constructor(
     private crudService: CrudService,
     private widgetsService: WidgetsService,
+    private snackBar: MatSnackBar,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-  ) { }
+  ) {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+   }
 
   ngOnInit() {
     // Config for Dynamic Form.
+    console.log(this.currentUser);
     this.config = [
       {
         type: 'text',
@@ -90,7 +101,7 @@ export class PostComponent implements OnInit {
 
   submit(data: {[key: string]: string | File}) {
     const systemInfoValues = this.systemInfoConfigform.value;
-    
+
     if (!systemInfoValues.author || !systemInfoValues.createdAt) {
       return;
     }
@@ -118,7 +129,12 @@ export class PostComponent implements OnInit {
         ...systemInfoValues,
       };
 
-      this.crudService.createRecord(postData).subscribe((post) => {
+      this.crudService.createRecord(postData).subscribe(() => {
+        this.snackBar.openFromComponent(SnackBarComponent, {
+          verticalPosition: 'top',
+          horizontalPosition: 'right',
+          data: `${title} was successfully created`,
+        });
         this.router.navigate(['../'], { relativeTo: this.activatedRoute });
       });
     });

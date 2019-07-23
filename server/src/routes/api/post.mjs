@@ -6,11 +6,11 @@ import AccessControlService from '../../services/AccessControlService';
 
 const router = express.Router();
 
-router.get('/posts', PostController.postList);
+router.get('/posts', AuthService.jwt(), AccessControlService.checkPermissions, PostController.postList);
 
 router.get('/posts/:title', PostController.postGetOne);
 
-router.post('/posts', validateBody(schemas.postSchema), PostController.postCreate);
+router.post('/posts', AuthService.jwt, AccessControlService.checkPermissions, validateBody(schemas.postSchema), PostController.postCreate);
 
 router.put('/posts/:title', validateBody(schemas.postSchema), PostController.postUpdate);
 //router.put('/posts/:id', AuthService.jwt(), AccessControlService.checkPermissions, validateBody(schemas.postSchema), PostController.postUpdate);

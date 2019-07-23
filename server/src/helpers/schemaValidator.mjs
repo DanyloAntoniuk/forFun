@@ -12,7 +12,6 @@ import Joi from 'joi';
 export function validateBody(schema) {
   // eslint-disable-next-line consistent-return
   return (req, res, next) => {
-    // console.log(req.body);
     const result = Joi.validate(req.body, schema);
 
     if (result.error) {

@@ -18,6 +18,7 @@ export class PostEditComponent implements OnInit {
   postTitle: string;
 
   @ViewChild('systemInfoConfigform') systemInfoConfigform: DynamicFormComponent;
+  widgetID: string;
 
   constructor(
     private crudService: CrudService,
@@ -30,10 +31,13 @@ export class PostEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.crudService.getRecord(this.activatedRoute.snapshot.params.title)
+    this.postTitle = this.activatedRoute.snapshot.params.title;
+
+    this.crudService.getRecord(this.postTitle)
     .subscribe((post: any) => {
       console.log(post);
       this.postTitle = post.title;
+      this.widgetID = post.widgets[0].image._id;
       // Config for Dynamic Form.
       this.config = [
         {
@@ -99,7 +103,6 @@ export class PostEditComponent implements OnInit {
         },
       ];
     });
-    
   }
 
   submit(data: {[key: string]: string | File}) {
@@ -124,8 +127,8 @@ export class PostEditComponent implements OnInit {
 
       formData.append('image', file);
       formData.append('title', (file as File).name);
-  
-      this.widgetsService.updateRecord('images', (title as string), formData).subscribe((image: any) => {
+
+      this.widgetsService.updateRecord('images', this.widgetID, formData).subscribe((image: any) => {
         const postWidgetData = {
           ...postData,
           widgets: [
@@ -135,15 +138,15 @@ export class PostEditComponent implements OnInit {
             },
           ],
         };
-  
+
         this.crudService.updateRecord(this.postTitle, postWidgetData).subscribe(() => {
           this.router.navigate(['../../'], { relativeTo: this.activatedRoute });
-        })
+        });
       });
     } else {
       this.crudService.updateRecord(this.postTitle, postData).subscribe(() => {
         this.router.navigate(['../../'], { relativeTo: this.activatedRoute });
-      })
+      });
     }
   }
 }

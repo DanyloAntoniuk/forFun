@@ -35,10 +35,7 @@ export default {
 
       const token = signToken(user);
 
-      const userData = user.toObject();
-      delete userData.strategy.password;
-
-      return res.status(201).json({ user: userData, token });
+      return res.status(201).json({ token });
     } catch (err) {
       next(err);
     }
@@ -63,12 +60,7 @@ export default {
 
         const token = signToken(user);
 
-        // While console.log is showing raw mongoose document(????),
-        // it's required to convert it to object to delete properties
-        const userData = user.toObject();
-        delete userData.strategy.password;
-
-        return res.status(200).json({ user: userData, token });
+        return res.status(200).json({ token });
       }
 
       return res.status(404).json({ message: `User ${email} is not registered.` });
