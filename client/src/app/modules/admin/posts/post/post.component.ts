@@ -28,6 +28,7 @@ export class PostComponent implements OnInit {
   constructor(
     private crudService: CrudService,
     private widgetsService: WidgetsService,
+    private messageService:  MessageService,
     private snackBar: MatSnackBar,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -105,7 +106,6 @@ export class PostComponent implements OnInit {
       return;
     }
 
-    console.log(this.systemInfoConfigForm.value, this.systemInfoConfigForm);
     const { file, ...post } = data;
     // Create Post data
     const { title, ...postFields } = post;
@@ -135,6 +135,9 @@ export class PostComponent implements OnInit {
           data: `${title} was successfully created`,
         });
         this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+      },
+      () => {
+        this.messageService.error(`Post with title ${title} is already created.`);
       });
     });
   }

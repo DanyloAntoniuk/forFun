@@ -62,7 +62,7 @@ export default {
 
         const token = signToken(user);
 
-        return res.status(200).json({ token });
+        return res.status(200).json({ token, username: user.username });
       }
 
       return res.status(404).json({ message: `User ${email} is not registered.` });

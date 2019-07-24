@@ -33,7 +33,7 @@ export class CrudService {
 
   getRecord(title: string, resourceName?: string): Observable<any> {
     if (resourceName) {
-      return this.http.delete<any>(`${environment.endpoint}/${resourceName}/${title}`);
+      return this.http.get<any>(`${environment.endpoint}/${resourceName}/${title}`);
     }
 
     return this.http.get<any>(`${environment.endpoint}/${this.resourceName}/${title}`);

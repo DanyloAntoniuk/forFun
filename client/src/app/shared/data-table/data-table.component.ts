@@ -98,7 +98,7 @@ export class DataTableComponent implements AfterViewInit, OnInit {
       // To prevent multiple requests, start after 350ms and more than 2 characters typed.
       debounceTime(350),
       map((event: any) => event.target.value),
-      filter(filterValue => {
+      filter((filterValue: string) => {
         return filterValue.length > 2 || filterValue.length === 0;
       }),
       distinctUntilChanged()
@@ -175,7 +175,7 @@ export class DataTableComponent implements AfterViewInit, OnInit {
   }
 
   // Delete one record.
-  deleteRecord(element) {
+  deleteRecord(element: any) {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '300px',
       position: { top: '20%' },

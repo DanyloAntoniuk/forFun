@@ -87,11 +87,19 @@ export default {
    */
   async postCreate(req, res, next) {
     try {
-      const post = new Post(req.value.body);
+      const { title } = req.value.body;
 
-      await post.save();
+      const post = await Post.find({ title });
 
-      res.status(201).json(post);
+      if (post) {
+        return res.status(422).json({ message: 'Post title has to be unique.' });
+      }
+
+      const newPost = new Post(req.value.body);
+
+      await newPost.save();
+
+      res.status(201).json(newPost);
     } catch (err) {
       next(err);
     }

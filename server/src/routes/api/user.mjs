@@ -6,14 +6,14 @@ import AccessControlService from '../../services/AccessControlService';
 
 const router = express.Router();
 
-router.get('/user/:username', UserController.userGetOne);
+router.get('/users/:username', UserController.userGetOne);
 
 router.get('/users', UserController.userList);
 
-router.post('/user/:id/cancel', AuthService.jwt(), validateBody(schemas.userCancelSchema), UserController.userCancel);
+router.post('/users/:id/cancel', AuthService.jwt(), validateBody(schemas.userCancelSchema), UserController.userCancel);
 
-router.delete('/user/:id', AuthService.jwt(), UserController.userDelete);
+router.delete('/users/:id', AuthService.jwt(), UserController.userDelete);
 
-router.put('/user/:id', AuthService.jwt(), UserController.userUpdate);
+router.put('/users/:id', AuthService.jwt(), UserController.userUpdate);
 
 export default router;

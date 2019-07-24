@@ -12,7 +12,7 @@ export default {
     try {
       const user = await User.find({ username: req.params.username });
 
-      res.json(user);
+      res.json(user[0]);
     } catch (err) {
       next(err);
     }

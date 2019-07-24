@@ -6,10 +6,10 @@
     [placeholder]="config.placeholder" 
     [formControlName]="config.name" 
     [matAutocomplete]="auto">
-      <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let record of records" [value]="record.username">
-          {{ record.username }}
-        </mat-option>
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="display">
+      <mat-option *ngFor="let record of records" [value]="record">
+        {{ record.username }}
+      </mat-option>
     </mat-autocomplete>
     <mat-error *ngIf="!valid">{{ getError() }}</mat-error>
   </mat-form-field>

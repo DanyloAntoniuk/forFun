@@ -18,11 +18,6 @@ const PostSchema = mongoose.Schema({
     ref: 'User',
     reqiured: true,
   },
-  // author: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'User',
-  //   reqiured: true,
-  // },
   // contentType: {
   //   type: mongoose.Schema.Types.ObjectId,
   //   ref: 'ContentType',
