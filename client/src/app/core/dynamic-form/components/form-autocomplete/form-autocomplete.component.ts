@@ -21,7 +21,7 @@ export class FormAutocompleteComponent extends FormElement implements OnInit {
     super();
    }
 
-  getError() { 
+  getError() {
     return super.getRequiredError();
   }
 

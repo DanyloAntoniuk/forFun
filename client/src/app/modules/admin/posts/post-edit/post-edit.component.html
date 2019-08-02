@@ -2,25 +2,34 @@
   <mat-card>
     <mat-card-title>Edit</mat-card-title>
     <mat-card-content>
-        <app-dynamic-form
-          class="dynamic-form"
-          [config]="config"
-          #form
-          (submit)="submit($event)">
-        </app-dynamic-form>
+      <app-dynamic-form
+        class="dynamic-form"
+        [config]="config"
+        #form
+        (submit)="submit($event)">
+      </app-dynamic-form>
     </mat-card-content>
   </mat-card>
 </div>
 <div fxLayout="row" fxFlex="40" fxLayoutAlign="center flex-start" class="create-wrapper">
   <mat-card>
     <mat-card-title>System information</mat-card-title>
-    <mat-card-content>
-      <app-dynamic-form          
-        class="dynamic-form"
-        [config]="systemInfoConfig"
-        #systemInfoConfigform
-      >
-      </app-dynamic-form>
-    </mat-card-content>
+    <mat-tab-group>
+      <mat-tab label="General">
+        <mat-card-content>
+          <app-dynamic-form
+            class="dynamic-form"
+            [config]="systemInfoConfig"
+            #systemInfoConfigform
+          >
+          </app-dynamic-form>
+        </mat-card-content>
+      </mat-tab>
+      <mat-tab label="History">
+        <mat-card-content>
+          <p>adasda</p>
+        </mat-card-content>
+        </mat-tab>
+    </mat-tab-group> 
   </mat-card>
 </div>

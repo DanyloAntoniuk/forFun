@@ -17,6 +17,7 @@ import {
   MatSortModule,
   MatInputModule,
   MatButtonModule,
+  MatTabsModule,
 } from '@angular/material';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -63,6 +64,7 @@ import { SystemInfoFormComponent } from './system-info-form/system-info-form.com
     ReactiveFormsModule,
     DynamicFormModule,
     DragDropModule,
+    MatTabsModule,
   ],
   entryComponents: [
     DynamicContentTypeComponent,

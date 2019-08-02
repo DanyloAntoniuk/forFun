@@ -5,7 +5,7 @@ mat-card {
 
 :host ::ng-deep {
   .dynamic-form {
-    .form-input {
+    .form-input, .form-autocomplete, .form-date-picker, .form-select {
       margin: 10px 0;
 
       mat-form-field {

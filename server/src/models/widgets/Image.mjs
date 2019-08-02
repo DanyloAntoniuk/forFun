@@ -13,11 +13,14 @@ const ImageSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  relatedTo: {
+    type: String,
+    required: true,
+  },
   image: {
     originalName: {
       type: String,
       required: true,
-      unique: true,
     },
     size: {
       type: Number,

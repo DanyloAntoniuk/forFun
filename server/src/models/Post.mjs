@@ -18,6 +18,9 @@ const PostSchema = mongoose.Schema({
     ref: 'User',
     reqiured: true,
   },
+  relatedTo: {
+    type: String,
+  },
   // contentType: {
   //   type: mongoose.Schema.Types.ObjectId,
   //   ref: 'ContentType',

@@ -20,7 +20,7 @@ export default {
 
       if (req.query.filterValue !== 'undefined') {
         [posts, count] = await Promise.all([
-          Post.find({ title: { $regex: req.query.filterValue, $options: 'i' } })
+          Post.find({ title: { $regex: req.query.filterValue, $options: 'i' }, relatedTo: { $exists: false } })
             .populate('author')
             // .populate('widgets.id')
             .limit(limit)
@@ -28,7 +28,7 @@ export default {
             .lean()
             .sort({ [req.query.sortField]: req.query.sortDirection })
             .exec(),
-          Post.countDocuments({ title: { $regex: req.query.filterValue, $options: 'i' } }),
+          Post.countDocuments({ title: { $regex: req.query.filterValue, $options: 'i' }, relatedTo: { $exists: false } }),
         ]);
       } else {
         [posts, count] = await Promise.all([
@@ -75,7 +75,12 @@ export default {
         return res.status(404).json({ message: `Post with id ${req.params.id} not found.` });
       }
 
-      return res.json(post[0]);
+      const relatedPosts = await Post.find({ relatedTo: post[0]._id });
+
+      return res.json({
+        currentPost: post[0],
+        relatedPosts,
+      });
     } catch (err) {
       next(err);
     }
@@ -91,7 +96,7 @@ export default {
 
       const post = await Post.find({ title });
 
-      if (post) {
+      if (post.length) {
         return res.status(422).json({ message: 'Post title has to be unique.' });
       }
 
@@ -110,11 +115,26 @@ export default {
    */
   async postUpdate(req, res, next) {
     try {
-      const updatedPost = await Post.findOneAndUpdate(
-        { title: req.params.title },
-        req.value.body,
-        { new: true },
-      );
+      const { title } = req.params;
+
+      const [previousPost, updatedPost] = await Promise.all([
+        Post.findOne({ title })
+          .select(['-_id'])
+          .populate('author')
+          .populate('widgets.image'),
+        Post.findOneAndUpdate(
+          { title: req.params.title },
+          req.value.body,
+          { new: true },
+        ),
+      ]);
+
+      const newPost = new Post(previousPost);
+      newPost.isNew = true;
+      newPost.title = `${newPost.title}-${newPost._id}`;
+      newPost.relatedTo = updatedPost._id;
+
+      await newPost.save();
 
       if (!updatedPost) {
         return res.status(404).json({ message: `Post with title ${req.params.title} not found.` });

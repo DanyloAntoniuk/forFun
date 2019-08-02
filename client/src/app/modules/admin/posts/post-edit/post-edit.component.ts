@@ -15,11 +15,10 @@ import { DynamicFormComponent } from 'src/app/core/dynamic-form/containers/dynam
 export class PostEditComponent implements OnInit {
   config: FieldConfig[];
   systemInfoConfig: FieldConfig[];
-  postTitle: string;
+  post: any;
   username = localStorage.getItem('username');
 
   @ViewChild('systemInfoConfigform') systemInfoConfigform: DynamicFormComponent;
-  widgetID: string;
 
   constructor(
     private crudService: CrudService,
@@ -32,13 +31,10 @@ export class PostEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.postTitle = this.activatedRoute.snapshot.params.title;
-
-    this.crudService.getRecord(this.postTitle)
-    .subscribe((post: any) => {
-      console.log(post);
-      this.postTitle = post.title;
-      this.widgetID = post.widgets[0].image._id;
+    this.crudService.getRecord(this.activatedRoute.snapshot.params.title)
+    .subscribe((data: any) => {
+      console.log(data);
+      this.post = data.currentPost;
       // Config for Dynamic Form.
       this.config = [
         {
@@ -46,23 +42,23 @@ export class PostEditComponent implements OnInit {
           name: 'title',
           placeholder: 'Title',
           validation: [ Validators.required ],
-          value: post.title,
+          value: this.post.title,
         },
         {
           type: 'file',
           name: 'image',
           placeholder: 'Upload Image',
-          options: (post.widgets) ?
+          options: (this.post.widgets) ?
            {
-            fileName: post.widgets[0].image.image.originalName,
-            fileURL: post.widgets[0].image.image.path,
+            fileName: this.post.widgets[0].image.image.originalName,
+            fileURL: this.post.widgets[0].image.image.path,
           } : '',
         },
         {
           type: 'wysiwyg',
           label: 'Body',
           name: 'body',
-          value: (post.fields && post.fields.body) ? post.fields.body : '',
+          value: (this.post.fields && this.post.fields.body) ? this.post.fields.body : '',
         },
         {
           label: 'Save',
@@ -73,23 +69,26 @@ export class PostEditComponent implements OnInit {
 
       this.systemInfoConfig = [
         {
-          type: 'text',
+          type: 'autocomplete',
           name: 'author',
           placeholder: 'Author',
           validation: [ Validators.required ],
-          value: post.username,
+          options: {
+            ref: 'users',
+          },
+          value: this.post.author.username,
         },
         {
           type: 'date',
           name: 'createdAt',
           placeholder: 'Created At',
-          value: post.createdAt,
+          value: this.post.createdAt,
         },
         {
           type: 'date',
           name: 'updatedAt',
           placeholder: 'Updated At',
-          value: post.updatedAt,
+          value: this.post.updatedAt,
         },
         {
           type: 'select',
@@ -100,7 +99,7 @@ export class PostEditComponent implements OnInit {
             'Unpublished',
             'Archived',
           ],
-          value: post.status,
+          value: this.post.status,
         },
       ];
     });
@@ -108,12 +107,16 @@ export class PostEditComponent implements OnInit {
 
   submit(data: {[key: string]: string | File}) {
     const systemInfoValues = this.systemInfoConfigform.value;
-    systemInfoValues.createdAt = new Date(systemInfoValues.createdAt);
-    systemInfoValues.updatedAt = new Date(systemInfoValues.updatedAt);
   
     if (!systemInfoValues.author || !systemInfoValues.createdAt || !systemInfoValues.updatedAt) {
       return;
     }
+
+    // If updatedAt field wasn't changed, set its value to curernt date
+    if (systemInfoValues.updatedAt === this.post.updatedAt) {
+      systemInfoValues.updatedAt = new Date();
+    }
+
     const { file, ...post } = data;
     // Create Post data
     const { title, ...postFields } = post;
@@ -125,28 +128,19 @@ export class PostEditComponent implements OnInit {
 
     // If file input was changed
     if (file) {
-      const formData = new FormData();
+      this.crudService.updateRecord(this.post.title, postData).subscribe((post) => {
+        const formData = new FormData();
 
-      formData.append('image', file);
-      formData.append('title', (file as File).name);
+        formData.append('image', file);
+        formData.append('title', (file as File).name);
+        formData.append('relatedTo', post._id);
 
-      this.widgetsService.updateRecord('images', this.widgetID, formData).subscribe((image: any) => {
-        const postWidgetData = {
-          ...postData,
-          widgets: [
-            {
-              fieldType: 'Image',
-              image: image._id,
-            },
-          ],
-        };
-
-        this.crudService.updateRecord(this.postTitle, postWidgetData).subscribe(() => {
+        this.widgetsService.updateRecord('images', post.widgets[0].image, formData).subscribe(() => {
           this.router.navigate(['../../'], { relativeTo: this.activatedRoute });
         });
       });
     } else {
-      this.crudService.updateRecord(this.postTitle, postData).subscribe(() => {
+      this.crudService.updateRecord(this.post.title, postData).subscribe(() => {
         this.router.navigate(['../../'], { relativeTo: this.activatedRoute });
       });
     }

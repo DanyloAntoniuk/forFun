@@ -4,6 +4,7 @@
 import paginate from 'express-paginate';
 import fs from 'fs';
 import Image from '../../models/widgets/Image';
+import Post from '../../models/Post';
 
 export default {
   /**
@@ -105,15 +106,12 @@ export default {
         path,
         size,
       } = req.file;
-      const { title, imageTitle, imageAlt } = req.body;
 
       // Update or Replace Image entity?
       // Delete unused image?
       const updatedImage = await Image.findByIdAndUpdate(req.params.id, {
-        title,
+        ...req.body,
         image: {
-          title: imageTitle,
-          alt: imageAlt,
           originalName: originalname,
           size,
           mimetype,
